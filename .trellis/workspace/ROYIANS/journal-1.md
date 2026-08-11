@@ -38,3 +38,37 @@
 ### Next Steps
 
 - None - task complete
+
+
+## Session 2: Bootstrap Trellis development guidelines
+
+**Date**: 2026-08-11
+**Task**: Bootstrap Trellis development guidelines
+**Branch**: `main`
+
+### Summary
+
+Initialized Trellis agent tooling and Matt Pocock skills; established Trellis-led documentation workflow, write-through persistence, recovery reconciliation, and CodeGraph-first source discovery.
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `c9d8eef` | (see git log) |
+| `d453f60` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete

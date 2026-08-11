@@ -72,3 +72,36 @@ Initialized Trellis agent tooling and Matt Pocock skills; established Trellis-le
 ### Next Steps
 
 - None - task complete
+
+
+## Session 3: Define product vision and MVP boundaries
+
+**Date**: 2026-08-11
+**Task**: Define product vision and MVP boundaries
+**Branch**: `main`
+
+### Summary
+
+Confirmed Zetu as an open-source, self-hosted personal career decision system; documented user-owned career profiles, evidence-first AI boundaries, the application-ready job-search MVP, source-agnostic job intake, explicit advisory recommendations, focused target users, and added the root project README.
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `b06b642` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete

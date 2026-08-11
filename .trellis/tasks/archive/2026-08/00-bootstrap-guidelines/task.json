@@ -2,8 +2,8 @@
   "id": "00-bootstrap-guidelines",
   "name": "00-bootstrap-guidelines",
   "title": "Bootstrap Guidelines",
-  "description": "Fill in project development guidelines for AI agents",
-  "status": "in_progress",
+  "description": "Define Trellis-led development, documentation, persistence, and skill-routing guidelines before application code exists",
+  "status": "completed",
   "dev_type": "docs",
   "scope": null,
   "package": null,
@@ -11,7 +11,7 @@
   "creator": "ROYIANS",
   "assignee": "ROYIANS",
   "createdAt": "2026-08-11",
-  "completedAt": null,
+  "completedAt": "2026-08-11",
   "branch": null,
   "base_branch": null,
   "worktree_path": null,
@@ -21,9 +21,10 @@
   "children": [],
   "parent": null,
   "relatedFiles": [
-    ".trellis/spec/backend/",
-    ".trellis/spec/frontend/"
+    "AGENTS.md",
+    "docs/specs/development-process.md",
+    ".trellis/spec/"
   ],
-  "notes": "First-time setup task created by trellis init (fullstack project)",
+  "notes": "No application code exists yet. Bootstrap only evidence-backed workflow, documentation, persistence, and skill-routing rules; defer layer coding specs.",
   "meta": {}
 }

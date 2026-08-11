@@ -9,6 +9,12 @@
 * 重要选择及其原因放在 `decisions/`。
 * 当前必须成立的行为、接口、数据或质量要求放在 `specs/`。
 
+## 当前规范
+
+| Spec | 状态 | 说明 |
+|---|---|---|
+| [`development-process.md`](development-process.md) | accepted | Trellis 主导的开发过程、知识持久化和技能协作规则 |
+
 ## 未来领域
 
 领域目录只在出现第一份 spec 时创建。预计可能包括：

@@ -8,7 +8,7 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 5
+- **Total Sessions**: 6
 - **Last Active**: 2026-08-12
 <!-- @@@/auto:current-status -->
 
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~173 | Active |
+| `journal-1.md` | ~207 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 6 | 2026-08-12 | Complete system concept demo | `3499c1a`, `1907cb9` | `codex/system-concept-demo` |
 | 5 | 2026-08-12 | Define MVP experience backbone | `ce5a710` | `main` |
 | 4 | 2026-08-12 | Define product capability map | `7c842c9` | `main` |
 | 3 | 2026-08-11 | Define product vision and MVP boundaries | `b06b642` | `main` |

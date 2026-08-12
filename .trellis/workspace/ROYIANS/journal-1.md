@@ -171,3 +171,37 @@ Defined the six-stage MVP experience backbone, persistent experience state, edge
 ### Next Steps
 
 - None - task complete
+
+
+## Session 6: Complete system concept demo
+
+**Date**: 2026-08-12
+**Task**: Complete system concept demo
+**Branch**: `codex/system-concept-demo`
+
+### Summary
+
+Defined Zetu as a personal career research system organized around the career fact source, research library, and opportunity research desk; completed and validated the standalone end-to-end concept demo while preserving the comparison prototype.
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `3499c1a` | (see git log) |
+| `1907cb9` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete

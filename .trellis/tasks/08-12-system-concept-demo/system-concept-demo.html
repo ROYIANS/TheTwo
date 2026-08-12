@@ -1,0 +1,871 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>择途 · 系统概念 Demo</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f5f6f2;
+      --surface: #fcfdf9;
+      --ink: #17211b;
+      --muted: #68736c;
+      --line: #d3d9d3;
+      --line-strong: #a8b2aa;
+      --green: #14604a;
+      --green-2: #1f7a5f;
+      --green-soft: #dfede6;
+      --blue: #315e86;
+      --blue-soft: #e3ebf3;
+      --copper: #98612e;
+      --copper-soft: #f0e4d6;
+      --red: #9d423b;
+      --red-soft: #f3e2df;
+      --amber: #89610c;
+      --amber-soft: #f3ead5;
+      --purple: #745884;
+      --purple-soft: #ece6f0;
+      --nav: 15rem;
+      --aside: 19rem;
+      --sans: "Microsoft YaHei UI", "PingFang SC", "Noto Sans CJK SC", sans-serif;
+      --serif: Georgia, "Noto Serif CJK SC", "Songti SC", serif;
+      font-family: var(--sans);
+      font-size: 16px;
+    }
+
+    * { box-sizing: border-box; }
+    html { min-width: 320px; background: var(--paper); }
+    body { margin: 0; color: var(--ink); letter-spacing: 0; }
+    button, input { font: inherit; letter-spacing: 0; }
+    button { cursor: pointer; }
+    button:focus-visible, a:focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--blue) 32%, transparent);
+      outline-offset: 2px;
+    }
+
+    .prototype-note {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      min-height: 2rem;
+      padding: 0.4rem 1rem;
+      border-bottom: 1px solid #d6bd8d;
+      background: var(--amber-soft);
+      color: #5e430f;
+      font-size: 0.68rem;
+      font-weight: 700;
+    }
+
+    #app { min-height: calc(100vh - 2rem); }
+
+    .brand-lockup { display: flex; align-items: center; gap: 0.7rem; }
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 2.15rem;
+      height: 2.15rem;
+      background: var(--ink);
+      color: var(--surface);
+      font-family: var(--serif);
+      font-weight: 700;
+    }
+    .brand-cn { display: block; font-family: var(--serif); font-size: 1.08rem; font-weight: 700; }
+    .brand-en { display: block; margin-top: 0.05rem; color: var(--muted); font-size: 0.58rem; font-weight: 800; }
+
+    .icon {
+      width: 1rem;
+      height: 1rem;
+      flex: 0 0 auto;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .badge, .status, .source-tag, .fact-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.28rem;
+      min-height: 1.55rem;
+      padding: 0.26rem 0.48rem;
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+    .status.good, .fact-tag.fact { border-color: #9fc6b4; background: var(--green-soft); color: var(--green); }
+    .status.caution, .fact-tag.unknown { border-color: #d2b879; background: var(--amber-soft); color: var(--amber); }
+    .status.stop, .fact-tag.risk { border-color: #d3a19c; background: var(--red-soft); color: var(--red); }
+    .status.wait, .source-tag { border-color: #aac0d3; background: var(--blue-soft); color: var(--blue); }
+    .fact-tag.inference { border-color: #c7b6d0; background: var(--purple-soft); color: var(--purple); }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      min-height: 2.35rem;
+      padding: 0.48rem 0.75rem;
+      border: 1px solid var(--line-strong);
+      border-radius: 4px;
+      background: transparent;
+      color: var(--ink);
+      font-size: 0.72rem;
+      font-weight: 800;
+    }
+    .button:hover { background: #ecefea; }
+    .button.primary { border-color: var(--green); background: var(--green); color: white; }
+    .button.primary:hover { background: #0e503d; }
+    .button.ghost { border-color: transparent; color: var(--muted); }
+
+    .page-title { margin: 0; font-family: var(--serif); font-size: clamp(1.7rem, 3vw, 2.55rem); line-height: 1.16; font-weight: 600; }
+    .page-subtitle { max-width: 50rem; margin: 0.55rem 0 0; color: var(--muted); font-size: 0.84rem; line-height: 1.65; }
+    .section-title { margin: 0; font-size: 0.86rem; font-weight: 800; }
+    .section-note { color: var(--muted); font-size: 0.68rem; }
+
+    .empty-line { color: var(--muted); font-size: 0.74rem; }
+
+    .variant-switcher {
+      position: fixed;
+      left: 50%;
+      bottom: 1rem;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.35rem;
+      border: 1px solid #424944;
+      border-radius: 5px;
+      background: #17201b;
+      color: #f7f8f4;
+      box-shadow: 0 0.75rem 2rem rgb(23 32 27 / 22%);
+      transform: translateX(-50%);
+    }
+    .variant-switcher button {
+      display: grid;
+      place-items: center;
+      width: 2rem;
+      height: 2rem;
+      border: 0;
+      border-radius: 3px;
+      background: transparent;
+      color: inherit;
+      font-size: 1rem;
+    }
+    .variant-switcher button:hover { background: #303a33; }
+    .variant-label { min-width: 11rem; padding: 0 0.45rem; text-align: center; font-size: 0.68rem; font-weight: 800; }
+
+    .mobile-nav-button { display: none; }
+    .mobile-scrim { display: none; }
+
+    /* Variant A: Decision workspace */
+    .a-shell { display: grid; grid-template-columns: var(--nav) minmax(0, 1fr) var(--aside); min-height: calc(100vh - 2rem); background: var(--paper); }
+    .a-sidebar {
+      position: sticky;
+      top: 0;
+      align-self: start;
+      height: calc(100vh - 2rem);
+      border-right: 1px solid var(--line);
+      background: #eef1ed;
+      overflow-y: auto;
+    }
+    .a-brand { padding: 1.15rem; border-bottom: 1px solid var(--line); }
+    .a-direction {
+      margin: 0.9rem 0.75rem;
+      padding: 0.8rem;
+      border: 1px solid #b7c8bd;
+      background: #f8faf7;
+    }
+    .a-direction span { display: block; color: var(--muted); font-size: 0.62rem; font-weight: 800; }
+    .a-direction strong { display: block; margin-top: 0.28rem; font-size: 0.76rem; line-height: 1.45; }
+    .a-nav { padding: 0.3rem 0.55rem; }
+    .a-nav-group { margin: 1rem 0 0.35rem; padding: 0 0.55rem; color: var(--muted); font-size: 0.58rem; font-weight: 800; text-transform: uppercase; }
+    .a-nav-button {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      width: 100%;
+      min-height: 2.65rem;
+      padding: 0.65rem 0.7rem;
+      border: 0;
+      border-radius: 4px;
+      background: transparent;
+      color: #445048;
+      text-align: left;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+    .a-nav-button:hover { background: #e2e7e2; }
+    .a-nav-button.active { background: var(--ink); color: white; }
+    .a-nav-count { margin-left: auto; font-size: 0.6rem; opacity: 0.72; }
+    .a-user { margin-top: 1.2rem; padding: 1rem 1.15rem; border-top: 1px solid var(--line); font-size: 0.7rem; }
+    .a-user strong, .a-user span { display: block; }
+    .a-user span { margin-top: 0.2rem; color: var(--muted); }
+
+    .a-main { min-width: 0; padding: 1.25rem clamp(1.2rem, 2.3vw, 2.5rem) 5rem; }
+    .a-topbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 2.7rem; margin-bottom: 1.5rem; }
+    .a-crumb { color: var(--muted); font-size: 0.68rem; }
+    .a-top-actions { display: flex; gap: 0.5rem; }
+    .a-content { width: min(100%, 74rem); margin: 0 auto; }
+    .a-page-header { display: flex; align-items: end; justify-content: space-between; gap: 2rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--line-strong); }
+    .a-header-actions { display: flex; flex: 0 0 auto; gap: 0.5rem; }
+
+    .a-ai {
+      position: sticky;
+      top: 0;
+      align-self: start;
+      height: calc(100vh - 2rem);
+      border-left: 1px solid var(--line);
+      background: var(--surface);
+      overflow-y: auto;
+    }
+    .a-ai-head { padding: 1.1rem; border-bottom: 1px solid var(--line-strong); }
+    .a-ai-head span { display: block; color: var(--green); font-size: 0.62rem; font-weight: 800; }
+    .a-ai-head h2 { margin: 0.35rem 0 0; font-family: var(--serif); font-size: 1.1rem; }
+    .a-ai-context { padding: 0.85rem 1.1rem; border-bottom: 1px solid var(--line); background: #f1f4ef; }
+    .a-ai-context span { display: block; color: var(--muted); font-size: 0.6rem; font-weight: 800; }
+    .a-ai-context strong { display: block; margin-top: 0.3rem; font-size: 0.75rem; }
+    .a-ai-body { padding: 1rem 1.1rem 5rem; }
+    .a-ai-message { margin: 0; font-family: var(--serif); font-size: 0.9rem; line-height: 1.72; }
+    .a-ai-list { margin: 1rem 0 0; padding: 0; list-style: none; }
+    .a-ai-list li { padding: 0.72rem 0; border-top: 1px solid var(--line); font-size: 0.7rem; line-height: 1.55; }
+    .a-ai-list strong { display: block; margin-bottom: 0.15rem; font-size: 0.65rem; }
+
+    .today-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(17rem, 0.65fr); gap: 1.4rem; margin-top: 1.4rem; align-items: start; }
+    .priority-list { border-top: 2px solid var(--ink); background: var(--surface); }
+    .priority-head, .section-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 3rem; padding: 0.75rem 0.95rem; border-bottom: 1px solid var(--line); }
+    .priority-item {
+      display: grid;
+      grid-template-columns: 1.9rem minmax(0, 1fr) auto;
+      gap: 0.75rem;
+      align-items: start;
+      padding: 1rem 0.95rem;
+      border-bottom: 1px solid var(--line);
+      cursor: pointer;
+    }
+    .priority-item:hover { background: #f2f5f1; }
+    .priority-index { display: grid; place-items: center; width: 1.75rem; height: 1.75rem; border: 1px solid var(--line-strong); border-radius: 50%; color: var(--muted); font-size: 0.7rem; font-weight: 800; }
+    .priority-item:first-of-type .priority-index { border-color: var(--green); background: var(--green); color: white; }
+    .priority-title { display: block; font-size: 0.79rem; font-weight: 800; }
+    .priority-copy { display: block; margin-top: 0.25rem; color: var(--muted); font-size: 0.7rem; line-height: 1.5; }
+    .priority-action { color: var(--green); font-size: 0.67rem; font-weight: 800; white-space: nowrap; }
+
+    .direction-pulse { border-top: 2px solid var(--green); background: var(--surface); }
+    .pulse-body { padding: 1rem; }
+    .pulse-title { font-family: var(--serif); font-size: 1.18rem; line-height: 1.4; }
+    .pulse-meta { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.7rem; }
+    .pulse-rule { margin: 1rem 0; border: 0; border-top: 1px solid var(--line); }
+    .pulse-row { display: flex; justify-content: space-between; gap: 1rem; padding: 0.45rem 0; font-size: 0.7rem; }
+    .pulse-row span { color: var(--muted); }
+
+    .opportunity-strip { margin-top: 1.4rem; border-top: 2px solid var(--blue); background: var(--surface); }
+    .opportunity-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .opportunity-card { min-width: 0; padding: 1rem; border-right: 1px solid var(--line); cursor: pointer; }
+    .opportunity-card:last-child { border-right: 0; }
+    .opportunity-card:hover { background: #f1f4f1; }
+    .opp-company { color: var(--muted); font-size: 0.65rem; }
+    .opp-role { display: block; margin-top: 0.28rem; font-size: 0.78rem; font-weight: 800; line-height: 1.45; }
+    .opp-meta { margin-top: 0.6rem; color: var(--muted); font-size: 0.66rem; line-height: 1.5; }
+    .opp-footer { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; margin-top: 0.75rem; }
+    .opp-unknown { color: var(--muted); font-size: 0.62rem; }
+
+    .object-table { margin-top: 1.4rem; border-top: 2px solid var(--ink); background: var(--surface); }
+    .table-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.75rem 0.9rem; border-bottom: 1px solid var(--line); }
+    .table-filters { display: flex; gap: 0.35rem; }
+    .filter-button { min-height: 1.9rem; padding: 0.35rem 0.55rem; border: 1px solid var(--line); border-radius: 3px; background: transparent; color: var(--muted); font-size: 0.64rem; font-weight: 700; }
+    .filter-button.active { border-color: var(--ink); background: var(--ink); color: white; }
+    .opportunity-row { display: grid; grid-template-columns: minmax(12rem, 1.3fr) minmax(7rem, 0.7fr) minmax(10rem, 1fr) 7rem 5rem; gap: 0.75rem; align-items: center; min-height: 4.25rem; padding: 0.75rem 0.9rem; border-bottom: 1px solid var(--line); cursor: pointer; }
+    .opportunity-row:hover { background: #f1f4f1; }
+    .row-title strong { display: block; font-size: 0.76rem; }
+    .row-title span, .row-cell { color: var(--muted); font-size: 0.67rem; line-height: 1.45; }
+
+    .detail-layout { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.8fr); gap: 1.4rem; margin-top: 1.4rem; align-items: start; }
+    .detail-main, .detail-side { min-width: 0; }
+    .verdict-band { padding: 1.1rem; border-top: 3px solid var(--amber); background: var(--surface); }
+    .verdict-top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+    .verdict-title { font-family: var(--serif); font-size: 1.25rem; }
+    .verdict-copy { margin: 0.65rem 0 0; color: #4f5a53; font-size: 0.76rem; line-height: 1.65; }
+    .evidence-ledger { margin-top: 1rem; border-top: 2px solid var(--ink); background: var(--surface); }
+    .evidence-item { display: grid; grid-template-columns: 5.2rem minmax(0, 1fr) 5.8rem; gap: 0.8rem; padding: 0.85rem 0.95rem; border-bottom: 1px solid var(--line); }
+    .evidence-kind { color: var(--muted); font-size: 0.64rem; font-weight: 800; }
+    .evidence-text strong { display: block; font-size: 0.73rem; }
+    .evidence-text span { display: block; margin-top: 0.22rem; color: var(--muted); font-size: 0.66rem; line-height: 1.5; }
+    .evidence-time { color: var(--muted); font-size: 0.62rem; text-align: right; }
+    .analysis-sheet { border-top: 2px solid var(--blue); background: var(--surface); }
+    .analysis-block { padding: 0.9rem; border-bottom: 1px solid var(--line); }
+    .analysis-block h3 { margin: 0; font-size: 0.7rem; }
+    .analysis-block p { margin: 0.35rem 0 0; color: var(--muted); font-size: 0.68rem; line-height: 1.55; }
+    .unknown-box { margin-top: 1rem; padding: 0.9rem; border: 1px solid #d6bd80; background: var(--amber-soft); }
+    .unknown-box h3 { margin: 0; font-size: 0.7rem; }
+    .unknown-box ul { margin: 0.55rem 0 0; padding-left: 1rem; font-size: 0.67rem; line-height: 1.55; }
+    .detail-tabs { display: flex; gap: 0; margin-top: 1rem; border-bottom: 1px solid var(--line-strong); }
+    .detail-tab { min-height: 2.45rem; padding: 0.5rem 0.75rem; border: 0; border-bottom: 2px solid transparent; background: transparent; color: var(--muted); font-size: 0.68rem; font-weight: 800; }
+    .detail-tab.active { border-bottom-color: var(--green); color: var(--green); }
+
+    .profile-layout { display: grid; grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.25fr); gap: 1.4rem; margin-top: 1.4rem; align-items: start; }
+    .profile-summary { border-top: 3px solid var(--green); background: var(--surface); }
+    .profile-identity { padding: 1.15rem; border-bottom: 1px solid var(--line); }
+    .profile-identity h2 { margin: 0; font-family: var(--serif); font-size: 1.35rem; }
+    .profile-identity p { margin: 0.35rem 0 0; color: var(--muted); font-size: 0.72rem; line-height: 1.55; }
+    .profile-stat { display: grid; grid-template-columns: 1fr auto; gap: 1rem; padding: 0.7rem 1rem; border-bottom: 1px solid var(--line); font-size: 0.7rem; }
+    .profile-stat span { color: var(--muted); }
+    .fact-board { border-top: 2px solid var(--ink); background: var(--surface); }
+    .fact-group { padding: 1rem; border-bottom: 1px solid var(--line); }
+    .fact-group h3 { margin: 0 0 0.65rem; font-size: 0.72rem; }
+    .fact-list { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .timeline { margin-top: 1rem; border-top: 2px solid var(--copper); background: var(--surface); }
+    .timeline-item { display: grid; grid-template-columns: 6rem minmax(0, 1fr); gap: 1rem; padding: 0.9rem 1rem; border-bottom: 1px solid var(--line); }
+    .timeline-time { color: var(--muted); font-size: 0.65rem; }
+    .timeline-copy strong { display: block; font-size: 0.72rem; }
+    .timeline-copy span { display: block; margin-top: 0.25rem; color: var(--muted); font-size: 0.66rem; line-height: 1.5; }
+
+    .materials-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin-top: 1.4rem; }
+    .material-item { min-width: 0; border-top: 3px solid var(--ink); background: var(--surface); }
+    .material-item.job-specific { border-top-color: var(--green); }
+    .material-head { padding: 0.9rem; border-bottom: 1px solid var(--line); }
+    .material-head span { color: var(--muted); font-size: 0.62rem; }
+    .material-head h2 { margin: 0.3rem 0 0; font-size: 0.82rem; }
+    .material-body { padding: 0.9rem; }
+    .material-row { display: flex; justify-content: space-between; gap: 0.75rem; padding: 0.45rem 0; border-bottom: 1px solid var(--line); font-size: 0.67rem; }
+    .material-row span { color: var(--muted); }
+    .material-actions { display: flex; gap: 0.45rem; margin-top: 0.8rem; }
+    .package-review { margin-top: 1.2rem; border-top: 2px solid var(--blue); background: var(--surface); }
+    .review-row { display: grid; grid-template-columns: 1.4rem minmax(0, 1fr) auto; gap: 0.65rem; align-items: start; padding: 0.8rem 0.9rem; border-bottom: 1px solid var(--line); }
+    .review-check { display: grid; place-items: center; width: 1.25rem; height: 1.25rem; border-radius: 50%; background: var(--green); color: white; font-size: 0.65rem; }
+    .review-copy strong { display: block; font-size: 0.7rem; }
+    .review-copy span { display: block; margin-top: 0.2rem; color: var(--muted); font-size: 0.64rem; line-height: 1.45; }
+
+    /* Variant B: Editorial career briefing */
+    .b-shell { min-height: calc(100vh - 2rem); background: #f6f3ed; }
+    .b-header { position: sticky; top: 0; z-index: 20; border-bottom: 1px solid #bcb8ae; background: rgb(249 247 242 / 96%); }
+    .b-header-inner { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 2rem; width: min(100% - 2rem, 86rem); min-height: 4.3rem; margin: 0 auto; }
+    .b-nav { display: flex; justify-content: center; gap: 0.2rem; }
+    .b-nav-button { min-height: 2.25rem; padding: 0.45rem 0.65rem; border: 0; border-bottom: 2px solid transparent; background: transparent; color: #635f57; font-size: 0.68rem; font-weight: 800; }
+    .b-nav-button.active { border-bottom-color: var(--copper); color: var(--ink); }
+    .b-profile-button { display: flex; align-items: center; gap: 0.55rem; border: 0; background: transparent; color: var(--ink); font-size: 0.68rem; font-weight: 700; }
+    .b-avatar { display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 50%; background: var(--ink); color: white; font-family: var(--serif); }
+    .b-main { width: min(100% - 2rem, 78rem); margin: 0 auto; padding: 2.4rem 0 6rem; }
+    .b-date { color: var(--copper); font-size: 0.66rem; font-weight: 800; text-transform: uppercase; }
+    .b-title { max-width: 52rem; margin: 0.65rem 0 0; font-family: var(--serif); font-size: clamp(2.25rem, 5vw, 4.6rem); font-weight: 500; line-height: 1.06; }
+    .b-deck { max-width: 46rem; margin: 1rem 0 0; color: #625f58; font-family: var(--serif); font-size: 1rem; line-height: 1.7; }
+    .b-rule { margin: 2rem 0 0; border: 0; border-top: 1px solid #8d897f; }
+    .b-brief-grid { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(17rem, 0.5fr); gap: 3rem; margin-top: 1.5rem; }
+    .b-lead { min-width: 0; }
+    .b-lead-label { color: var(--copper); font-size: 0.66rem; font-weight: 800; }
+    .b-lead h2 { margin: 0.5rem 0 0; font-family: var(--serif); font-size: clamp(1.45rem, 3vw, 2.25rem); font-weight: 500; line-height: 1.2; }
+    .b-lead p { margin: 0.8rem 0 0; color: #5f5c55; font-size: 0.82rem; line-height: 1.75; }
+    .b-brief-action { display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 1rem; border: 0; border-bottom: 1px solid var(--ink); background: transparent; color: var(--ink); font-size: 0.72rem; font-weight: 800; }
+    .b-sidebar-brief { border-top: 3px solid var(--ink); }
+    .b-side-item { padding: 0.9rem 0; border-bottom: 1px solid #c8c4ba; }
+    .b-side-item span { color: var(--copper); font-size: 0.62rem; font-weight: 800; }
+    .b-side-item strong { display: block; margin-top: 0.3rem; font-family: var(--serif); font-size: 0.92rem; line-height: 1.4; }
+    .b-section { margin-top: 3.2rem; }
+    .b-section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; padding-bottom: 0.65rem; border-bottom: 1px solid #8d897f; }
+    .b-section-head h2 { margin: 0; font-family: var(--serif); font-size: 1.25rem; font-weight: 500; }
+    .b-section-head span { color: #767168; font-size: 0.65rem; }
+    .b-story-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; }
+    .b-story { padding: 1.2rem 1.1rem 1.2rem 0; border-right: 1px solid #c8c4ba; }
+    .b-story + .b-story { padding-left: 1.1rem; }
+    .b-story:last-child { border-right: 0; }
+    .b-story-company { color: #767168; font-size: 0.65rem; }
+    .b-story h3 { margin: 0.35rem 0 0; font-family: var(--serif); font-size: 1.12rem; font-weight: 500; line-height: 1.35; }
+    .b-story p { margin: 0.55rem 0 0; color: #68645c; font-size: 0.7rem; line-height: 1.65; }
+    .b-story-footer { display: flex; align-items: center; justify-content: space-between; gap: 0.6rem; margin-top: 0.8rem; }
+    .b-object-header { display: grid; grid-template-columns: minmax(0, 1fr) minmax(16rem, 0.36fr); gap: 3rem; align-items: end; padding-bottom: 1.4rem; border-bottom: 1px solid #8d897f; }
+    .b-object-title { margin: 0; font-family: var(--serif); font-size: clamp(2rem, 4.5vw, 4rem); font-weight: 500; line-height: 1.08; }
+    .b-object-summary { color: #625f58; font-size: 0.78rem; line-height: 1.72; }
+    .b-reading-grid { display: grid; grid-template-columns: minmax(0, 0.65fr) minmax(0, 1.35fr); gap: 3rem; margin-top: 2rem; align-items: start; }
+    .b-margin-note { position: sticky; top: 6rem; border-top: 3px solid var(--copper); padding-top: 0.8rem; }
+    .b-margin-note h3 { margin: 0; font-family: var(--serif); font-size: 1rem; }
+    .b-margin-note p { margin: 0.55rem 0 0; color: #6a665e; font-size: 0.7rem; line-height: 1.65; }
+    .b-reading h2 { margin: 0; font-family: var(--serif); font-size: 1.45rem; font-weight: 500; }
+    .b-reading p { color: #55524c; font-size: 0.82rem; line-height: 1.8; }
+    .b-evidence { margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid #aaa59b; }
+    .b-evidence-item { display: grid; grid-template-columns: 5rem minmax(0, 1fr); gap: 1rem; padding: 0.65rem 0; border-bottom: 1px solid #d1cdc4; }
+    .b-evidence-item span { color: var(--copper); font-size: 0.62rem; font-weight: 800; }
+    .b-evidence-item strong { font-family: var(--serif); font-size: 0.82rem; font-weight: 500; line-height: 1.45; }
+    .b-profile-columns { column-count: 2; column-gap: 3rem; margin-top: 2rem; }
+    .b-profile-section { break-inside: avoid; margin-bottom: 2rem; padding-top: 0.8rem; border-top: 2px solid var(--ink); }
+    .b-profile-section h2 { margin: 0; font-family: var(--serif); font-size: 1.1rem; font-weight: 500; }
+    .b-profile-section p, .b-profile-section li { color: #5e5b54; font-size: 0.75rem; line-height: 1.7; }
+
+    /* Variant C: Dense decision ledger */
+    .c-shell { min-height: calc(100vh - 2rem); background: #f1f3f1; }
+    .c-commandbar { display: grid; grid-template-columns: auto minmax(16rem, 1fr) auto; align-items: center; gap: 1rem; min-height: 3.6rem; padding: 0 0.85rem; border-bottom: 1px solid #9ca69e; background: #202922; color: white; }
+    .c-commandbar .brand-mark { width: 1.85rem; height: 1.85rem; background: white; color: var(--ink); }
+    .c-search { display: flex; align-items: center; gap: 0.5rem; max-width: 38rem; min-height: 2.15rem; padding: 0 0.65rem; border: 1px solid #526057; border-radius: 3px; background: #2b372f; color: #bec8c0; font-size: 0.68rem; }
+    .c-command-actions { display: flex; gap: 0.25rem; }
+    .c-command { min-height: 2rem; padding: 0.4rem 0.55rem; border: 1px solid transparent; border-radius: 3px; background: transparent; color: #d7ded8; font-size: 0.65rem; font-weight: 700; }
+    .c-command:hover { border-color: #526057; background: #2b372f; }
+    .c-body { display: grid; grid-template-columns: 11rem minmax(0, 1fr); min-height: calc(100vh - 5.6rem); }
+    .c-rail { border-right: 1px solid #b9c0ba; background: #e5e9e5; }
+    .c-nav { padding: 0.65rem 0.45rem; }
+    .c-nav-button { display: flex; align-items: center; gap: 0.5rem; width: 100%; min-height: 2.25rem; padding: 0.45rem 0.55rem; border: 0; border-radius: 3px; background: transparent; color: #4c584f; text-align: left; font-size: 0.67rem; font-weight: 700; }
+    .c-nav-button.active { background: #cdd6cf; color: var(--ink); }
+    .c-rail-label { margin: 0.9rem 0.55rem 0.3rem; color: #727d74; font-size: 0.55rem; font-weight: 800; text-transform: uppercase; }
+    .c-main { min-width: 0; padding: 0.85rem 0.85rem 5rem; }
+    .c-pagebar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 2.6rem; padding-bottom: 0.65rem; border-bottom: 1px solid #aeb6af; }
+    .c-pagebar h1 { margin: 0; font-size: 0.92rem; }
+    .c-view-actions { display: flex; gap: 0.3rem; }
+    .c-mini-button { min-height: 1.85rem; padding: 0.32rem 0.5rem; border: 1px solid #aeb6af; border-radius: 3px; background: #f8faf7; color: #475249; font-size: 0.62rem; font-weight: 700; }
+    .c-workgrid { display: grid; grid-template-columns: minmax(0, 1fr) 21rem; gap: 0.75rem; margin-top: 0.75rem; align-items: start; }
+    .c-gridpanel { min-width: 0; border: 1px solid #b9c0ba; background: #fafbf8; }
+    .c-panelhead { display: flex; align-items: center; justify-content: space-between; gap: 0.7rem; min-height: 2.35rem; padding: 0.5rem 0.65rem; border-bottom: 1px solid #b9c0ba; background: #edf0ec; }
+    .c-panelhead h2 { margin: 0; font-size: 0.68rem; }
+    .c-panelhead span { color: #6c766e; font-size: 0.58rem; }
+    .c-taskrow { display: grid; grid-template-columns: 1.3rem minmax(0, 1fr) 5.8rem; gap: 0.5rem; padding: 0.6rem; border-bottom: 1px solid #d6dbd6; font-size: 0.66rem; }
+    .c-taskrow:hover { background: #f0f4ef; }
+    .c-taskcheck { display: grid; place-items: center; width: 1.1rem; height: 1.1rem; border: 1px solid #8e9990; border-radius: 2px; }
+    .c-taskcopy strong { display: block; font-size: 0.67rem; }
+    .c-taskcopy span { display: block; margin-top: 0.15rem; color: #6c766e; font-size: 0.6rem; line-height: 1.4; }
+    .c-tasktype { color: var(--green); font-size: 0.58rem; text-align: right; }
+    .c-matrix { width: 100%; border-collapse: collapse; table-layout: fixed; }
+    .c-matrix th { height: 2rem; padding: 0.4rem 0.5rem; border-right: 1px solid #c7cdc8; border-bottom: 1px solid #b9c0ba; background: #edf0ec; color: #657067; text-align: left; font-size: 0.58rem; font-weight: 800; }
+    .c-matrix td { height: 3.55rem; padding: 0.45rem 0.5rem; border-right: 1px solid #d8ddd8; border-bottom: 1px solid #d8ddd8; vertical-align: top; font-size: 0.62rem; line-height: 1.4; cursor: pointer; }
+    .c-matrix tr:hover td { background: #f0f4ef; }
+    .c-matrix strong { display: block; font-size: 0.65rem; }
+    .c-sub { display: block; margin-top: 0.15rem; color: #737d75; font-size: 0.57rem; }
+    .c-inspector { min-width: 0; border: 1px solid #9fa9a1; background: #fafbf8; }
+    .c-inspector-head { padding: 0.7rem; border-bottom: 1px solid #b9c0ba; background: #e8ece8; }
+    .c-inspector-head span { color: #69736b; font-size: 0.57rem; font-weight: 800; }
+    .c-inspector-head h2 { margin: 0.25rem 0 0; font-size: 0.78rem; }
+    .c-inspector-body { padding: 0.65rem; }
+    .c-field { display: grid; grid-template-columns: 5.2rem minmax(0, 1fr); gap: 0.5rem; padding: 0.42rem 0; border-bottom: 1px solid #d7dcd7; font-size: 0.61rem; line-height: 1.45; }
+    .c-field span { color: #6d776f; }
+    .c-field strong { font-weight: 700; }
+    .c-inspector-section { margin-top: 0.7rem; padding-top: 0.6rem; border-top: 2px solid #869188; }
+    .c-inspector-section h3 { margin: 0; font-size: 0.63rem; }
+    .c-inspector-section ul { margin: 0.4rem 0 0; padding-left: 1rem; color: #59635b; font-size: 0.6rem; line-height: 1.5; }
+    .c-ledger { margin-top: 0.75rem; border: 1px solid #b9c0ba; background: #fafbf8; }
+    .c-ledger-row { display: grid; grid-template-columns: 7rem minmax(0, 1fr) 5rem 6rem; gap: 0.6rem; padding: 0.55rem 0.65rem; border-bottom: 1px solid #d6dbd6; font-size: 0.61rem; }
+    .c-ledger-row span { color: #6f7971; }
+    .c-profile-sheet { display: grid; grid-template-columns: 15rem minmax(0, 1fr); gap: 0.75rem; margin-top: 0.75rem; }
+    .c-profile-index, .c-profile-data { border: 1px solid #b9c0ba; background: #fafbf8; }
+    .c-index-item { display: grid; grid-template-columns: 1fr auto; gap: 0.5rem; padding: 0.55rem 0.65rem; border-bottom: 1px solid #d7dcd7; font-size: 0.62rem; }
+    .c-index-item span { color: #6c766e; }
+    .c-data-row { display: grid; grid-template-columns: 6rem minmax(0, 1fr) 6rem; gap: 0.6rem; padding: 0.58rem 0.65rem; border-bottom: 1px solid #d7dcd7; font-size: 0.62rem; }
+    .c-data-row > span { color: #6b756d; }
+
+    @media (max-width: 1180px) {
+      :root { --nav: 12.5rem; --aside: 16.5rem; }
+      .opportunity-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .opportunity-card:nth-child(2) { border-right: 0; }
+      .opportunity-card:nth-child(-n + 2) { border-bottom: 1px solid var(--line); }
+      .materials-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .c-workgrid { grid-template-columns: 1fr; }
+      .c-inspector { position: static; }
+    }
+
+    @media (max-width: 940px) {
+      .a-shell { grid-template-columns: 11.5rem minmax(0, 1fr); }
+      .a-ai { display: none; }
+      .today-grid, .detail-layout, .profile-layout { grid-template-columns: 1fr; }
+      .b-header-inner { grid-template-columns: auto 1fr auto; }
+      .b-nav { overflow-x: auto; justify-content: flex-start; }
+      .b-brief-grid, .b-object-header, .b-reading-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+      .b-margin-note { position: static; }
+      .c-commandbar { grid-template-columns: auto 1fr; }
+      .c-command-actions { display: none; }
+      .opportunity-row { grid-template-columns: minmax(12rem, 1.3fr) minmax(7rem, 0.7fr) 7rem; }
+      .opportunity-row .optional-cell { display: none; }
+    }
+
+    @media (max-width: 700px) {
+      .prototype-note { flex-direction: column; gap: 0.1rem; padding: 0.45rem 0.65rem; }
+      .a-shell, .c-body { display: block; }
+      .a-sidebar, .c-rail {
+        position: fixed;
+        inset: 0 auto 0 0;
+        z-index: 80;
+        width: min(16rem, 88vw);
+        height: 100vh;
+        transform: translateX(-100%);
+        transition: transform 180ms ease-out;
+        box-shadow: 0.8rem 0 1.5rem rgb(23 32 27 / 18%);
+      }
+      .a-sidebar.open, .c-rail.open { transform: translateX(0); }
+      .mobile-scrim { position: fixed; inset: 0; z-index: 70; display: block; border: 0; background: rgb(23 32 27 / 34%); }
+      .mobile-scrim[hidden] { display: none; }
+      .mobile-nav-button { display: inline-flex; }
+      .a-main { padding: 0.75rem 0.7rem 5.5rem; }
+      .a-topbar { margin-bottom: 1rem; }
+      .a-page-header { align-items: flex-start; flex-direction: column; gap: 0.8rem; }
+      .a-header-actions { width: 100%; overflow-x: auto; }
+      .priority-item { grid-template-columns: 1.7rem minmax(0, 1fr); }
+      .priority-action { grid-column: 2; }
+      .opportunity-grid, .materials-grid { grid-template-columns: 1fr; }
+      .opportunity-card { border-right: 0; border-bottom: 1px solid var(--line); }
+      .opportunity-card:nth-child(2) { border-right: 0; }
+      .opportunity-row { grid-template-columns: minmax(0, 1fr) auto; }
+      .opportunity-row .row-cell { display: none; }
+      .evidence-item { grid-template-columns: 4.5rem minmax(0, 1fr); }
+      .evidence-time { grid-column: 2; text-align: left; }
+      .b-header-inner { width: 100%; grid-template-columns: auto minmax(0, 1fr) auto; gap: 0.75rem; padding: 0 0.65rem; }
+      .b-header { z-index: 90; }
+      .b-nav {
+        position: fixed;
+        inset: 0 auto 0 0;
+        z-index: 80;
+        display: flex;
+        align-items: stretch;
+        flex-direction: column;
+        justify-content: flex-start;
+        gap: 0;
+        width: min(16rem, 88vw);
+        padding: 4.5rem 0.75rem 1rem;
+        background: #f9f7f2;
+        box-shadow: 0.8rem 0 1.5rem rgb(23 32 27 / 18%);
+        transform: translateX(-100%);
+        transition: transform 180ms ease-out;
+      }
+      .b-nav.open { transform: translateX(0); }
+      .b-nav-button { width: 100%; min-height: 2.8rem; border-bottom: 1px solid #d2cec4; text-align: left; }
+      .b-nav-button.active { border-bottom-color: var(--copper); background: #efe9df; }
+      .b-profile-button span { display: none; }
+      .b-main { width: auto; padding: 1.5rem 0.8rem 5.5rem; }
+      .b-title { font-size: 2.4rem; }
+      .b-story-grid { grid-template-columns: 1fr; }
+      .b-story, .b-story + .b-story { padding: 1rem 0; border-right: 0; border-bottom: 1px solid #c8c4ba; }
+      .b-profile-columns { column-count: 1; }
+      .c-commandbar { grid-template-columns: auto minmax(0, 1fr) auto; padding: 0 0.55rem; }
+      .c-search { min-width: 0; }
+      .c-main { padding: 0.6rem 0.55rem 5.5rem; }
+      .c-pagebar { align-items: flex-start; flex-direction: column; }
+      .c-view-actions { width: 100%; overflow-x: auto; }
+      .c-matrix { min-width: 44rem; }
+      .c-gridpanel.matrix-wrap { overflow-x: auto; }
+      .c-profile-sheet { grid-template-columns: 1fr; }
+      .c-ledger-row { grid-template-columns: 4.2rem minmax(0, 1fr); }
+      .c-ledger-row > :nth-child(3),
+      .c-ledger-row > :nth-child(4) { grid-column: 2; }
+      .variant-label { min-width: 8.6rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="prototype-note">
+    <span>择途系统概念 Demo · 比较信息架构与产品骨架，不代表功能已经实现</span>
+    <span>虚构用户与机会数据 · 使用底部切换器或键盘 ← → 比较 A / B / C</span>
+  </div>
+  <div id="app"></div>
+  <button id="mobile-scrim" class="mobile-scrim" type="button" aria-label="关闭导航" hidden></button>
+  <div class="variant-switcher" aria-label="概念方案切换">
+    <button id="prev-variant" type="button" title="上一个方案">←</button>
+    <span id="variant-label" class="variant-label"></span>
+    <button id="next-variant" type="button" title="下一个方案">→</button>
+  </div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const icons = {
+        today: '<svg class="icon" viewBox="0 0 24 24"><path d="M8 2v4M16 2v4M3 9h18M5 4h14a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/></svg>',
+        opportunities: '<svg class="icon" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12h18M10 12v2h4v-2"/></svg>',
+        profile: '<svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>',
+        materials: '<svg class="icon" viewBox="0 0 24 24"><path d="M6 2h9l4 4v16H6z"/><path d="M14 2v5h5M9 13h6M9 17h6M9 9h2"/></svg>',
+        search: '<svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>',
+        menu: '<svg class="icon" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>',
+        plus: '<svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>',
+        arrow: '<svg class="icon" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>',
+        shield: '<svg class="icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg>'
+      };
+
+      const variants = {
+        A: "A · 决策工作台",
+        B: "B · 职业简报",
+        C: "C · 决策台账"
+      };
+
+      const navItems = [
+        ["today", "今日", icons.today],
+        ["opportunities", "机会", icons.opportunities],
+        ["profile", "职业画像", icons.profile],
+        ["materials", "简历与材料", icons.materials]
+      ];
+
+      const opportunities = [
+        { id: "chengyu", company: "澄屿科技", role: "资深前端工程师 / 前端负责人", salary: "35-45K · 14薪", place: "上海 · 工作方式待确认", recommendation: "谨慎投入", tone: "caution", unknowns: 3, match: "技术领导与架构职责匹配", next: "确认工作方式与长期招聘原因" },
+        { id: "shore", company: "岸线云", role: "高级前端工程师", salary: "32-40K · 15薪", place: "上海 · 双休", recommendation: "值得投入", tone: "good", unknowns: 1, match: "平台工程经验高度相关", next: "审核职位定制简历" },
+        { id: "prism", company: "折光智能", role: "前端架构师", salary: "40-55K · 13薪", place: "杭州 · 每周两天远程", recommendation: "等待信息", tone: "wait", unknowns: 5, match: "职责空间大，业务稳定性未知", next: "确认融资与团队规模" },
+        { id: "farhill", company: "远岚网络", role: "全栈工程师（偏前端）", salary: "28-36K · 14薪", place: "上海 · 长期单休", recommendation: "暂不投入", tone: "stop", unknowns: 1, match: "能力可覆盖，但违反硬约束", next: "无需继续投入" }
+      ];
+
+      const tasks = [
+        { title: "确认澄屿科技的工作方式", copy: "官网写弹性办公，招聘页标注固定坐班；这项信息可能改变当前建议。", action: "查看机会", page: "opportunity" },
+        { title: "审核岸线云的职位定制简历", copy: "AI 调整了两个项目的排序，并删除了与岗位关联较弱的一段经历。", action: "审核材料", page: "materials" },
+        { title: "纠正一条职业画像推断", copy: "系统仍需确认“负责跨团队方案”是否包含人员招聘职责。", action: "查看画像", page: "profile" }
+      ];
+
+      const evidence = [
+        { kind: "一手来源", title: "公司官网能够核验产品与主体", note: "官网披露核心产品面向零售数字化，工商主体与招聘主体名称一致。", time: "今天 09:42" },
+        { kind: "一手来源", title: "同一岗位在六个月内重复发布", note: "招聘页描述有两次改动，但核心职责一致；长期招聘原因仍未知。", time: "今天 09:47" },
+        { kind: "冲突信息", title: "工作方式表述不一致", note: "官网人才页称弹性办公，Boss 职位页写 09:30-18:30 固定坐班。", time: "今天 09:51" },
+        { kind: "弱信号", title: "匿名评价提到阶段性加班", note: "只有单一匿名来源，缺少时间与团队信息，当前仅作为向招聘方确认的线索。", time: "昨天" }
+      ];
+
+      const appState = {
+        variant: new URLSearchParams(location.search).get("variant")?.toUpperCase() || "A",
+        page: "today",
+        detailTab: "evidence",
+        navOpen: false
+      };
+      if (!variants[appState.variant]) appState.variant = "A";
+
+      const $ = (id) => document.getElementById(id);
+      const escapeHtml = (value) => String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+      function status(value, tone) {
+        return `<span class="status ${tone}">${escapeHtml(value)}</span>`;
+      }
+
+      function brand(showEnglish = true) {
+        return `<div class="brand-lockup"><span class="brand-mark">择</span><span><span class="brand-cn">择途</span>${showEnglish ? '<span class="brand-en">THE TWO</span>' : ""}</span></div>`;
+      }
+
+      function pageTitle() {
+        const map = {
+          today: ["今天，先处理三件真正影响求职结果的事", "择途已经整理了新的机会证据、材料修改和一条待确认画像推断。"],
+          opportunities: ["机会", "从真实来源带入职位，按一致维度看清收益、风险、机会成本与未知项。"],
+          opportunity: ["澄屿科技 · 资深前端工程师", "当前绑定方向：资深前端 / 前端架构 · 来源：Boss 职位截图（用户提供）"],
+          profile: ["职业画像", "当前有效事实、证据、AI 推断和未知项共同构成求职判断的事实底座。"],
+          materials: ["简历与申请材料", "从同一职业事实源派生方向表达和职位定制版本，每项事实都可追溯。"]
+        };
+        return map[appState.page] || map.today;
+      }
+
+      function aNav() {
+        return `<aside id="mobile-nav" class="a-sidebar${appState.navOpen ? " open" : ""}">
+          <div class="a-brand">${brand()}</div>
+          <div class="a-direction"><span>当前主方向</span><strong>资深前端 / 前端架构</strong></div>
+          <nav class="a-nav">
+            <div class="a-nav-group">工作</div>
+            ${navItems.map(([id, label, icon]) => `<button class="a-nav-button${appState.page === id || (id === "opportunities" && appState.page === "opportunity") ? " active" : ""}" type="button" data-page="${id}">${icon}<span>${label}</span>${id === "opportunities" ? '<span class="a-nav-count">4</span>' : ""}</button>`).join("")}
+            <div class="a-nav-group">个人上下文</div>
+            <button class="a-nav-button" type="button">${icons.shield}<span>数据与服务</span></button>
+          </nav>
+          <div class="a-user"><strong>林舟</strong><span>个人空间 · 自部署实例</span></div>
+        </aside>`;
+      }
+
+      function aAdvisor() {
+        const context = appState.page === "opportunity" ? "澄屿科技 · 当前机会" : appState.page === "profile" ? "林舟 · 当前职业画像" : appState.page === "materials" ? "岸线云 · 申请材料" : "今日决策队列";
+        const message = appState.page === "opportunity"
+          ? "这个机会值得继续了解，但现在还不适合直接乐观申请。工作方式冲突和长期招聘原因，都会显著改变它的实际性价比。"
+          : appState.page === "profile"
+            ? "我已经把“人员管理者”从当前画像中移除。仍有一条职责边界需要你确认，否则它可能影响架构岗位的表达。"
+            : appState.page === "materials"
+              ? "岸线云的定制版没有新增事实。我只调整了项目顺序，并把平台工程经验提前到第一页。"
+              : "今天不需要继续扩大机会数量。先消除一个关键未知项，再完成一份已经值得申请的材料，会更有效。";
+        return `<aside class="a-ai">
+          <div class="a-ai-head"><span>批判性职业顾问</span><h2>与当前工作同行</h2></div>
+          <div class="a-ai-context"><span>正在理解</span><strong>${context}</strong></div>
+          <div class="a-ai-body">
+            <p class="a-ai-message">${message}</p>
+            <ul class="a-ai-list">
+              <li><strong>依据</strong>${appState.page === "opportunity" ? "4 条公开证据 + 当前求职硬约束" : "当前有效职业事实与最近机会变化"}</li>
+              <li><strong>未知项</strong>${appState.page === "profile" ? "跨团队职责是否包含招聘参与" : "工作方式、团队稳定性与招聘原因"}</li>
+              <li><strong>你拥有最终权力</strong>可以纠正我的理解、覆盖建议或暂不处理。</li>
+            </ul>
+            <button class="button primary" type="button">继续当前工作</button>
+          </div>
+        </aside>`;
+      }
+
+      function aPageHeader() {
+        const [title, subtitle] = pageTitle();
+        return `<div class="a-page-header"><div><h1 class="page-title">${title}</h1><p class="page-subtitle">${subtitle}</p></div><div class="a-header-actions">${appState.page === "opportunities" ? `<button class="button primary" type="button">${icons.plus}带入职位</button>` : appState.page === "opportunity" ? '<button class="button primary" type="button" data-page="materials">准备申请</button>' : '<button class="button" type="button">查看当前方向</button>'}</div></div>`;
+      }
+
+      function todayContentA() {
+        return `${aPageHeader()}
+          <div class="today-grid">
+            <section class="priority-list"><div class="priority-head"><h2 class="section-title">今日决策队列</h2><span class="section-note">按预期影响排序，不是普通待办</span></div>
+              ${tasks.map((task, i) => `<div class="priority-item" data-page="${task.page}"><span class="priority-index">${i + 1}</span><span><strong class="priority-title">${task.title}</strong><span class="priority-copy">${task.copy}</span></span><span class="priority-action">${task.action} →</span></div>`).join("")}
+            </section>
+            <section class="direction-pulse"><div class="section-head"><h2 class="section-title">方向脉搏</h2><span class="section-note">最近 7 天</span></div><div class="pulse-body"><div class="pulse-title">资深前端 / 前端架构</div><div class="pulse-meta"><span class="badge">主方向</span><span class="badge">上海或远程</span></div><hr class="pulse-rule"><div class="pulse-row"><span>新机会</span><strong>4</strong></div><div class="pulse-row"><span>值得继续</span><strong>2</strong></div><div class="pulse-row"><span>关键未知项</span><strong>6</strong></div><div class="pulse-row"><span>申请就绪</span><strong>1</strong></div></div></section>
+          </div>
+          <section class="opportunity-strip"><div class="section-head"><h2 class="section-title">正在判断的机会</h2><button class="button ghost" type="button" data-page="opportunities">查看全部 ${icons.arrow}</button></div><div class="opportunity-grid">${opportunities.map(oppCard).join("")}</div></section>`;
+      }
+
+      function oppCard(o) {
+        return `<article class="opportunity-card" data-opportunity="${o.id}"><span class="opp-company">${o.company}</span><strong class="opp-role">${o.role}</strong><div class="opp-meta">${o.salary}<br>${o.place}</div><div class="opp-footer">${status(o.recommendation, o.tone)}<span class="opp-unknown">${o.unknowns} 项未知</span></div></article>`;
+      }
+
+      function opportunitiesContentA() {
+        return `${aPageHeader()}<section class="object-table"><div class="table-toolbar"><div class="table-filters"><button class="filter-button active" type="button">全部 4</button><button class="filter-button" type="button">值得继续 2</button><button class="filter-button" type="button">等待信息 1</button></div><span class="section-note">没有综合总分或自动排名</span></div>
+          ${opportunities.map(o => `<div class="opportunity-row" data-opportunity="${o.id}"><div class="row-title"><strong>${o.company} · ${o.role}</strong><span>${o.salary} · ${o.place}</span></div><div class="row-cell">${o.match}</div><div class="row-cell optional-cell">下一步：${o.next}</div><div>${status(o.recommendation, o.tone)}</div><div class="row-cell optional-cell">${o.unknowns} 未知</div></div>`).join("")}</section>`;
+      }
+
+      function opportunityContentA() {
+        return `${aPageHeader()}<div class="detail-tabs">${[["evidence","证据与判断"],["fit","个人匹配"],["application","申请准备"]].map(([id,label])=>`<button class="detail-tab${appState.detailTab===id?" active":""}" type="button" data-detail-tab="${id}">${label}</button>`).join("")}</div>${detailPaneA()}`;
+      }
+
+      function detailPaneA() {
+        if (appState.detailTab === "fit") return `<div class="detail-layout"><section class="detail-main"><div class="verdict-band"><div class="verdict-top"><span class="verdict-title">匹配不是问题，真实职责才是</span>${status("匹配较强", "good")}</div><p class="verdict-copy">林舟具备复杂前端、工程化和跨团队技术落地经验。主要差距不在能力，而在职位是否真的提供架构职责与技术决策空间。</p></div><div class="evidence-ledger"><div class="section-head"><h2 class="section-title">匹配依据</h2></div>${["微前端迁移路径与岗位平台化职责高度相关","跨业务线方案推动可迁移到多团队协作","没有人员绩效管理经验，不应假设可承担团队管理"].map((x,i)=>`<div class="evidence-item"><span class="evidence-kind">${i<2?"已确认事实":"表达边界"}</span><span class="evidence-text"><strong>${x}</strong><span>可追溯到职业事实与用户更正记录。</span></span><span class="evidence-time">当前有效</span></div>`).join("")}</div></section><aside class="detail-side"><section class="analysis-sheet"><div class="section-head"><h2 class="section-title">机会成本</h2></div><div class="analysis-block"><h3>申请投入</h3><p>预计需要 35 分钟完成材料审核和首轮沟通准备。</p></div><div class="analysis-block"><h3>替代机会</h3><p>岸线云的信息确定性更高，但技术决策空间可能更小。</p></div></section></aside></div>`;
+        if (appState.detailTab === "application") return `<div class="detail-layout"><section class="detail-main"><div class="verdict-band"><div class="verdict-top"><span class="verdict-title">可以准备，但不要隐藏未知项</span>${status("材料草拟中", "wait")}</div><p class="verdict-copy">定制材料将突出工程化升级与跨团队技术落地；工作方式、团队稳定性和长期招聘原因继续保留在沟通问题中。</p></div><div class="package-review"><div class="section-head"><h2 class="section-title">申请决策包</h2><span class="section-note">3 / 5 已准备</span></div>${reviewRows()}</div></section><aside class="detail-side"><div class="unknown-box"><h3>申请前需要确认</h3><ul><li>固定坐班还是弹性办公？</li><li>岗位长期发布的真实原因？</li><li>前端负责人是否包含人员管理？</li></ul></div><button class="button primary" style="margin-top:.75rem;width:100%" type="button" data-page="materials">进入材料审核</button></aside></div>`;
+        return `<div class="detail-layout"><section class="detail-main"><div class="verdict-band"><div class="verdict-top"><span class="verdict-title">谨慎投入</span>${status("建议继续了解", "caution")}</div><p class="verdict-copy">技术领导经历和平台化职责匹配，但工作方式存在公开信息冲突，职位长期发布原因未知。先确认这两点，再决定是否投入完整申请成本。</p></div><div class="evidence-ledger"><div class="section-head"><h2 class="section-title">证据台账</h2><span class="section-note">来源、时间和强弱保持可见</span></div>${evidence.map(e=>`<div class="evidence-item"><span class="evidence-kind">${e.kind}</span><span class="evidence-text"><strong>${e.title}</strong><span>${e.note}</span></span><span class="evidence-time">${e.time}</span></div>`).join("")}</div></section><aside class="detail-side"><section class="analysis-sheet"><div class="section-head"><h2 class="section-title">个人判断</h2></div><div class="analysis-block"><h3>匹配</h3><p>工程化、复杂前端与跨团队方案经历高度相关。</p></div><div class="analysis-block"><h3>回报</h3><p>薪资和职责上限有吸引力，可能扩大技术影响力。</p></div><div class="analysis-block"><h3>风险</h3><p>工作方式冲突，岗位长期发布，团队稳定性未知。</p></div></section><div class="unknown-box"><h3>可能改变结论</h3><ul><li>确认实际工作方式</li><li>了解岗位长期招聘原因</li><li>核实职责是否包含人员管理</li></ul></div></aside></div>`;
+      }
+
+      function profileContentA() {
+        return `${aPageHeader()}<div class="profile-layout"><section class="profile-summary"><div class="profile-identity"><h2>林舟</h2><p>8 年前端与全栈经历 · 当前聚焦资深前端与前端架构方向</p></div><div class="profile-stat"><span>已确认事实</span><strong>27</strong></div><div class="profile-stat"><span>能力证据</span><strong>18</strong></div><div class="profile-stat"><span>AI 推断</span><strong>2</strong></div><div class="profile-stat"><span>关键未知项</span><strong>4</strong></div></section><section class="fact-board"><div class="section-head"><h2 class="section-title">当前有效内容</h2><span class="section-note">只有这里的内容参与后续判断</span></div><div class="fact-group"><h3>已确认职业事实</h3><div class="fact-list">${["8 年前端与全栈经历","主导前端工程化升级","设计微前端迁移路径","推动三个业务线落地","技术负责人，不承担人员绩效"].map(x=>`<span class="fact-tag fact">${x}</span>`).join("")}</div></div><div class="fact-group"><h3>AI 推断 · 尚未确认</h3><div class="fact-list"><span class="fact-tag inference">可能参与过技术招聘评估</span><span class="fact-tag inference">具备平台团队协作经验</span></div></div><div class="fact-group"><h3>未知项</h3><div class="fact-list"><span class="fact-tag unknown">工程化改造的完整量化影响</span><span class="fact-tag unknown">国际化团队协作深度</span></div></div></section></div><section class="timeline"><div class="section-head"><h2 class="section-title">更正与演化</h2></div><div class="timeline-item"><span class="timeline-time">今天 08:55</span><span class="timeline-copy"><strong>纠正“人员管理者”推断</strong><span>用户确认自己负责技术方案和协作，但不承担人员绩效。已同步影响方向表达和岗位匹配。</span></span></div><div class="timeline-item"><span class="timeline-time">昨天</span><span class="timeline-copy"><strong>补充微前端迁移证据</strong><span>从项目复盘中确认三个业务线的落地范围，进入当前有效事实。</span></span></div></section>`;
+      }
+
+      function materialsContentA() {
+        return `${aPageHeader()}<div class="materials-grid">${materialCards()}</div><section class="package-review"><div class="section-head"><h2 class="section-title">岸线云 · 申请决策包</h2><span class="section-note">系统建议：值得投入 · 用户尚未决定</span></div>${reviewRows()}</section>`;
+      }
+
+      function materialCards() {
+        return [
+          ["方向资产","资深前端 / 前端架构 · 基础简历","已审核","12 条事实表达","今天 09:10",false],
+          ["平台档案","Boss 精简档案","已审核","8 条事实表达","昨天",false],
+          ["职位定制","岸线云 · 高级前端工程师","等待审核","相对基础版 4 处修改","今天 10:02",true],
+          ["职位定制","澄屿科技 · 前端负责人","草拟中","风险与职责待确认","今天 09:58",true]
+        ].map(([kind,title,state,detail,time,specific])=>`<article class="material-item${specific?" job-specific":""}"><div class="material-head"><span>${kind}</span><h2>${title}</h2></div><div class="material-body"><div class="material-row"><span>状态</span><strong>${state}</strong></div><div class="material-row"><span>事实一致性</span><strong>${detail}</strong></div><div class="material-row"><span>最近更新</span><strong>${time}</strong></div><div class="material-actions"><button class="button primary" type="button">${state==="等待审核"?"开始审核":"打开"}</button><button class="button" type="button">查看差异</button></div></div></article>`).join("");
+      }
+
+      function reviewRows() {
+        return [["岗位定制简历","已按平台工程职责重排项目，没有新增事实","已准备"],["初次沟通草稿","突出工程化和跨团队落地，语气适合 Boss","已准备"],["重点能力证据","微前端迁移、工程化升级、技术方案推动","已准备"],["招聘方待确认问题","工作方式、团队规模、岗位长期招聘原因","待审核"],["用户最终决定","申请 / 暂缓 / 放弃及理由","未决定"]].map(([title,copy,state],i)=>`<div class="review-row"><span class="review-check">${i<3?"✓":"·"}</span><span class="review-copy"><strong>${title}</strong><span>${copy}</span></span>${status(state,i<3?"good":"wait")}</div>`).join("");
+      }
+
+      function renderA() {
+        const content = appState.page === "today" ? todayContentA() : appState.page === "opportunities" ? opportunitiesContentA() : appState.page === "opportunity" ? opportunityContentA() : appState.page === "profile" ? profileContentA() : materialsContentA();
+        return `<div class="a-shell">${aNav()}<main class="a-main"><div class="a-content"><div class="a-topbar"><div class="a-crumb"><button class="button ghost mobile-nav-button" type="button" data-nav-toggle>${icons.menu}导航</button>个人空间 / ${pageTitle()[0]}</div><div class="a-top-actions"><button class="button" type="button">${icons.search}搜索</button><button class="button" type="button">${icons.plus}带入职位</button></div></div>${content}</div></main>${aAdvisor()}</div>`;
+      }
+
+      function bNav() {
+        return `<header class="b-header"><div class="b-header-inner">${brand(false)}<button class="button ghost mobile-nav-button" type="button" data-nav-toggle>${icons.menu}导航</button><nav id="mobile-nav" class="b-nav${appState.navOpen ? " open" : ""}">${navItems.map(([id,label])=>`<button class="b-nav-button${appState.page===id||(id==="opportunities"&&appState.page==="opportunity")?" active":""}" type="button" data-page="${id}">${label}</button>`).join("")}</nav><button class="b-profile-button" type="button" data-page="profile"><span>林舟 · 资深前端方向</span><span class="b-avatar">林</span></button></div></header>`;
+      }
+
+      function todayContentB() {
+        return `<div class="b-date">2026 年 8 月 12 日 · 职业简报</div><h1 class="b-title">今天，不必寻找更多机会。先让两个已有选择变得清晰。</h1><p class="b-deck">一个关键信息可能改变澄屿科技的判断；一份已经值得申请的材料只差你的审核。择途建议把注意力放在这两件事上。</p><hr class="b-rule"><div class="b-brief-grid"><article class="b-lead"><span class="b-lead-label">首要判断</span><h2>澄屿科技值得继续了解，但“弹性办公”与“固定坐班”的冲突不能被忽略。</h2><p>岗位职责与林舟的技术领导经历相符，薪资也有吸引力；然而工作方式直接影响现实可行性。公开来源不足以消除冲突，下一步应向招聘方确认，而不是继续润色简历。</p><button class="b-brief-action" type="button" data-page="opportunity">阅读完整判断 ${icons.arrow}</button></article><aside class="b-sidebar-brief"><div class="b-side-item"><span>材料</span><strong>岸线云定制简历等待审核</strong></div><div class="b-side-item"><span>画像</span><strong>一条职责推断需要纠正</strong></div><div class="b-side-item"><span>方向</span><strong>本周新机会 4 个，值得继续 2 个</strong></div></aside></div><section class="b-section"><div class="b-section-head"><h2>正在观察的机会</h2><span>按当前建议分组，不做自动排名</span></div><div class="b-story-grid">${opportunities.slice(1,4).map(o=>`<article class="b-story" data-opportunity="${o.id}"><span class="b-story-company">${o.company}</span><h3>${o.role}</h3><p>${o.match}。${o.next}。</p><div class="b-story-footer">${status(o.recommendation,o.tone)}<span class="opp-unknown">${o.unknowns} 项未知</span></div></article>`).join("")}</div></section>`;
+      }
+
+      function opportunitiesContentB() {
+        return `<div class="b-object-header"><div><div class="b-date">当前机会集 · 4 个</div><h1 class="b-object-title">不是哪个分数最高，而是哪种取舍更适合现在的你。</h1></div><p class="b-object-summary">四个机会分别代表技术空间、信息确定性、薪酬上限与现实可行性的不同组合。择途保留建议，但不会替你生成唯一最优答案。</p></div><section class="b-section"><div class="b-story-grid">${opportunities.slice(0,3).map(o=>`<article class="b-story" data-opportunity="${o.id}"><span class="b-story-company">${o.company} · ${o.salary}</span><h3>${o.role}</h3><p>${o.match}。下一步：${o.next}。</p><div class="b-story-footer">${status(o.recommendation,o.tone)}<span class="opp-unknown">${o.unknowns} 项未知</span></div></article>`).join("")}</div><article class="b-lead" style="margin-top:2rem;padding-top:1.2rem;border-top:1px solid #8d897f" data-opportunity="farhill"><span class="b-lead-label">明确排除</span><h2>远岚网络的能力匹配，不能抵消长期单休这一硬约束。</h2><p>这是“暂不投入”，不是低分。它提醒我们：现实限制属于决策条件，而不是可以被一般优势冲掉的扣分项。</p></article></section>`;
+      }
+
+      function opportunityContentB() {
+        return `<div class="b-object-header"><div><div class="b-date">机会判断 · 谨慎投入</div><h1 class="b-object-title">澄屿科技，真正需要确认的不是技术栈，而是这份工作的现实形态。</h1></div><p class="b-object-summary">林舟的经历与架构职责相符。当前判断受两个未知项限制：实际工作方式，以及岗位长期发布的原因。</p></div><div class="b-reading-grid"><aside class="b-margin-note"><h3>系统建议</h3><p>继续了解，但先确认硬条件。现在投入完整申请成本仍然偏早。</p><div style="margin-top:.8rem">${status("谨慎投入","caution")}</div><button class="button primary" style="margin-top:1rem" type="button" data-page="materials">查看申请准备</button></aside><article class="b-reading"><h2>为什么仍然值得了解</h2><p>公司公开产品方向能够核验，岗位对复杂前端、工程化和跨团队方案能力的要求，也与林舟的当前事实相符。薪酬与职责上限意味着它可能是一份性价比较高的机会。</p><h2>为什么不能直接乐观</h2><p>官网与招聘页对工作方式的描述冲突。同一岗位在较长时间内重复发布，可能意味着持续扩招，也可能意味着留存或职责预期存在问题。公开信息不足以替代向招聘方确认。</p><div class="b-evidence"><h2>证据与未知项</h2>${evidence.map(e=>`<div class="b-evidence-item"><span>${e.kind}</span><strong>${e.title}<br><small style="font-family:var(--sans);font-weight:400;color:#6c685f">${e.note}</small></strong></div>`).join("")}</div></article></div>`;
+      }
+
+      function profileContentB() {
+        return `<div class="b-object-header"><div><div class="b-date">当前有效职业画像</div><h1 class="b-object-title">林舟不是一组技能关键词，而是一套可以被纠正的职业事实。</h1></div><p class="b-object-summary">AI 主动理解和提出解释；用户决定哪些内容成为当前有效事实。历史用于说明变化，不用于重新施加已否定标签。</p></div><div class="b-profile-columns"><section class="b-profile-section"><h2>当前定位</h2><p>8 年前端与全栈经历，聚焦资深前端与前端架构。强调复杂系统迁移、工程化升级和跨团队技术落地。</p></section><section class="b-profile-section"><h2>已确认事实</h2><ul><li>设计微前端迁移路径并推动三个业务线落地</li><li>主导前端工程化升级</li><li>技术负责人，不承担人员绩效</li></ul></section><section class="b-profile-section"><h2>AI 仍在推断</h2><p>可能参与过技术招聘评估；具备平台团队协作经验。这些内容尚不能进入对外材料。</p></section><section class="b-profile-section"><h2>尚不知道</h2><p>工程化改造的完整量化影响；国际化团队协作深度。它们是后续证据目标，不是需要立即补满的空格。</p></section><section class="b-profile-section"><h2>最近一次更正</h2><p>用户否定“人员管理者”推断，确认自己的领导方式是技术方案与跨团队协作。该更正已经同步到方向简历和岗位匹配。</p></section></div>`;
+      }
+
+      function materialsContentB() {
+        return `<div class="b-object-header"><div><div class="b-date">方向表达与申请材料</div><h1 class="b-object-title">多份简历可以讲不同重点，但不能拥有不同的事实。</h1></div><p class="b-object-summary">方向定位是稳定起点；职位定制只是有依据的重排与删改。风险、未知项和表达边界继续留在申请决策包中。</p></div><section class="b-section"><div class="b-story-grid">${[["基础资产","资深前端 / 前端架构简历","已审核"],["招聘平台","Boss 精简档案","已审核"],["职位定制","岸线云 · 高级前端工程师","等待审核"]].map(([kind,title,state])=>`<article class="b-story"><span class="b-story-company">${kind}</span><h3>${title}</h3><p>所有事实可追溯到当前职业画像；最近修改没有新增未经确认内容。</p><div class="b-story-footer">${status(state,state==="等待审核"?"wait":"good")}<button class="b-brief-action" type="button">打开 ${icons.arrow}</button></div></article>`).join("")}</div></section>`;
+      }
+
+      function renderB() {
+        const content = appState.page === "today" ? todayContentB() : appState.page === "opportunities" ? opportunitiesContentB() : appState.page === "opportunity" ? opportunityContentB() : appState.page === "profile" ? profileContentB() : materialsContentB();
+        return `<div class="b-shell">${bNav()}<main class="b-main">${content}</main></div>`;
+      }
+
+      function cNav() {
+        return `<aside id="mobile-nav" class="c-rail${appState.navOpen ? " open" : ""}"><div class="c-nav"><div class="c-rail-label">Workspace</div>${navItems.map(([id,label,icon])=>`<button class="c-nav-button${appState.page===id||(id==="opportunities"&&appState.page==="opportunity")?" active":""}" type="button" data-page="${id}">${icon}${label}</button>`).join("")}<div class="c-rail-label">Context</div><button class="c-nav-button" type="button">${icons.shield}服务与数据</button></div></aside>`;
+      }
+
+      function cCommandbar() {
+        return `<header class="c-commandbar">${brand(false)}<div class="c-search">${icons.search}<span>搜索机会、证据、职业事实或材料…</span></div><div class="c-command-actions"><button class="c-command" type="button">+ 职位</button><button class="c-command" type="button">林舟</button></div></header>`;
+      }
+
+      function cPagebar(title, note="") {
+        return `<div class="c-pagebar"><div><button class="c-mini-button mobile-nav-button" type="button" data-nav-toggle>${icons.menu}</button><h1 style="display:inline;margin-left:.35rem">${title}</h1>${note?`<span style="margin-left:.6rem;color:#6d776f;font-size:.6rem">${note}</span>`:""}</div><div class="c-view-actions"><button class="c-mini-button" type="button">筛选</button><button class="c-mini-button" type="button">字段</button><button class="c-mini-button" type="button">导出当前视图</button></div></div>`;
+      }
+
+      function todayContentC() {
+        return `${cPagebar("今日工作台","3 项优先工作 · 4 个活跃机会")}<div class="c-workgrid"><div><section class="c-gridpanel"><div class="c-panelhead"><h2>决策队列</h2><span>按影响与依赖排序</span></div>${tasks.map(t=>`<div class="c-taskrow" data-page="${t.page}"><span class="c-taskcheck"></span><span class="c-taskcopy"><strong>${t.title}</strong><span>${t.copy}</span></span><span class="c-tasktype">${t.action}</span></div>`).join("")}</section><section class="c-ledger"><div class="c-panelhead"><h2>最近变化</h2><span>事实与判断更新</span></div><div class="c-ledger-row"><span>09:51</span><strong>澄屿科技新增工作方式冲突</strong><span>证据</span><span>影响建议</span></div><div class="c-ledger-row"><span>09:10</span><strong>方向基础简历完成审核</strong><span>材料</span><span>当前有效</span></div><div class="c-ledger-row"><span>08:55</span><strong>人员管理者推断被用户否定</strong><span>画像</span><span>已传播</span></div></section></div><aside class="c-inspector"><div class="c-inspector-head"><span>当前检查器</span><h2>今日优先级说明</h2></div><div class="c-inspector-body"><div class="c-field"><span>首要工作</span><strong>确认澄屿工作方式</strong></div><div class="c-field"><span>原因</span><strong>可能改变“谨慎投入”建议</strong></div><div class="c-field"><span>其次</span><strong>审核岸线云申请材料</strong></div><div class="c-inspector-section"><h3>AI 顾问</h3><ul><li>不建议继续扩大机会数量</li><li>先消除关键未知项</li><li>再完成已有高价值申请</li></ul></div></div></aside></div>`;
+      }
+
+      function opportunitiesContentC() {
+        return `${cPagebar("机会台账","无综合分 · 4 个机会")}<div class="c-workgrid"><section class="c-gridpanel matrix-wrap"><table class="c-matrix"><thead><tr><th style="width:23%">机会</th><th style="width:13%">建议</th><th style="width:16%">回报</th><th style="width:18%">主要风险</th><th style="width:16%">下一步</th><th style="width:8%">未知</th></tr></thead><tbody>${opportunities.map(o=>`<tr data-opportunity="${o.id}"><td><strong>${o.company}</strong><span class="c-sub">${o.role}<br>${o.salary}</span></td><td>${status(o.recommendation,o.tone)}</td><td>${o.match}</td><td>${o.id==="farhill"?"长期单休":o.id==="chengyu"?"工作方式冲突":"信息仍需核验"}</td><td>${o.next}</td><td>${o.unknowns}</td></tr>`).join("")}</tbody></table></section><aside class="c-inspector"><div class="c-inspector-head"><span>机会检查器</span><h2>澄屿科技</h2></div><div class="c-inspector-body"><div class="c-field"><span>建议</span><strong>谨慎投入</strong></div><div class="c-field"><span>方向</span><strong>资深前端 / 前端架构</strong></div><div class="c-field"><span>关键冲突</span><strong>弹性办公 / 固定坐班</strong></div><div class="c-field"><span>未知项</span><strong>3</strong></div><button class="button primary" style="width:100%;margin-top:.7rem" type="button" data-page="opportunity">打开完整判断</button></div></aside></div>`;
+      }
+
+      function opportunityContentC() {
+        return `${cPagebar("澄屿科技 / 资深前端工程师","建议：谨慎投入")}<div class="c-workgrid"><div><section class="c-gridpanel"><div class="c-panelhead"><h2>证据台账</h2><span>4 条 · 1 项冲突</span></div>${evidence.map(e=>`<div class="c-ledger-row"><span>${e.kind}</span><strong>${e.title}<span class="c-sub">${e.note}</span></strong><span>${e.time}</span><span>${e.kind==="冲突信息"?"待确认":"已记录"}</span></div>`).join("")}</section><section class="c-ledger"><div class="c-panelhead"><h2>判断分解</h2><span>当前方向：资深前端 / 前端架构</span></div><div class="c-ledger-row"><span>匹配</span><strong>工程化、复杂前端、跨团队技术落地</strong><span>较强</span><span>事实支持</span></div><div class="c-ledger-row"><span>回报</span><strong>薪资与技术影响力上限有吸引力</strong><span>中高</span><span>待核验职责</span></div><div class="c-ledger-row"><span>风险</span><strong>工作方式冲突、长期招聘原因未知</strong><span>显著</span><span>可改变结论</span></div></section></div><aside class="c-inspector"><div class="c-inspector-head"><span>系统建议 / 用户决定分离</span><h2>谨慎投入</h2></div><div class="c-inspector-body"><div class="c-field"><span>系统建议</span><strong>先确认硬条件，再投入完整申请成本</strong></div><div class="c-field"><span>用户决定</span><strong>尚未决定</strong></div><div class="c-inspector-section"><h3>必须确认</h3><ul><li>实际工作方式</li><li>长期招聘原因</li><li>职责是否包含人员管理</li></ul></div><button class="button primary" style="width:100%;margin-top:.75rem" type="button" data-page="materials">准备申请材料</button></div></aside></div>`;
+      }
+
+      function profileContentC() {
+        return `${cPagebar("职业画像数据","27 事实 · 18 证据 · 2 推断 · 4 未知")}<div class="c-profile-sheet"><section class="c-profile-index"><div class="c-panelhead"><h2>分类</h2></div><div class="c-index-item"><strong>职业事实</strong><span>27</span></div><div class="c-index-item"><strong>能力证据</strong><span>18</span></div><div class="c-index-item"><strong>AI 推断</strong><span>2</span></div><div class="c-index-item"><strong>未知项</strong><span>4</span></div><div class="c-index-item"><strong>更正记录</strong><span>6</span></div></section><section class="c-profile-data"><div class="c-panelhead"><h2>当前有效职业事实</h2><span>被下游引用</span></div>${[["经历","8 年前端与全栈经历","已确认"],["项目","设计微前端迁移路径并推动三个业务线落地","已确认"],["能力","主导前端工程化升级","已确认"],["角色","技术负责人，不承担人员绩效","用户更正"],["推断","可能参与过技术招聘评估","未确认"],["未知","工程化改造的完整量化影响","待补充"]].map(([type,value,state])=>`<div class="c-data-row"><span>${type}</span><strong>${value}</strong><span>${state}</span></div>`).join("")}</section></div>`;
+      }
+
+      function materialsContentC() {
+        return `${cPagebar("材料版本台账","4 个版本 · 1 个等待审核")}<div class="c-workgrid"><section class="c-gridpanel matrix-wrap"><table class="c-matrix"><thead><tr><th>材料</th><th>类型</th><th>状态</th><th>事实表达</th><th>绑定机会</th><th>更新</th></tr></thead><tbody><tr><td><strong>资深前端 / 前端架构简历</strong></td><td>方向资产</td><td>${status("已审核","good")}</td><td>12</td><td>—</td><td>09:10</td></tr><tr><td><strong>Boss 精简档案</strong></td><td>平台档案</td><td>${status("已审核","good")}</td><td>8</td><td>—</td><td>昨天</td></tr><tr><td><strong>岸线云定制简历</strong></td><td>职位定制</td><td>${status("等待审核","wait")}</td><td>11</td><td>岸线云</td><td>10:02</td></tr><tr><td><strong>澄屿科技定制简历</strong></td><td>职位定制</td><td>${status("草拟中","caution")}</td><td>10</td><td>澄屿科技</td><td>09:58</td></tr></tbody></table></section><aside class="c-inspector"><div class="c-inspector-head"><span>材料检查器</span><h2>岸线云定制简历</h2></div><div class="c-inspector-body"><div class="c-field"><span>相对基础版</span><strong>4 处修改</strong></div><div class="c-field"><span>新增事实</span><strong>0</strong></div><div class="c-field"><span>主要变化</span><strong>平台工程经验提前</strong></div><div class="c-inspector-section"><h3>待审核</h3><ul><li>两个项目顺序变化</li><li>一段无关经历被删除</li><li>沟通草稿强调跨团队落地</li></ul></div><button class="button primary" style="width:100%;margin-top:.75rem" type="button">开始审核</button></div></aside></div>`;
+      }
+
+      function renderC() {
+        const content = appState.page === "today" ? todayContentC() : appState.page === "opportunities" ? opportunitiesContentC() : appState.page === "opportunity" ? opportunityContentC() : appState.page === "profile" ? profileContentC() : materialsContentC();
+        return `<div class="c-shell">${cCommandbar()}<div class="c-body">${cNav()}<main class="c-main">${content}</main></div></div>`;
+      }
+
+      function updateUrl() {
+        const url = new URL(location.href);
+        url.searchParams.set("variant", appState.variant);
+        history.replaceState(null, "", url);
+      }
+
+      function cycleVariant(delta) {
+        const keys = Object.keys(variants);
+        const current = keys.indexOf(appState.variant);
+        appState.variant = keys[(current + delta + keys.length) % keys.length];
+        appState.navOpen = false;
+        updateUrl();
+        render();
+      }
+
+      function navigate(page) {
+        appState.page = page;
+        appState.navOpen = false;
+        render();
+      }
+
+      function bindEvents() {
+        document.querySelectorAll("[data-page]").forEach(el => el.addEventListener("click", () => navigate(el.dataset.page)));
+        document.querySelectorAll("[data-opportunity]").forEach(el => el.addEventListener("click", () => navigate("opportunity")));
+        document.querySelectorAll("[data-detail-tab]").forEach(el => el.addEventListener("click", () => { appState.detailTab = el.dataset.detailTab; render(); }));
+        document.querySelectorAll("[data-nav-toggle]").forEach(el => el.addEventListener("click", () => { appState.navOpen = true; render(); }));
+      }
+
+      function setNavOpen(open) {
+        appState.navOpen = open;
+        const nav = document.getElementById("mobile-nav");
+        if (nav) nav.classList.toggle("open", open);
+        $("mobile-scrim").hidden = !open;
+      }
+
+      function render() {
+        $("app").innerHTML = appState.variant === "A" ? renderA() : appState.variant === "B" ? renderB() : renderC();
+        $("variant-label").textContent = variants[appState.variant];
+        $("mobile-scrim").hidden = !appState.navOpen;
+        bindEvents();
+      }
+
+      $("prev-variant").addEventListener("click", () => cycleVariant(-1));
+      $("next-variant").addEventListener("click", () => cycleVariant(1));
+      $("mobile-scrim").addEventListener("click", () => setNavOpen(false));
+      document.addEventListener("keydown", (event) => {
+        const tag = document.activeElement?.tagName;
+        if (["INPUT", "TEXTAREA"].includes(tag) || document.activeElement?.isContentEditable) return;
+        if (event.key === "ArrowLeft") cycleVariant(-1);
+        if (event.key === "ArrowRight") cycleVariant(1);
+        if (event.key === "Escape") setNavOpen(false);
+      });
+
+      render();
+    })();
+  </script>
+</body>
+</html>

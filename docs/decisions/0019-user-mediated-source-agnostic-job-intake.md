@@ -4,11 +4,13 @@ type: decision
 status: accepted
 id: ADR-0019
 created: 2026-08-11
-updated: 2026-08-11
+updated: 2026-08-12
 related:
   - ../product/product-brief.md
+  - ../product/product-capability-map.md
   - 0011-minimum-necessary-external-disclosure.md
   - 0014-evidence-first-decision-support.md
+  - 0023-manual-text-and-screenshot-job-intake.md
   - ../../.trellis/tasks/08-11-product-vision-boundaries/research/job-source-access-boundaries.md
 ---
 
@@ -62,4 +64,4 @@ related:
 
 ## Supersession
 
-无。
+关于第一版职位内容输入方式的第 5 条已被 [ADR-0023](0023-manual-text-and-screenshot-job-intake.md) 部分取代：第一版正文输入收窄为文本和截图，URL 只记录为来源，浏览器当前页面采集后置。其余决定继续有效。

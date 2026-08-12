@@ -6,7 +6,7 @@
 
 | 目录 | 回答的问题 | 权威性 |
 |---|---|---|
-| [`product/`](product/product-brief.md) | 我们为什么做、为谁做、当前产品方向是什么？ | 当前产品上下文 |
+| [`product/`](product/product-brief.md) | 我们为什么做、为谁做、当前产品方向和能力边界是什么？ | 当前产品上下文 |
 | [`specs/`](specs/README.md) | 产品或系统现在必须满足什么？ | 当前有效契约 |
 | [`decisions/`](decisions/README.md) | 为什么选择这种方案？ | 不可覆写的决策历史 |
 | [`work/`](work/README.md) | 我们讨论过什么、正在研究什么？ | 阶段性工作记录 |
@@ -22,6 +22,11 @@
 * `.trellis/spec/` 保存 AI 必须直接遵守的精炼约束和对 `docs/` 正文的引用。
 * Trellis 任务形成长期结论后，应将结论晋升到 `docs/`，而不是在两处长期维护相同正文。
 * 发生冲突时，项目知识以 `docs/` 为准；仅服务于 Trellis 自身运行的规则以 `.trellis/` 为准。
+
+当前产品入口：
+
+* [`product/product-brief.md`](product/product-brief.md) 描述产品定位、目标用户、核心承诺和 MVP 概览；
+* [`product/product-capability-map.md`](product/product-capability-map.md) 描述完整能力层级、阶段、规划依据、下一步动作和依赖关系。
 
 ## 文档生命周期
 

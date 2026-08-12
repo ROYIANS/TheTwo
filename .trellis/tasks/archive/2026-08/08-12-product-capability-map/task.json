@@ -1,0 +1,31 @@
+{
+  "id": "product-capability-map",
+  "name": "product-capability-map",
+  "title": "brainstorm: build product capability map",
+  "description": "",
+  "status": "completed",
+  "dev_type": null,
+  "scope": null,
+  "package": null,
+  "priority": "P2",
+  "creator": "ROYIANS",
+  "assignee": "ROYIANS",
+  "createdAt": "2026-08-12",
+  "completedAt": "2026-08-12",
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": null,
+  "relatedFiles": [
+    "docs/product/product-capability-map.md",
+    "docs/product/product-brief.md",
+    "docs/decisions/0022-isolated-multi-user-self-hosting.md",
+    "docs/decisions/0023-manual-text-and-screenshot-job-intake.md"
+  ],
+  "notes": "",
+  "meta": {}
+}

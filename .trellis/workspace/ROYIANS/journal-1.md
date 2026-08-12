@@ -138,3 +138,36 @@ Defined Zetu's ten product capability domains, cross-cutting advisor/evidence/de
 ### Next Steps
 
 - None - task complete
+
+
+## Session 5: Define MVP experience backbone
+
+**Date**: 2026-08-12
+**Task**: Define MVP experience backbone
+**Branch**: `main`
+
+### Summary
+
+Defined the six-stage MVP experience backbone, persistent experience state, edge cases, and validation goals for a follow-up throwaway prototype.
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `ce5a710` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete

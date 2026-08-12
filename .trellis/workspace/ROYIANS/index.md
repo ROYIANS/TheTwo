@@ -8,7 +8,7 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 4
+- **Total Sessions**: 5
 - **Last Active**: 2026-08-12
 <!-- @@@/auto:current-status -->
 
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~140 | Active |
+| `journal-1.md` | ~173 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 5 | 2026-08-12 | Define MVP experience backbone | `ce5a710` | `main` |
 | 4 | 2026-08-12 | Define product capability map | `7c842c9` | `main` |
 | 3 | 2026-08-11 | Define product vision and MVP boundaries | `b06b642` | `main` |
 | 2 | 2026-08-11 | Bootstrap Trellis development guidelines | `c9d8eef`, `d453f60` | `main` |

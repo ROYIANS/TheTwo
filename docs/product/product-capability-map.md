@@ -6,6 +6,7 @@ created: 2026-08-12
 updated: 2026-08-12
 related:
   - product-brief.md
+  - mvp-experience-backbone.md
   - ../decisions/0003-personal-career-decision-system.md
   - ../decisions/0005-complete-job-search-decision-loop.md
   - ../decisions/0007-user-owned-career-profile.md
@@ -25,6 +26,8 @@ related:
 本文把择途的产品愿景、求职闭环和边界整理为稳定的产品能力结构，用于回答：长期计划提供什么能力，第一版必须具备什么，哪些能力后置，以及哪些方向明确不做。
 
 这是一份产品规划，不是开发待办、页面清单或技术架构。当前没有可运行产品，因此本文中的阶段和规划字段不表示功能已经实现，也不表示准确性、可用性或效果已经接受检验。
+
+这些能力在第一版中的端到端体验顺序、确认点和持续状态见 [`mvp-experience-backbone.md`](mvp-experience-backbone.md)。
 
 ## 阅读方式
 

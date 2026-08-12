@@ -6,6 +6,7 @@ created: 2026-08-11
 updated: 2026-08-12
 related:
   - product-capability-map.md
+  - mvp-experience-backbone.md
   - ../work/discussions/2026-08-11-product-direction-handoff.md
   - ../decisions/0003-personal-career-decision-system.md
   - ../decisions/0004-initial-target-software-engineers.md
@@ -226,6 +227,8 @@ AI 主动理解并提出画像，用户拥有最终解释权。
 其中职业画像、目标与标准、简历定位、用户主动职位采集、公司调查、机会判断和申请决策包构成首个 MVP 主链；机会发现与完整求职过程属于 `MVP 后续`，职业发展与求职准备属于 `长期方向`。顾问工作方式、决策追溯、证据追溯、更正历史以及数据和模型控制作为横切契约作用于各能力域。
 
 ## 第一版 MVP 闭环
+
+端到端体验阶段、确认点、持续状态和失败分支见 [`mvp-experience-backbone.md`](mvp-experience-backbone.md)。
 
 第一版主路径包含准备阶段和反复使用的机会判断与申请准备循环：
 

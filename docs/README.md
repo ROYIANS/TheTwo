@@ -27,6 +27,7 @@
 
 * [`product/product-brief.md`](product/product-brief.md) 描述产品定位、目标用户、核心承诺和 MVP 概览；
 * [`product/product-capability-map.md`](product/product-capability-map.md) 描述完整能力层级、阶段、规划依据、下一步动作和依赖关系。
+* [`product/mvp-experience-backbone.md`](product/mvp-experience-backbone.md) 描述第一版从首次进入到申请决定的端到端用户体验与关键状态。
 
 ## 文档生命周期
 

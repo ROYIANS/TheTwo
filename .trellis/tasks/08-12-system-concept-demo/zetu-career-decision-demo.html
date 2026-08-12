@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>择途 · 职业研究系统 Demo</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f7f8fa;
+      --panel: #fff;
+      --panel-soft: #f2f4f7;
+      --ink: #242a33;
+      --muted: #78818d;
+      --line: #e2e6eb;
+      --line-dark: #cbd2da;
+      --green: #1b9a70;
+      --green-soft: #e5f5ee;
+      --orange: #e8683d;
+      --orange-soft: #fff0ea;
+      --red: #dc4c4c;
+      --red-soft: #fff0f0;
+      --blue: #3d79bf;
+      --blue-soft: #edf5ff;
+      --navy: #202938;
+      --mono: "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
+      --sans: "Microsoft YaHei UI", "PingFang SC", "Noto Sans CJK SC", system-ui, sans-serif;
+      --serif: "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-family: var(--sans);
+      font-size: 16px;
+    }
+    * { box-sizing: border-box; }
+    html, body { min-width: 320px; min-height: 100%; margin: 0; background: var(--bg); color: var(--ink); }
+    body { overflow: hidden; }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, input:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+    .app { height: 100vh; display: grid; grid-template-rows: 54px minmax(0, 1fr); }
+    .topbar { display: grid; grid-template-columns: 170px minmax(260px, 1fr) 300px; align-items: center; border-bottom: 1px solid var(--line); background: var(--panel); }
+    .brand { display: flex; align-items: center; gap: 10px; height: 100%; padding: 0 18px; border-right: 1px solid var(--line); }
+    .brand-mark { display: grid; place-items: center; width: 25px; height: 25px; border-radius: 5px; background: var(--navy); color: white; font-family: var(--serif); font-weight: 700; }
+    .brand strong { display: block; font-size: 14px; letter-spacing: .02em; }
+    .brand small { display: block; margin-top: 2px; color: var(--muted); font-family: var(--mono); font-size: 8px; }
+    .journey-nav { display: flex; justify-content: center; align-self: stretch; }
+    .journey-button { position: relative; min-width: 126px; padding: 0 18px; border: 0; border-right: 1px solid var(--line); background: transparent; color: var(--muted); text-align: left; }
+    .journey-button:first-child { border-left: 1px solid var(--line); }
+    .journey-button::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: transparent; }
+    .journey-button:hover { background: var(--panel-soft); color: var(--ink); }
+    .journey-button.active { background: #fbfcfd; color: var(--ink); }
+    .journey-button.active::after { background: var(--orange); }
+    .journey-button small { display: block; margin-bottom: 2px; font-family: var(--mono); font-size: 8px; }
+    .journey-button strong { display: block; font-size: 10px; }
+    .journey-button.done small { color: var(--green); }
+    .mode-nav { display: flex; justify-content: flex-end; gap: 2px; }
+    .mode-button { min-width: 70px; height: 32px; border: 0; border-radius: 5px; background: transparent; color: var(--muted); font-size: 12px; font-weight: 700; }
+    .mode-button:hover { background: var(--panel-soft); color: var(--ink); }
+    .mode-button.active { background: var(--panel-soft); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line); }
+    .stage-meta { display: flex; justify-content: flex-end; align-items: center; gap: 9px; height: 100%; padding: 0 17px; border-left: 1px solid var(--line); color: var(--muted); font-family: var(--mono); font-size: 10px; }
+    .stage-meta strong { color: var(--ink); font-family: var(--sans); font-size: 12px; }
+    .stage-meta.research-controls { gap: 6px; }
+    .stage-meta.research-controls .concept-badge { margin-right: 5px; }
+    .concept-badge { padding: 3px 6px; border: 1px solid var(--line-dark); border-radius: 4px; color: var(--muted); font-family: var(--mono); font-size: 8px; text-transform: uppercase; }
+    .ready { display: inline-flex; align-items: center; gap: 5px; color: #5a6571; }
+    .ready::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
+    .ready.waiting::before { background: var(--line-dark); }
+    .workspace { min-height: 0; display: grid; grid-template-columns: minmax(390px, .8fr) minmax(520px, 1.05fr); }
+    .workspace.artifact { grid-template-columns: 1fr 0; }
+    .workspace.artifact .task-pane { display: none; }
+    .workspace.workbench { grid-template-columns: 0 minmax(430px, 1fr); }
+    .workspace.workbench .artifact-pane { display: none; }
+    .artifact-pane, .task-pane { min-width: 0; min-height: 0; overflow: hidden; }
+    .artifact-pane { position: relative; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; border-right: 1px solid var(--line); background: var(--panel); }
+    .workspace.workbench .task-pane { grid-column: 2; }
+    .task-pane { display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto; background: var(--panel); }
+    .task-head { display: flex; justify-content: space-between; gap: 18px; padding: 18px 22px 13px; border-bottom: 1px solid var(--line); }
+    .task-head h1 { margin: 0; font-size: 17px; line-height: 1.35; }
+    .task-head p { margin: 4px 0 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
+    .task-head > div:last-child { display: grid; justify-items: end; align-content: start; gap: 7px; color: var(--muted); font-family: var(--mono); font-size: 10px; white-space: nowrap; }
+    .task-head .mode-nav { font-family: var(--sans); }
+    .task-head .status { padding: 4px 7px; border-radius: 4px; font-family: var(--sans); font-size: 10px; font-weight: 700; }
+    .stage-rail { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); padding: 0 22px; border-bottom: 1px solid var(--line); background: #fbfcfd; }
+    .stage-rail.profile { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .stage-rail.library { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .stage-button { position: relative; min-width: 0; height: 45px; padding: 0 8px; border: 0; border-right: 1px solid var(--line); background: transparent; color: var(--muted); text-align: left; }
+    .stage-button:first-child { border-left: 1px solid var(--line); }
+    .stage-button::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: transparent; }
+    .stage-button:hover { color: var(--ink); background: var(--panel-soft); }
+    .stage-button.active { color: var(--ink); background: var(--panel); }
+    .stage-button.active::after { background: var(--orange); }
+    .stage-button small { display: block; margin-bottom: 2px; font-family: var(--mono); font-size: 8px; }
+    .stage-button strong { display: block; overflow: hidden; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+    .status { display: inline-flex; align-items: center; width: fit-content; min-height: 22px; padding: 3px 7px; border: 1px solid var(--line); border-radius: 4px; font-size: 10px; font-weight: 700; }
+    .status.done { border-color: #a7d8c1; background: var(--green-soft); color: #147650; }
+    .status.active { border-color: #f0bdab; background: var(--orange-soft); color: #be542f; }
+    .status.wait { border-color: #b9d0ec; background: var(--blue-soft); color: #3d6d9f; }
+    .status.stop { border-color: #edb8b8; background: var(--red-soft); color: #a43b3b; }
+    .task-scroll { min-height: 0; overflow: auto; padding: 0 22px 20px; }
+    .stage-block { padding: 16px 0; border-bottom: 1px solid var(--line); }
+    .stage-block-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .stage-block-head h2 { margin: 0; font-size: 14px; }
+    .stage-block-head span { color: var(--muted); font-family: var(--mono); font-size: 9px; }
+    .stage-block p { margin: 7px 0 0; color: var(--muted); font-size: 11px; line-height: 1.6; }
+    .signal-strip { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 13px; padding: 10px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .signal { display: flex; align-items: baseline; gap: 6px; }
+    .signal strong { font-family: var(--serif); font-size: 16px; font-weight: 600; }
+    .signal span { color: var(--muted); font-size: 9px; }
+    .source-row { display: grid; grid-template-columns: 72px minmax(0, 1fr) 66px; gap: 8px; align-items: start; padding: 10px 0; border-bottom: 1px solid var(--line); }
+    .source-row:last-child { border-bottom: 0; }
+    .source-kind { color: var(--blue); font-size: 10px; font-weight: 700; }
+    .source-kind.risk { color: var(--orange); }
+    .source-row strong { display: block; font-size: 11px; line-height: 1.4; }
+    .source-row p { margin: 3px 0 0; color: var(--muted); font-size: 10px; line-height: 1.45; }
+    .source-row time { color: var(--muted); font-family: var(--mono); font-size: 9px; text-align: right; }
+    .question { display: flex; align-items: start; gap: 9px; margin-top: 12px; padding: 11px; border: 1px solid #f0c2b0; border-radius: 5px; background: var(--orange-soft); }
+    .question strong { display: block; color: #9c482d; font-size: 11px; }
+    .question p { margin: 4px 0 0; color: #805c50; font-size: 10px; line-height: 1.5; }
+    .question-icon { display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--orange); color: white; font-family: var(--mono); font-size: 10px; }
+    .progress-list { display: grid; margin-top: 16px; border-top: 1px solid var(--line); }
+    .progress-row { display: grid; grid-template-columns: 9px 28px minmax(0, 1fr) auto; gap: 8px; align-items: center; min-height: 34px; padding: 0 2px; border-bottom: 1px solid var(--line); }
+    .progress-row i { width: 7px; height: 7px; border-radius: 50%; background: var(--line-dark); }
+    .progress-row.done i { background: var(--green); }
+    .progress-row.active i { background: var(--orange); }
+    .progress-row code { color: var(--muted); font-family: var(--mono); font-size: 9px; }
+    .progress-row strong { font-size: 10px; }
+    .progress-row span:last-child { color: var(--muted); font-family: var(--mono); font-size: 9px; }
+    .action-bar { display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px; }
+    .action { min-height: 32px; padding: 0 12px; border: 1px solid var(--line-dark); border-radius: 5px; background: var(--panel); color: var(--ink); font-size: 11px; font-weight: 700; }
+    .action:hover { background: var(--panel-soft); }
+    .action.primary { border-color: var(--navy); background: var(--navy); color: white; }
+    .activity-strip { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; align-items: center; min-height: 43px; padding: 0 22px; border-top: 1px solid var(--line); background: #fbfcfd; color: var(--muted); font-size: 9px; }
+    .activity-strip strong { color: var(--ink); font-size: 10px; }
+    .activity-strip p { overflow: hidden; margin: 0; text-overflow: ellipsis; white-space: nowrap; }
+    .activity-strip time { font-family: var(--mono); font-size: 8px; }
+    .dialogue { display: grid; gap: 9px; margin-top: 13px; }
+    .bubble { max-width: 88%; padding: 10px 11px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel-soft); color: #4e5763; font-size: 10px; line-height: 1.65; }
+    .bubble.user { justify-self: end; border-color: #ccd4df; background: var(--navy); color: #f5f7fa; }
+    .prompt-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 11px; }
+    .prompt { min-height: 28px; padding: 0 9px; border: 1px solid var(--line); border-radius: 4px; background: var(--panel); color: var(--muted); font-size: 10px; }
+    .prompt:hover { border-color: var(--line-dark); color: var(--ink); }
+    .context-kicker { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 18px 12px; border-bottom: 1px solid var(--line); color: var(--muted); font-family: var(--mono); font-size: 9px; }
+    .context-kicker strong { color: var(--ink); font-family: var(--sans); font-size: 12px; }
+    .dossier-lead { padding: 30px 38px 22px; border-bottom: 1px solid var(--line); }
+    .dossier-eyebrow { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--muted); font-family: var(--mono); font-size: 9px; }
+    .dossier-lead h2 { max-width: 18ch; margin: 15px 0 9px; font-family: var(--serif); font-size: 29px; line-height: 1.25; font-weight: 600; }
+    .dossier-deck { max-width: 58ch; margin: 0; color: #626c77; font-family: var(--serif); font-size: 12px; line-height: 1.8; }
+    .dossier-meta { display: flex; flex-wrap: wrap; gap: 7px 16px; margin-top: 17px; color: var(--muted); font-size: 10px; }
+    .dossier-meta strong { color: var(--ink); font-weight: 600; }
+    .decision-line { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 16px; margin-top: 21px; padding: 16px 0 0; border-top: 1px solid var(--line-dark); }
+    .decision-line > span { color: var(--muted); font-size: 10px; }
+    .decision-line strong { font-family: var(--serif); font-size: 17px; line-height: 1.45; font-weight: 600; }
+    .context-body { min-height: 0; overflow: auto; padding: 0 38px 28px; }
+    .context-section { padding: 14px 0; border-bottom: 1px solid var(--line); }
+    .context-section:last-child { border-bottom: 0; }
+    .context-section-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 9px; }
+    .context-section-head h3 { margin: 0; font-size: 12px; }
+    .context-section-head span { color: var(--muted); font-family: var(--mono); font-size: 9px; }
+    .context-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+    .context-fact { min-height: 65px; padding: 11px 12px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--panel); }
+    .context-fact strong { display: block; font-size: 11px; line-height: 1.35; }
+    .context-fact span { display: block; margin-top: 3px; color: var(--muted); font-size: 9px; line-height: 1.4; }
+    .context-list { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+    .context-list li { display: grid; grid-template-columns: 7px minmax(0, 1fr); gap: 8px; align-items: start; color: var(--muted); font-size: 10px; line-height: 1.5; }
+    .context-list i { width: 6px; height: 6px; margin-top: 4px; border-radius: 50%; background: var(--line-dark); }
+    .context-list i.good { background: var(--green); }
+    .context-list i.risk { background: var(--orange); }
+    .context-list strong { display: block; color: var(--ink); font-size: 10px; }
+    .constraint-note { margin: 0; padding: 12px 0 0 15px; border-left: 2px solid var(--orange); color: #5c6570; font-family: var(--serif); font-size: 11px; line-height: 1.7; }
+    .fact-ledger { display: grid; gap: 0; border-top: 1px solid var(--line); }
+    .fact-entry { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 12px; padding: 13px 0; border-bottom: 1px solid var(--line); }
+    .fact-entry > span { font-size: 9px; font-weight: 700; }
+    .fact-entry.confirmed > span { color: var(--green); }
+    .fact-entry.inferred > span { color: var(--blue); }
+    .fact-entry.unknown > span { color: var(--orange); }
+    .fact-entry strong { display: block; font-size: 11px; }
+    .fact-entry p { margin: 4px 0 0; color: var(--muted); font-size: 10px; line-height: 1.55; }
+    .upload-zone { display: grid; place-items: center; min-height: 150px; margin-top: 14px; padding: 22px; border: 1px dashed var(--line-dark); background: #fbfcfd; text-align: center; }
+    .upload-zone strong { font-family: var(--serif); font-size: 17px; font-weight: 600; }
+    .upload-zone p { max-width: 50ch; }
+    .file-record { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: center; margin-top: 12px; padding: 11px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .file-icon { display: grid; place-items: center; width: 28px; height: 34px; border: 1px solid var(--line-dark); color: var(--muted); font-family: var(--mono); font-size: 8px; }
+    .file-record strong { display: block; font-size: 11px; }
+    .file-record span { color: var(--muted); font-size: 9px; }
+    .interview-card { margin-top: 14px; padding: 16px 0; border-top: 1px solid var(--line-dark); border-bottom: 1px solid var(--line-dark); }
+    .interview-card blockquote { margin: 0; font-family: var(--serif); font-size: 17px; line-height: 1.6; }
+    .answer { margin: 14px 0 0 44px; padding: 11px 13px; background: var(--navy); color: #f6f7f9; font-size: 10px; line-height: 1.65; }
+    .extracted-fact { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 9px; margin-top: 13px; padding: 11px; border: 1px solid #b8dcca; background: var(--green-soft); }
+    .extracted-fact span:first-child { color: var(--green); font-size: 9px; font-weight: 700; }
+    .extracted-fact strong { display: block; font-size: 10px; }
+    .extracted-fact p { margin: 3px 0 0; color: #50675e; font-size: 9px; }
+    .choice-list { margin-top: 13px; border-top: 1px solid var(--line); }
+    .choice-row { display: grid; grid-template-columns: 120px minmax(0, 1fr) auto; gap: 12px; align-items: center; min-height: 52px; border-bottom: 1px solid var(--line); }
+    .choice-row > span:first-child { color: var(--muted); font-size: 9px; }
+    .choice-row strong { font-size: 11px; }
+    .choice-row em { color: var(--muted); font-family: var(--mono); font-size: 8px; font-style: normal; }
+    .readiness { margin-top: 14px; padding: 18px 0; border-top: 1px solid var(--line-dark); border-bottom: 1px solid var(--line-dark); }
+    .readiness strong { display: block; font-family: var(--serif); font-size: 22px; font-weight: 600; }
+    .readiness p { max-width: 62ch; }
+    .source-methods { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 14px; border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+    .source-method { min-height: 86px; padding: 13px; border: 0; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--panel); color: var(--ink); text-align: left; }
+    .source-method:hover { background: var(--panel-soft); }
+    .source-method span { display: block; color: var(--muted); font-family: var(--mono); font-size: 8px; }
+    .source-method strong { display: block; margin-top: 14px; font-size: 11px; }
+    .material-list { border-top: 1px solid var(--line); }
+    .material-row { display: grid; grid-template-columns: 74px minmax(0, 1fr) auto; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+    .material-row.active { background: linear-gradient(90deg, var(--orange-soft), transparent 72%); }
+    .material-row > span:first-child { color: var(--muted); font-size: 9px; }
+    .material-row strong { display: block; font-size: 11px; }
+    .material-row p { margin: 4px 0 0; color: var(--muted); font-size: 9px; line-height: 1.5; }
+    .material-row time { color: var(--muted); font-family: var(--mono); font-size: 8px; }
+    .parse-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 14px; border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+    .parse-field { min-height: 66px; padding: 11px 12px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .parse-field span { display: block; color: var(--muted); font-size: 8px; }
+    .parse-field strong { display: block; margin-top: 5px; font-size: 11px; }
+    .object-preview { margin-top: 14px; padding: 18px 0; border-top: 1px solid var(--line-dark); border-bottom: 1px solid var(--line-dark); }
+    .object-preview h3 { margin: 0; font-family: var(--serif); font-size: 21px; font-weight: 600; }
+    .object-preview p { max-width: 62ch; }
+    .context-footer { display: flex; justify-content: space-between; gap: 8px; padding: 11px 18px; border-top: 1px solid var(--line); color: var(--muted); font-family: var(--mono); font-size: 9px; }
+    .context-footer button { border: 0; background: transparent; color: var(--blue); font-family: var(--mono); font-size: 9px; }
+    .artifact-scroll { min-height: 0; overflow: auto; }
+    .artifact-document { max-width: 680px; padding: 28px 38px 48px; }
+    .artifact-label { display: flex; align-items: center; gap: 8px; color: var(--muted); font-family: var(--mono); font-size: 9px; }
+    .artifact-label strong { padding: 4px 7px; background: var(--navy); color: white; font-size: 9px; }
+    .artifact-document h2 { margin: 18px 0 8px; font-family: var(--serif); font-size: 28px; line-height: 1.28; font-weight: 600; }
+    .artifact-deck { margin: 0 0 20px; color: var(--muted); font-family: var(--serif); font-size: 13px; font-style: italic; line-height: 1.7; }
+    .artifact-rule { margin: 20px 0 0; border: 0; border-top: 1px solid var(--line); }
+    .artifact-section { padding: 18px 0; border-bottom: 1px solid var(--line); }
+    .artifact-section h3 { margin: 0 0 9px; font-family: var(--serif); font-size: 17px; font-weight: 600; }
+    .artifact-section h3 span { margin-right: 9px; color: var(--muted); font-family: var(--mono); font-size: 10px; }
+    .artifact-section p { margin: 0 0 9px; color: #4e5763; font-size: 11px; line-height: 1.75; }
+    .artifact-quote { margin: 12px 0 0; padding: 9px 12px; border-left: 2px solid var(--line-dark); background: #fafbfc; color: var(--muted); font-family: var(--serif); font-size: 11px; font-style: italic; line-height: 1.65; }
+    .artifact-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin-top: 16px; }
+    .artifact-summary div { padding: 9px 10px; border: 1px solid var(--line); border-radius: 5px; }
+    .artifact-summary span { display: block; color: var(--muted); font-size: 9px; }
+    .artifact-summary strong { display: block; margin-top: 4px; font-family: var(--serif); font-size: 14px; }
+    .resume-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px; align-items: start; padding-bottom: 16px; border-bottom: 1px solid var(--line-dark); }
+    .resume-head h2 { margin: 0 0 4px; font-family: var(--sans); font-size: 22px; font-weight: 700; }
+    .resume-head p { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.55; }
+    .resume-head aside { color: var(--muted); font-family: var(--mono); font-size: 9px; text-align: right; }
+    .resume-section { padding: 16px 0; border-bottom: 1px solid var(--line); }
+    .resume-section h3 { margin: 0 0 7px; font-size: 12px; }
+    .resume-section p { margin: 0; color: #4e5763; font-size: 11px; line-height: 1.75; }
+    mark { padding: 1px 2px; background: var(--green-soft); color: inherit; }
+    .raw-card { margin-top: 17px; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+    .raw-card-head { display: flex; justify-content: space-between; padding: 9px 11px; border-bottom: 1px solid var(--line); background: var(--panel-soft); color: var(--muted); font-family: var(--mono); font-size: 9px; }
+    .raw-card-body { padding: 12px; color: #4e5763; font-size: 11px; line-height: 1.7; white-space: pre-line; }
+    .toast { position: fixed; right: 18px; bottom: 18px; z-index: 30; max-width: 330px; padding: 11px 13px; border: 1px solid var(--line-dark); border-radius: 5px; background: var(--panel); box-shadow: 0 8px 25px rgba(30,40,50,.15); font-size: 11px; line-height: 1.5; }
+    .toast strong { color: var(--green); }
+    @media (max-width: 900px) {
+      body { overflow-x: hidden; overflow-y: auto; }
+      .app { height: auto; min-height: 100vh; grid-template-rows: 54px auto; }
+      .topbar { position: sticky; top: 0; z-index: 10; grid-template-columns: 150px minmax(0, 1fr) 180px; }
+      .stage-meta { gap: 6px; padding-inline: 10px; white-space: nowrap; }
+      .stage-meta strong { overflow: hidden; max-width: 72px; text-overflow: ellipsis; }
+      .workspace, .workspace.artifact, .workspace.workbench { min-height: auto; grid-template-columns: 1fr !important; }
+      .workspace.artifact .task-pane { display: none; }
+      .workspace.workbench .artifact-pane { display: none; }
+      .workspace.workbench .task-pane { grid-column: 1; }
+      .artifact-pane { height: 52vh; min-height: 380px; border-right: 0; border-bottom: 1px solid var(--line); }
+      .task-pane { min-height: 700px; grid-template-rows: auto auto auto auto; }
+      .task-scroll { overflow: visible; }
+      .source-methods { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 580px) {
+      .topbar { grid-template-columns: 1fr; }
+      .brand { padding-inline: 12px; border-right: 0; }
+      .journey-nav { position: fixed; top: 54px; left: 0; right: 0; z-index: 11; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); width: 100vw; overflow: hidden; border-bottom: 1px solid var(--line); background: var(--panel); }
+      .journey-button { width: 100%; min-width: 0; height: 42px; padding: 0 7px; }
+      .journey-button small { font-size: 7px; }
+      .journey-button strong { overflow: hidden; font-size: 9px; text-overflow: ellipsis; white-space: nowrap; }
+      .stage-meta { display: none; }
+      .stage-meta.research-controls { position: fixed; top: 96px; left: 0; right: 0; z-index: 11; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); width: 100vw; height: 35px; padding: 0; border-top: 0; border-bottom: 1px solid var(--line); background: var(--panel); }
+      .stage-meta.research-controls .concept-badge { display: none; }
+      .stage-meta.research-controls .mode-button { width: 100%; height: 34px; min-width: 0; }
+      .workspace { padding-top: 77px; }
+      .flow-screen { padding-top: 42px; }
+      .artifact-pane { height: 43vh; min-height: 310px; }
+      .dossier-lead { padding: 21px 16px 17px; }
+      .dossier-lead h2 { font-size: 23px; }
+      .decision-line { grid-template-columns: 1fr; gap: 5px; }
+      .context-body { padding-inline: 12px; }
+      .context-kicker { padding-inline: 12px; }
+      .context-footer { padding-inline: 12px; }
+      .artifact-document { padding: 20px 16px 34px; }
+      .artifact-document h2 { max-width: 100%; font-size: 22px; overflow-wrap: anywhere; }
+      .artifact-summary { grid-template-columns: 1fr; }
+      .workspace { grid-template-columns: 1fr !important; }
+      .artifact-pane, .task-pane, .task-head, .task-scroll { max-width: 100vw; }
+      .task-head { padding: 14px 13px 11px; }
+      .task-head h1 { font-size: 15px; }
+      .task-head > div:last-child { font-size: 9px; }
+      .stage-rail { display: flex; max-width: 100vw; padding: 0; overflow-x: auto; overflow-y: hidden; }
+      .stage-button { flex: 0 0 92px; min-width: 0; height: 43px; }
+      .task-scroll { padding-inline: 13px; }
+      .source-row { grid-template-columns: 58px minmax(0, 1fr); }
+      .source-row time { grid-column: 2; text-align: left; }
+      .action-bar { flex-wrap: wrap; }
+      .choice-row { grid-template-columns: 1fr auto; padding-block: 10px; }
+      .choice-row > span:first-child { grid-column: 1 / -1; }
+      .source-methods, .parse-grid { grid-template-columns: 1fr; }
+      .material-row { grid-template-columns: 64px minmax(0, 1fr); }
+      .material-row time { grid-column: 2; }
+      .fact-entry { grid-template-columns: 62px minmax(0, 1fr); }
+      .activity-strip { grid-template-columns: auto minmax(0, 1fr); padding-inline: 13px; }
+      .activity-strip time { display: none; }
+    }
+    .flow-screen { min-height: 0; display: grid; grid-template-columns: minmax(310px, .72fr) minmax(520px, 1.28fr); background: var(--panel); }
+    .flow-aside { min-width: 0; padding: 34px 38px; border-right: 1px solid var(--line); overflow: auto; background: #fbfcfd; }
+    .flow-aside .artifact-label { margin-bottom: 20px; }
+    .flow-aside h1 { max-width: 13ch; margin: 0; font-family: var(--serif); font-size: 34px; line-height: 1.2; font-weight: 600; }
+    .flow-aside > p { max-width: 48ch; margin: 15px 0 0; color: var(--muted); font-family: var(--serif); font-size: 12px; line-height: 1.8; }
+    .flow-summary { margin-top: 26px; border-top: 1px solid var(--line-dark); }
+    .flow-summary-row { display: grid; grid-template-columns: 94px minmax(0, 1fr); gap: 12px; padding: 13px 0; border-bottom: 1px solid var(--line); }
+    .flow-summary-row span { color: var(--muted); font-size: 9px; }
+    .flow-summary-row strong { font-size: 10px; line-height: 1.5; }
+    .flow-main { min-width: 0; min-height: 0; display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto; overflow: hidden; }
+    .flow-main-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; padding: 22px 28px 17px; border-bottom: 1px solid var(--line); }
+    .flow-main-head h2 { margin: 0; font-size: 17px; }
+    .flow-main-head p { margin: 5px 0 0; color: var(--muted); font-size: 10px; }
+    .flow-main-head > span { color: var(--muted); font-family: var(--mono); font-size: 9px; }
+    .flow-scroll { min-height: 0; overflow: auto; padding: 0 28px 28px; }
+    .flow-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 54px; padding: 0 28px; border-top: 1px solid var(--line); background: #fbfcfd; color: var(--muted); font-size: 9px; }
+    @media (max-width: 900px) {
+      .flow-screen { grid-template-columns: 1fr; }
+      .flow-aside { border-right: 0; border-bottom: 1px solid var(--line); }
+      .flow-aside h1 { max-width: none; font-size: 29px; }
+      .flow-main { min-height: 680px; }
+    }
+    @media (max-width: 580px) {
+      .flow-aside { padding: 18px 16px 14px; }
+      .flow-aside .artifact-label { margin-bottom: 10px; }
+      .flow-aside h1 { max-width: 100%; font-size: 21px; }
+      .flow-aside > p { display: none; }
+      .flow-summary { margin-top: 14px; }
+      .flow-summary-row { grid-template-columns: 78px minmax(0, 1fr); padding: 8px 0; }
+      .flow-main-head { padding: 17px 14px 13px; }
+      .flow-scroll { padding: 0 14px 22px; }
+      .flow-footer { align-items: flex-start; padding: 12px 14px; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <div id="toast" class="toast" hidden></div>
+  <script>
+    (() => {
+      "use strict";
+      const query = new URLSearchParams(location.search);
+      const allowedSpaces = ["profile", "library", "research"];
+      const allowedModes = ["artifact", "split", "workbench"];
+      const allowedSteps = ["collect", "survey", "judge", "prepare", "decide"];
+      const allowedProfileSteps = ["import", "interview", "direction", "ready"];
+      const allowedLibrarySteps = ["ingest", "parse", "object"];
+      const inferredSpace = query.has("step") ? "research" : "profile";
+      const state = {
+        space: allowedSpaces.includes(query.get("space")) ? query.get("space") : inferredSpace,
+        mode: allowedModes.includes(query.get("mode")) ? query.get("mode") : "split",
+        step: allowedSteps.includes(query.get("step")) ? query.get("step") : "collect",
+        profileStep: allowedProfileSteps.includes(query.get("profileStep")) ? query.get("profileStep") : "import",
+        libraryStep: allowedLibrarySteps.includes(query.get("libraryStep")) ? query.get("libraryStep") : "ingest"
+      };
+      const steps = {
+        collect: { number: "1/5", label: "采集职位", status: "Completed" },
+        survey: { number: "2/5", label: "证据调查", status: "Ready" },
+        judge: { number: "3/5", label: "形成判断", status: "Ready" },
+        prepare: { number: "4/5", label: "申请准备", status: "Waiting" },
+        decide: { number: "5/5", label: "用户决定", status: "Waiting" }
+      };
+      const profileSteps = {
+        import: { number: "1/4", label: "导入材料" },
+        interview: { number: "2/4", label: "结构化访谈" },
+        direction: { number: "3/4", label: "目标与限制" },
+        ready: { number: "4/4", label: "确认可用" }
+      };
+      const librarySteps = {
+        ingest: { number: "1/3", label: "带入材料" },
+        parse: { number: "2/3", label: "检查解析" },
+        object: { number: "3/3", label: "建立研究对象" }
+      };
+      const evidence = [
+        ["一手来源", "公司官网可核验产品与招聘主体", "主体与产品方向一致，支持继续了解。", "09:42", ""],
+        ["一手来源", "同一岗位六个月内重复发布", "核心职责一致，长期招聘原因仍未知。", "09:47", ""],
+        ["冲突信息", "工作方式表述不一致", "官网写弹性办公，职位页写固定坐班。", "09:51", "risk"],
+        ["弱信号", "匿名评价提到阶段性加班", "单一来源，不能单独支撑判断。", "昨天", "risk"]
+      ];
+      const $ = (id) => document.getElementById(id);
+      const esc = (value) => String(value).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
+      function showToast(text) {
+        const toast = $("toast");
+        toast.innerHTML = `<strong>择途</strong> · ${esc(text)}`;
+        toast.hidden = false;
+        clearTimeout(showToast.timer);
+        showToast.timer = setTimeout(() => { toast.hidden = true; }, 3500);
+      }
+      function syncUrl() {
+        const url = new URL(location.href);
+        url.searchParams.set("space", state.space);
+        url.searchParams.set("mode", state.mode);
+        url.searchParams.set("step", state.step);
+        url.searchParams.set("profileStep", state.profileStep);
+        url.searchParams.set("libraryStep", state.libraryStep);
+        history.replaceState(null, "", url);
+      }
+      function topbar() {
+        const meta = state.space === "profile" ? profileSteps[state.profileStep] : state.space === "library" ? librarySteps[state.libraryStep] : steps[state.step];
+        const journey = [
+          ["profile", "01", "职业事实源"],
+          ["library", "02", "研究资料库"],
+          ["research", "03", "机会研究台"]
+        ];
+        const activeIndex = allowedSpaces.indexOf(state.space);
+        const right = state.space === "research"
+          ? `<div class="stage-meta research-controls"><span class="concept-badge">Concept Demo</span><button class="mode-button${state.mode === "artifact" ? " active" : ""}" data-mode="artifact">成果</button><button class="mode-button${state.mode === "split" ? " active" : ""}" data-mode="split">双栏</button><button class="mode-button${state.mode === "workbench" ? " active" : ""}" data-mode="workbench">工作</button></div>`
+          : `<div class="stage-meta"><span class="concept-badge">Concept Demo</span><span>${meta.number}</span><strong>${meta.label}</strong><span class="ready">In progress</span></div>`;
+        return `<header class="topbar"><div class="brand"><span class="brand-mark">择</span><span><strong>择途</strong><small>CAREER RESEARCH SYSTEM</small></span></div><nav class="journey-nav" aria-label="职业研究主链">${journey.map(([key, code, label], index) => `<button class="journey-button${state.space === key ? " active" : ""}${index < activeIndex ? " done" : ""}" data-space="${key}"><small>${index < activeIndex ? "COMPLETED" : code}</small><strong>${label}</strong></button>`).join("")}</nav>${right}</header>`;
+      }
+      function researchStageRail() {
+        return `<nav class="stage-rail" aria-label="机会研究阶段">${Object.entries(steps).map(([key, meta]) => `<button class="stage-button${state.step === key ? " active" : ""}" data-step="${key}"><small>${meta.number}</small><strong>${meta.label}</strong></button>`).join("")}</nav>`;
+      }
+      function flowStageRail(kind) {
+        const items = kind === "profile" ? profileSteps : librarySteps;
+        const current = kind === "profile" ? state.profileStep : state.libraryStep;
+        const attr = kind === "profile" ? "data-profile-step" : "data-library-step";
+        return `<nav class="stage-rail ${kind}" aria-label="${kind === "profile" ? "职业事实源建立" : "研究材料进入"}阶段">${Object.entries(items).map(([key, meta]) => `<button class="stage-button${current === key ? " active" : ""}" ${attr}="${key}"><small>${meta.number}</small><strong>${meta.label}</strong></button>`).join("")}</nav>`;
+      }
+      function surveyArtifact() {
+        return `<section class="artifact-pane"><div class="context-kicker"><strong>机会案卷</strong><span>OPP_CHENGYU_01 · 调查中</span></div><div class="artifact-scroll"><article class="dossier-lead"><div class="dossier-eyebrow"><span>CHENGYU TECHNOLOGY</span><span>更新于 10:08</span></div><h2>澄屿科技<br>资深前端工程师</h2><p class="dossier-deck">一个能力匹配较强、但现实工作条件仍不足以支持立即申请的机会。</p><div class="dossier-meta"><span><strong>35-45K · 14薪</strong></span><span>上海</span><span>资深前端 / 前端架构</span></div><div class="decision-line"><span>当前判断</span><strong>值得继续了解，但先确认实际工作方式。</strong></div></article><div class="context-body"><section class="context-section"><div class="context-section-head"><h3>与我的职业事实如何相交</h3><span>27 条已确认事实</span></div><div class="context-facts"><div class="context-fact"><strong>复杂前端与工程化</strong><span>能力证据充分</span></div><div class="context-fact"><strong>跨团队技术落地</strong><span>职责方向匹配</span></div><div class="context-fact"><strong>人员管理</strong><span>明确不承担绩效</span></div><div class="context-fact"><strong>工作方式</strong><span>个人硬约束</span></div></div></section><section class="context-section"><div class="context-section-head"><h3>最可能改变决定的信息</h3><span>3 个未知项</span></div><p class="constraint-note">官网写弹性办公，职位页写固定坐班。这个冲突直接影响通勤与生活安排，应在准备材料前确认。</p><ul class="context-list"><li><i></i><span><strong>岗位为何持续发布</strong>目前不能区分扩招、岗位常驻或人员留存问题。</span></li><li><i></i><span><strong>“负责人”的职责边界</strong>需要确认是否包含人员管理与绩效职责。</span></li></ul></section><section class="context-section"><div class="context-section-head"><h3>机会成本</h3><span>同时在看的方向</span></div><ul class="context-list"><li><i class="good"></i><span><strong>岸线云 · 值得投入</strong>信息更确定，定制简历等待审核。</span></li><li><i></i><span><strong>折光智能 · 等待信息</strong>职责空间更大，但稳定性未知。</span></li></ul></section></div></div><footer class="context-footer"><span>职业事实源 v27</span><button data-toast="将打开完整职业事实源（概念示例）">核对事实源 →</button></footer></section>`;
+      }
+      function judgeArtifact() {
+        return `<section class="artifact-pane"><div class="context-kicker"><strong>阶段性判断</strong><span>DECISION_01</span></div><div class="artifact-scroll"><article class="artifact-document"><div class="artifact-label"><strong>DECISION REPORT</strong><span>澄屿科技 · 当前版本</span></div><h2>真正需要确认的不是技术栈，而是工作的现实形态</h2><p class="artifact-deck">能力匹配已经足够清晰。当前建议受工作方式冲突、长期招聘原因和职责边界限制。</p><div class="artifact-summary"><div><span>系统建议</span><strong>谨慎投入</strong></div><div><span>用户决定</span><strong>尚未决定</strong></div><div><span>关键未知</span><strong>3 项</strong></div></div><hr class="artifact-rule"><section class="artifact-section"><h3><span>01</span>为什么仍值得了解</h3><p>公司主体和产品方向可以核验；岗位强调复杂前端、工程化与跨团队技术落地，与林舟当前有效职业事实相符。</p><blockquote class="artifact-quote">已确认事实支持“能够胜任”，但尚不足以支持“值得长期投入”。</blockquote></section><section class="artifact-section"><h3><span>02</span>为什么不能直接申请</h3><p>官网称弹性办公，职位页却写固定坐班。同一岗位长期发布的原因也未知。这些信息会改变通勤、生活安排与岗位稳定性判断。</p></section><section class="artifact-section"><h3><span>03</span>建议与下一动作</h3><p>先向招聘方确认实际工作方式、长期招聘原因和职责是否包含人员管理，再决定是否投入完整申请成本。</p></section></article></div><footer class="context-footer"><span>4 条来源 · 1 项冲突</span><button data-step="survey">返回证据 →</button></footer></section>`;
+      }
+      function prepareArtifact() {
+        return `<section class="artifact-pane"><div class="context-kicker"><strong>申请材料预览</strong><span>DRAFT_01</span></div><div class="artifact-scroll"><article class="artifact-document"><header class="resume-head"><div><h2>林舟</h2><p>资深前端 / 前端架构<br>8 年前端与全栈经历</p></div><aside>澄屿科技定制版<br>等待用户审核</aside></header><section class="resume-section"><h3>职业摘要</h3><p>长期聚焦复杂业务系统、工程化和跨团队技术落地。曾<mark>主导前端工程化升级，并推动共享能力在三个业务线落地</mark>。</p></section><section class="resume-section"><h3>核心经历</h3><p><mark>设计微前端迁移路径，协调三个业务线分阶段接入，降低存量系统一次性改造风险。</mark>负责方案评审、公共能力建设与关键问题治理，不承担人员绩效管理。</p></section><section class="resume-section"><h3>表达边界</h3><p>没有新增无法核验的业务数据，没有把技术负责人写成人员管理者。工作方式与岗位稳定性问题继续保留在沟通清单。</p></section></article></div><footer class="context-footer"><span>4 处修改 · 0 个新增事实</span><button data-toast="将打开逐项材料审核（概念示例）">查看修改 →</button></footer></section>`;
+      }
+      function collectArtifact() {
+        return `<section class="artifact-pane"><div class="context-kicker"><strong>职位原始记录</strong><span>INPUT_01</span></div><div class="artifact-scroll"><article class="artifact-document"><div class="artifact-label"><strong>USER PROVIDED</strong><span>Boss 职位截图</span></div><h2>澄屿科技 · 资深前端工程师 / 前端负责人</h2><p class="artifact-deck">35-45K · 14薪 · 上海 · 工作方式待确认</p><div class="raw-card"><div class="raw-card-head"><span>职位描述摘录</span><span>09:36</span></div><div class="raw-card-body">负责核心业务前端架构与工程化建设；
+推动跨团队公共能力落地；
+参与前端团队建设与技术方案评审；
+工作时间 09:30-18:30。</div></div></article></div><footer class="context-footer"><span>来源：用户主动采集</span><button data-step="survey">开始调查 →</button></footer></section>`;
+      }
+      function decideArtifact() {
+        return `<section class="artifact-pane"><div class="context-kicker"><strong>完整申请决策包</strong><span>PACKAGE_01</span></div><div class="artifact-scroll"><article class="artifact-document"><div class="artifact-label"><strong>DECISION PACKAGE</strong><span>等待用户决定</span></div><h2>澄屿科技 · 是否继续投入</h2><p class="artifact-deck">系统建议为谨慎投入。用户仍可继续、暂缓、停止，或先获取招聘方回答。</p><div class="artifact-summary"><div><span>匹配</span><strong>较强</strong></div><div><span>风险</span><strong>显著</strong></div><div><span>准备度</span><strong>3 / 5</strong></div></div><section class="artifact-section"><h3><span>01</span>已经知道</h3><p>主体可核验，技术职责与现有事实相符，薪资具备吸引力。</p></section><section class="artifact-section"><h3><span>02</span>仍不知道</h3><p>实际工作方式、长期招聘原因、职责是否包含人员管理。</p></section><section class="artifact-section"><h3><span>03</span>建议动作</h3><p>先发送一组具体确认问题，再根据回答决定是否投入材料与面试准备。</p></section></article></div><footer class="context-footer"><span>系统建议 ≠ 用户决定</span><button data-toast="用户拥有最终决定权">保留决定 →</button></footer></section>`;
+      }
+      function artifactPane() {
+        return state.step === "collect" ? collectArtifact() : state.step === "survey" ? surveyArtifact() : state.step === "judge" ? judgeArtifact() : state.step === "prepare" ? prepareArtifact() : decideArtifact();
+      }
+      function progressRows() {
+        const rows = [["done", "01", "读取职位与公司主体", "Completed"], ["done", "02", "匹配当前职业方向", "27 facts"], [state.step === "survey" || state.step === "judge" ? "active" : "done", "03", "核验公开证据", state.step === "survey" ? "1 conflict" : "Completed"], [state.step === "prepare" ? "active" : "", "04", "形成申请决策包", state.step === "prepare" ? "Waiting" : "Pending"]];
+        return `<div class="progress-list">${rows.map(([kind, code, title, note]) => `<div class="progress-row ${kind}"><i></i><code>${code}</code><strong>${title}</strong><span>${note}</span></div>`).join("")}</div>`;
+      }
+      function profileAside() {
+        const summaries = {
+          import: ["当前任务", "建立事实底座", "输入", "现有简历 + 基本信息", "原则", "先够用，再持续补全"],
+          interview: ["当前任务", "澄清真实经历", "已提取", "19 条候选事实", "待确认", "6 条推断 / 4 个缺口"],
+          direction: ["当前任务", "明确求职语境", "主方向", "资深前端 / 前端架构", "硬约束", "工作方式、通勤与薪资底线"],
+          ready: ["当前状态", "事实源已可用", "已确认", "27 条职业事实", "仍可补充", "4 个未知项"]
+        }[state.profileStep];
+        return `<aside class="flow-aside"><div class="artifact-label"><strong>CAREER SOURCE</strong><span>林舟 · 当前版本</span></div><h1>让系统先真正理解你。</h1><p>择途不从一张标签化画像开始，而是从可追溯、可纠正的职业事实开始。达到当前方向所需的最低可信上下文后，就可以进入机会研究。</p><div class="flow-summary">${[0,2,4].map((i) => `<div class="flow-summary-row"><span>${summaries[i]}</span><strong>${summaries[i+1]}</strong></div>`).join("")}</div></aside>`;
+      }
+      function profilePanel() {
+        if (state.profileStep === "import") return `<div class="stage-block"><div class="stage-block-head"><h2>从已有材料开始</h2><span>USER PROVIDED</span></div><p>上传现有简历，或者先填写公司、时间、角色和主要工作。择途会提取候选事实，不会把简历措辞直接当成真相。</p><div class="upload-zone"><div><strong>把你的现有简历带进来</strong><p>支持 PDF、Word 或粘贴文本的概念入口；本 Demo 不读取真实文件。</p><button class="action" data-toast="已选择虚构简历：林舟-前端架构师.pdf">选择简历</button></div></div><div class="file-record"><span class="file-icon">PDF</span><span><strong>林舟-前端架构师.pdf</strong><span>6 页 · 最近更新于 2026-07-28</span></span><span class="status done">已解析</span></div><div class="signal-strip"><div class="signal"><strong>19</strong><span>候选事实</span></div><div class="signal"><strong>6</strong><span>需要确认的推断</span></div><div class="signal"><strong>4</strong><span>高价值缺口</span></div></div><div class="action-bar"><button class="action primary" data-profile-step="interview">开始结构化访谈 →</button></div></div>`;
+        if (state.profileStep === "interview") return `<div class="stage-block"><div class="stage-block-head"><h2>AI 结构化访谈</h2><span>QUESTION 03 / 07</span></div><p>优先追问会影响方向判断和简历表达的缺口，不要求一次讲完整段职业生涯。</p><div class="interview-card"><blockquote>你说“主导前端架构升级”。你真正承担了哪些决定，又有哪些事情不是你负责的？</blockquote><div class="answer">我负责技术路线、迁移节奏和公共能力建设，也推动三个业务线接入；但我不负责人员绩效，也没有正式的团队编制权。</div><div class="extracted-fact"><span>待确认事实</span><span><strong>负责跨业务线技术落地，不承担人员绩效管理</strong><p>依据：用户本轮回答 + 原简历项目描述</p></span></div></div><div class="fact-ledger"><div class="fact-entry confirmed"><span>已确认</span><span><strong>设计微前端迁移路径</strong><p>协调三个业务线分阶段接入。</p></span></div><div class="fact-entry inferred"><span>AI 推断</span><span><strong>可能适合正式人员管理岗位</strong><p>与用户刚确认的职责边界冲突，等待否定或修正。</p></span></div><div class="fact-entry unknown"><span>未知</span><span><strong>工程化升级带来的可核验业务结果</strong><p>当前只有技术过程，仍缺少结果证据。</p></span></div></div><div class="action-bar"><button class="action" data-toast="已否定：正式人员管理岗位推断">否定不准确推断</button><button class="action primary" data-profile-step="direction">确认并继续 →</button></div></div>`;
+        if (state.profileStep === "direction") return `<div class="stage-block"><div class="stage-block-head"><h2>目标、期望与现实限制</h2><span>USER AUTHORITY</span></div><p>AI 可以提出方向理解，但目标、偏好和不可接受条件最终由你确认。</p><div class="choice-list"><div class="choice-row"><span>当前主方向</span><strong>资深前端 / 前端架构</strong><em>已确认</em></div><div class="choice-row"><span>并行方向</span><strong>偏前端的全栈工程师</strong><em>探索中</em></div><div class="choice-row"><span>薪资期望</span><strong>30K+，结合稳定性与职责综合判断</strong><em>可权衡</em></div><div class="choice-row"><span>工作方式</span><strong>通勤可控；长期固定高强度坐班不可接受</strong><em>硬约束</em></div><div class="choice-row"><span>职责边界</span><strong>接受技术领导力，不把人员绩效作为首要职责</strong><em>硬约束</em></div></div><div class="question"><span class="question-icon">!</span><span><strong>AI 提醒：前端架构师岗位可能隐含管理职责</strong><p>后续研究职位时，系统会把职责边界作为必须确认的信息，而不是默认你接受。</p></span></div><div class="action-bar"><button class="action primary" data-profile-step="ready">确认当前求职语境 →</button></div></div>`;
+        return `<div class="stage-block"><div class="stage-block-head"><h2>职业事实源已经足够开始研究</h2><span>READY FOR CURRENT DIRECTION</span></div><div class="readiness"><strong>不是完整，但已经可信且够用。</strong><p>27 条用户确认事实、2 个求职方向、3 项现实硬约束已经可以支撑职位解析、机会匹配和基础简历表达。未知项会在真实机会和后续结果中继续补全。</p></div><div class="fact-ledger"><div class="fact-entry confirmed"><span>事实</span><span><strong>8 年前端与全栈经历</strong><p>来源：简历、基本经历与用户确认。</p></span></div><div class="fact-entry confirmed"><span>能力</span><span><strong>复杂前端、工程化、跨团队技术落地</strong><p>存在多个项目证据支持。</p></span></div><div class="fact-entry confirmed"><span>边界</span><span><strong>不承担人员绩效管理</strong><p>用户明确确认，禁止在简历和匹配中反向推断。</p></span></div><div class="fact-entry unknown"><span>未知</span><span><strong>部分工程化项目的业务结果证据</strong><p>可以先用保守表达，后续补充。</p></span></div></div><div class="action-bar"><button class="action" data-toast="将打开职业事实源明细（概念示例）">查看 27 条事实</button><button class="action primary" data-space="library">进入研究资料库 →</button></div></div>`;
+      }
+      function profileScreen() {
+        return `<main class="flow-screen">${profileAside()}<section class="flow-main"><header class="flow-main-head"><div><h2>林舟的职业事实源</h2><p>简历、访谈、目标和限制共同构成当前有效理解</p></div><span>CAREER_SOURCE_V27</span></header>${flowStageRail("profile")}<div class="flow-scroll">${profilePanel()}</div><footer class="flow-footer"><span>AI 提出理解，用户拥有最终解释权</span><span>事实 ≠ 推断 ≠ 未知</span></footer></section></main>`;
+      }
+      function libraryAside() {
+        const summaries = {
+          ingest: ["当前任务", "带入研究材料", "支持入口", "截图、粘贴、插件、导入", "原则", "原始来源始终保留"],
+          parse: ["当前任务", "检查系统理解", "已识别", "澄屿科技 / 资深前端", "需确认", "工作方式与职责边界"],
+          object: ["当前任务", "建立机会研究对象", "绑定方向", "资深前端 / 前端架构", "初始研究目标", "真实性、工作方式、长期招聘原因"]
+        }[state.libraryStep];
+        return `<aside class="flow-aside"><div class="artifact-label"><strong>RESEARCH LIBRARY</strong><span>个人空间 · 4 条材料</span></div><h1>把现实中的职位，变成可研究的对象。</h1><p>材料可以来自任何合法渠道。系统先保留原文与来源，再解析、去重和显露缺失，不会把一张截图直接变成确定结论。</p><div class="flow-summary">${[0,2,4].map((i) => `<div class="flow-summary-row"><span>${summaries[i]}</span><strong>${summaries[i+1]}</strong></div>`).join("")}</div></aside>`;
+      }
+      function libraryPanel() {
+        if (state.libraryStep === "ingest") return `<div class="stage-block"><div class="stage-block-head"><h2>带入一份研究材料</h2><span>SOURCE AGNOSTIC</span></div><p>选择最顺手的方式。首版以用户主动采集为主，不自动海量抓取招聘平台。</p><div class="source-methods"><button class="source-method" data-toast="已选择虚构 Boss 职位截图"><span>01</span><strong>上传截图</strong></button><button class="source-method" data-toast="已打开粘贴文本入口（概念示例）"><span>02</span><strong>粘贴 JD</strong></button><button class="source-method" data-toast="浏览器插件属于后续能力"><span>03</span><strong>浏览器插件</strong></button><button class="source-method" data-toast="公开来源连接器需逐一核验合规性"><span>04</span><strong>导入公开来源</strong></button></div><div class="stage-block-head" style="margin-top:22px"><h2>最近材料</h2><span>保留原始来源</span></div><div class="material-list"><div class="material-row active"><span>Boss 截图</span><span><strong>澄屿科技 · 资深前端工程师</strong><p>来源截图与采集时间已保留，等待检查解析。</p></span><time>09:36</time></div><div class="material-row"><span>朋友转发</span><span><strong>岸线云 · 前端平台工程师</strong><p>已建立研究对象，材料等待审核。</p></span><time>昨天</time></div><div class="material-row"><span>V2EX</span><span><strong>折光智能 · 全栈工程师</strong><p>公司主体仍不明确，暂未开始研究。</p></span><time>2 天前</time></div></div><div class="action-bar"><button class="action primary" data-library-step="parse">检查澄屿科技解析 →</button></div></div>`;
+        if (state.libraryStep === "parse") return `<div class="stage-block"><div class="stage-block-head"><h2>检查解析结果</h2><span>ORIGINAL PRESERVED</span></div><p>系统只整理可识别内容。缺失和矛盾会进入后续研究目标，不用臆测补齐。</p><div class="parse-grid"><div class="parse-field"><span>公司</span><strong>澄屿科技</strong></div><div class="parse-field"><span>职位</span><strong>资深前端工程师 / 前端负责人</strong></div><div class="parse-field"><span>薪资</span><strong>35-45K · 14薪</strong></div><div class="parse-field"><span>地点</span><strong>上海</strong></div><div class="parse-field"><span>主要职责</span><strong>前端架构、工程化、公共能力落地</strong></div><div class="parse-field"><span>工作方式</span><strong>未明确，职位页仅写固定时间</strong></div></div><div class="question"><span class="question-icon">?</span><span><strong>“前端负责人”是否包含人员管理？</strong><p>原始 JD 只写团队建设和技术评审，无法确认绩效与编制职责。</p></span></div><div class="file-record"><span class="file-icon">PNG</span><span><strong>boss-chengyu-20260812.png</strong><span>原始截图 · 用户主动采集 · 09:36</span></span><button class="action" data-toast="将打开原始截图（概念示例）">查看原文</button></div><div class="action-bar"><button class="action" data-library-step="ingest">返回材料</button><button class="action primary" data-library-step="object">确认并建立研究对象 →</button></div></div>`;
+        return `<div class="stage-block"><div class="stage-block-head"><h2>机会研究对象已建立</h2><span>OPP_CHENGYU_01</span></div><div class="object-preview"><h3>澄屿科技 · 资深前端工程师</h3><p>绑定主方向“资深前端 / 前端架构”，并继承工作方式、通勤和职责边界等个人决策标准。</p></div><div class="choice-list"><div class="choice-row"><span>原始材料</span><strong>Boss 职位截图</strong><em>已保留</em></div><div class="choice-row"><span>绑定方向</span><strong>资深前端 / 前端架构</strong><em>当前主方向</em></div><div class="choice-row"><span>研究优先级</span><strong>确认主体、工作方式和长期招聘原因</strong><em>3 个目标</em></div><div class="choice-row"><span>初始匹配</span><strong>复杂前端与工程化存在明显交集</strong><em>待证据</em></div></div><div class="question"><span class="question-icon">!</span><span><strong>现在还没有“值得申请”的结论</strong><p>当前只有用户材料和职业上下文。公司证据、风险和机会成本需要进入研究台后形成。</p></span></div><div class="action-bar"><button class="action" data-library-step="parse">返回检查</button><button class="action primary" data-space="research" data-step="collect">进入机会研究台 →</button></div></div>`;
+      }
+      function libraryScreen() {
+        return `<main class="flow-screen">${libraryAside()}<section class="flow-main"><header class="flow-main-head"><div><h2>研究资料库</h2><p>从原始材料到可恢复的职业研究对象</p></div><span>4 MATERIALS · 3 OBJECTS</span></header>${flowStageRail("library")}<div class="flow-scroll">${libraryPanel()}</div><footer class="flow-footer"><span>原始材料不会被标准化结果覆盖</span><span>缺失与冲突进入研究目标</span></footer></section></main>`;
+      }
+      function surveyPanel() {
+        return `<div class="stage-block"><div class="stage-block-head"><h2>证据调查</h2><span>当前阶段 · 02</span></div><p>只收集会改变“是否值得投入”的信息。择途把来源、冲突和未知项直接放在判断旁边。</p><div class="signal-strip"><div class="signal"><strong>4</strong><span>已记录来源</span></div><div class="signal"><strong>1</strong><span>关键冲突</span></div><div class="signal"><strong>3</strong><span>待确认问题</span></div></div></div><div class="stage-block"><div class="stage-block-head"><h2>会影响决定的证据</h2><span>事实 / 推断 / 未知</span></div>${evidence.map(([kind, title, copy, time, klass]) => `<div class="source-row"><span class="source-kind ${klass}">${kind}</span><span><strong>${title}</strong><p>${copy}</p></span><time>${time}</time></div>`).join("")}<div class="question"><span class="question-icon">?</span><span><strong>先确认：实际工作方式</strong><p>这是个人硬约束，也是目前唯一来自两个一手来源的直接冲突。</p></span></div><div class="action-bar"><button class="action" data-toast="已生成三个招聘方确认问题（概念示例）">生成确认问题</button><button class="action primary" data-step="judge">形成阶段判断 →</button></div></div>`;
+      }
+      function judgePanel() {
+        return `<div class="stage-block"><div class="stage-block-head"><h2>判断形成</h2><span>4 条证据 / 27 条职业事实</span></div><p>左侧保留可阅读的阶段成果；这里给出它的依据、脆弱点和可反驳之处。</p><div class="signal-strip"><div class="signal"><strong>较强</strong><span>能力匹配</span></div><div class="signal"><strong>显著</strong><span>现实风险</span></div><div class="signal"><strong>3</strong><span>待确认项</span></div></div></div><div class="stage-block"><div class="stage-block-head"><h2>判断依据</h2><span>事实 / 推断 / 价值</span></div><div class="source-row"><span class="source-kind">事实</span><span><strong>职位职责与职业事实相符</strong><p>复杂前端、工程化和跨团队技术落地均有已确认经历支持。</p></span><time>支持</time></div><div class="source-row"><span class="source-kind risk">冲突</span><span><strong>工作方式信息互相矛盾</strong><p>该项触发个人硬约束，会直接改变建议。</p></span><time>关键</time></div><div class="source-row"><span class="source-kind risk">推断</span><span><strong>长期招聘原因尚不可判断</strong><p>可能是扩招或留存问题，不能把任一解释当成事实。</p></span><time>未知</time></div><div class="question"><span class="question-icon">!</span><span><strong>为什么只是“谨慎投入”</strong><p>“能够胜任”不等于“值得长期投入”。现实条件仍缺少决定性信息。</p></span></div><div class="action-bar"><button class="action" data-toast="顾问将从反方质疑当前建议（概念示例）">质疑这份判断</button><button class="action primary" data-step="prepare">进入申请准备 →</button></div></div>`;
+      }
+      function preparePanel() {
+        return `<div class="stage-block"><div class="stage-block-head"><h2>申请准备</h2><span>APPLICATION DOSSIER / DRAFT</span></div><p>从职业事实源派生岗位版本，不新增无法核验的事实，也不隐藏仍会影响决定的风险。</p><div class="signal-strip"><div class="signal"><strong>11</strong><span>绑定事实</span></div><div class="signal"><strong>4</strong><span>表达修改</span></div><div class="signal"><strong>0</strong><span>新增事实</span></div></div></div><div class="stage-block"><div class="stage-block-head"><h2>待你审核的表达</h2><span>WAITING USER REVIEW</span></div>${[["01", "平台工程经验提前", "岗位强调共享能力建设。"], ["02", "微前端项目具体化", "保留三个业务线落地事实。"], ["03", "人员管理表述被阻止", "职业事实源确认不承担绩效管理。"]].map(([code, title, copy]) => `<div class="source-row"><span class="source-kind">${code}</span><span><strong>${title}</strong><p>${copy}</p></span><time>待审</time></div>`).join("")}<div class="question"><span class="question-icon">?</span><span><strong>仍需确认表达重点</strong><p>当前版本更强调工程化；业务结果是否足够突出，最终由你审核。</p></span></div><div class="action-bar"><button class="action" data-step="judge">返回判断</button><button class="action primary" data-toast="已进入逐项材料审核（概念示例）">开始逐项审核 →</button></div></div>`;
+      }
+      function collectPanel() {
+        return `<div class="stage-block"><div class="stage-block-head"><h2>01 采集职位信息</h2><span>INPUT / USER PROVIDED</span></div><p>职位信息来自用户主动采集的 Boss 截图。择途只负责整理和建立后续调查上下文，不自动抓取或投递。</p><div class="source-row"><span class="source-kind">用户输入</span><span><strong>澄屿科技 · 资深前端工程师 / 前端负责人</strong><p>35-45K · 14薪 · 上海 · 工作方式待确认</p></span><time>09:36</time></div><div class="action-bar"><button class="action primary" data-step="survey">开始证据调查 →</button></div></div>`;
+      }
+      function decidePanel() {
+        return `<div class="stage-block"><div class="stage-block-head"><h2>05 围绕决策包继续交互</h2><span>用户拥有最终决定权</span></div><p>成果保留在左侧，右侧从执行过程切换为顾问互动。顾问只围绕当前机会、证据和职业限制回答。</p><div class="prompt-row"><button class="prompt" data-toast="顾问将质疑当前建议（概念示例）">质疑当前建议</button><button class="prompt" data-toast="已生成招聘方确认问题（概念示例）">生成确认问题</button><button class="prompt" data-toast="将补充一条用户确认事实（概念示例）">补充事实</button></div><div class="dialogue"><div class="bubble user">如果只能先确认一件事，应该问什么？</div><div class="bubble">先问实际工作方式。它是你的硬约束，而且两个一手来源互相冲突；这个答案最可能改变是否值得继续投入。</div></div><div class="action-bar"><button class="action" data-toast="已保留：暂缓决定（概念示例）">暂缓决定</button><button class="action primary" data-toast="已记录：继续投入（概念示例）">继续投入</button></div></div>`;
+      }
+      function taskPanel() {
+        let main = state.step === "collect" ? collectPanel() : state.step === "survey" ? surveyPanel() : state.step === "judge" ? judgePanel() : state.step === "prepare" ? preparePanel() : decidePanel();
+        return `<section class="task-pane"><header class="task-head"><div><h1>澄屿科技 · 资深前端工程师</h1><p>当前机会持续贯穿采集、调查、判断、材料与决定</p></div><div><span>OPP_CHENGYU_01</span></div></header>${researchStageRail()}<div class="task-scroll">${main}${progressRows()}</div><footer class="activity-strip"><strong>最近变化</strong><p>工作方式冲突已提升为关键未知项，并同步到判断与申请材料。</p><time>10:08</time></footer></section>`;
+      }
+      function researchScreen() {
+        return `<main class="workspace ${state.mode}">${artifactPane()}${taskPanel()}</main>`;
+      }
+      function render() {
+        const content = state.space === "profile" ? profileScreen() : state.space === "library" ? libraryScreen() : researchScreen();
+        $("app").innerHTML = `<div class="app">${topbar()}${content}</div>`;
+        bind();
+      }
+      function bind() {
+        document.querySelectorAll("[data-mode]").forEach((el) => el.addEventListener("click", () => { state.mode = el.dataset.mode; syncUrl(); render(); }));
+        document.querySelectorAll("[data-space]").forEach((el) => el.addEventListener("click", () => { state.space = el.dataset.space; if (el.dataset.step) state.step = el.dataset.step; syncUrl(); render(); }));
+        document.querySelectorAll("[data-step]").forEach((el) => el.addEventListener("click", () => { state.space = "research"; state.step = el.dataset.step; syncUrl(); render(); }));
+        document.querySelectorAll("[data-profile-step]").forEach((el) => el.addEventListener("click", () => { state.space = "profile"; state.profileStep = el.dataset.profileStep; syncUrl(); render(); }));
+        document.querySelectorAll("[data-library-step]").forEach((el) => el.addEventListener("click", () => { state.space = "library"; state.libraryStep = el.dataset.libraryStep; syncUrl(); render(); }));
+        document.querySelectorAll("[data-toast]").forEach((el) => el.addEventListener("click", () => showToast(el.dataset.toast)));
+      }
+      render();
+    })();
+  </script>
+</body>
+</html>

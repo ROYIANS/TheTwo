@@ -449,6 +449,222 @@
     .c-data-row { display: grid; grid-template-columns: 6rem minmax(0, 1fr) 6rem; gap: 0.6rem; padding: 0.58rem 0.65rem; border-bottom: 1px solid #d7dcd7; font-size: 0.62rem; }
     .c-data-row > span { color: #6b756d; }
 
+    /* Variant D: Career decision research desk */
+    .d-shell {
+      --d-bg: #f7f8f6;
+      --d-panel: #fbfcfa;
+      --d-ink: #171b18;
+      --d-muted: #747b76;
+      --d-line: #d9ded9;
+      --d-line-strong: #b8c0ba;
+      --d-green: #128560;
+      min-height: calc(100vh - 2rem);
+      background: var(--d-bg);
+      color: var(--d-ink);
+    }
+    .d-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      display: grid;
+      grid-template-columns: minmax(9rem, 1fr) auto minmax(12rem, 1fr);
+      align-items: center;
+      min-height: 3.35rem;
+      padding: 0 1.15rem;
+      border-bottom: 1px solid var(--d-line);
+      background: rgb(251 252 250 / 97%);
+    }
+    .d-wordmark { display: flex; align-items: baseline; gap: 0.55rem; }
+    .d-wordmark strong { font-size: 0.91rem; font-weight: 900; }
+    .d-wordmark span { color: var(--d-muted); font-size: 0.56rem; font-weight: 800; text-transform: uppercase; }
+    .d-mode-nav {
+      display: flex;
+      align-items: center;
+      gap: 0.2rem;
+      padding: 0.18rem;
+      border: 1px solid #e1e5e1;
+      border-radius: 5px;
+      background: #f1f3f1;
+    }
+    .d-mode-button {
+      min-height: 2rem;
+      padding: 0.35rem 0.75rem;
+      border: 0;
+      border-radius: 3px;
+      background: transparent;
+      color: #747a75;
+      font-size: 0.65rem;
+      font-weight: 800;
+    }
+    .d-mode-button:hover { color: var(--d-ink); }
+    .d-mode-button.active { background: var(--d-panel); color: var(--d-ink); box-shadow: 0 1px 4px rgb(24 29 25 / 12%); }
+    .d-stage { display: flex; align-items: center; justify-content: flex-end; gap: 0.7rem; color: var(--d-muted); font-size: 0.62rem; }
+    .d-stage strong { color: var(--d-ink); font-size: 0.68rem; }
+    .d-ready { display: inline-flex; align-items: center; gap: 0.42rem; }
+    .d-ready::before { width: 0.42rem; height: 0.42rem; border-radius: 50%; background: var(--d-green); content: ""; }
+
+    .d-workspace { display: grid; grid-template-columns: minmax(0, 1.02fr) minmax(28rem, 0.98fr); min-height: calc(100vh - 5.35rem); }
+    .d-left, .d-right { min-width: 0; }
+    .d-left { border-right: 1px solid var(--d-line); background: var(--d-panel); }
+    .d-right { background: var(--d-bg); }
+    .d-pane-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      min-height: 3rem;
+      padding: 0.65rem 1rem;
+      border-bottom: 1px solid var(--d-line);
+      color: var(--d-muted);
+      font-size: 0.61rem;
+    }
+    .d-pane-head strong { color: var(--d-ink); }
+    .d-pane-tools { display: flex; align-items: center; gap: 0.35rem; }
+    .d-icon-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 2rem;
+      min-height: 2rem;
+      padding: 0.35rem 0.5rem;
+      border: 1px solid var(--d-line);
+      border-radius: 4px;
+      background: var(--d-panel);
+      color: #5e6760;
+      font-size: 0.61rem;
+      font-weight: 800;
+    }
+    .d-icon-button:hover { border-color: var(--d-line-strong); color: var(--d-ink); }
+    .d-icon-button.dark { border-color: #202622; background: #202622; color: #f4f6f3; }
+
+    .d-report { max-width: 53rem; margin: 0 auto; padding: clamp(1.7rem, 3.2vw, 3.1rem) clamp(1.4rem, 4.2vw, 4.3rem) 5rem; }
+    .d-report-label { display: flex; align-items: center; gap: 0.65rem; color: #969c97; font-size: 0.58rem; }
+    .d-report-label strong { padding: 0.32rem 0.48rem; background: var(--d-ink); color: #f7f8f6; font-size: 0.58rem; }
+    .d-report h1 { max-width: 47rem; margin: 1.3rem 0 0; font-family: var(--serif); font-size: clamp(2rem, 3.2vw, 3.3rem); font-weight: 500; line-height: 1.18; }
+    .d-deck { max-width: 43rem; margin: 0.8rem 0 0; color: #797f7a; font-family: var(--serif); font-size: 0.9rem; font-style: italic; line-height: 1.75; }
+    .d-report-rule { margin: 1.7rem 0; border: 0; border-top: 1px solid var(--d-line-strong); }
+    .d-section { padding: 1.15rem 0 1.35rem; border-bottom: 1px solid #e2e5e2; }
+    .d-section-head { display: grid; grid-template-columns: 2.3rem minmax(0, 1fr) auto; gap: 0.55rem; align-items: baseline; }
+    .d-section-index { color: #9ca29d; font-size: 0.66rem; font-variant-numeric: tabular-nums; }
+    .d-section h2 { margin: 0; font-family: var(--serif); font-size: 1.35rem; font-weight: 500; line-height: 1.35; }
+    .d-section p { margin: 0.8rem 0 0 2.85rem; color: #515853; font-size: 0.75rem; line-height: 1.85; }
+    .d-section h3 { margin: 0.95rem 0 0 2.85rem; font-size: 0.71rem; }
+    .d-quote { margin: 1rem 0 0 2.85rem; padding: 0.65rem 0 0.65rem 0.85rem; border-left: 2px solid var(--d-line); color: #747b76; font-family: var(--serif); font-size: 0.72rem; font-style: italic; line-height: 1.7; }
+    .d-inline-action { display: inline-flex; align-items: center; gap: 0.4rem; margin: 1rem 0 0 2.85rem; border: 0; border-bottom: 1px solid var(--d-ink); background: transparent; color: var(--d-ink); font-size: 0.67rem; font-weight: 800; }
+    .d-report-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 1.3rem; border-top: 1px solid var(--d-line); border-bottom: 1px solid var(--d-line); }
+    .d-report-fact { padding: 0.85rem; border-right: 1px solid var(--d-line); }
+    .d-report-fact:last-child { border-right: 0; }
+    .d-report-fact span { display: block; color: var(--d-muted); font-size: 0.57rem; }
+    .d-report-fact strong { display: block; margin-top: 0.3rem; font-size: 0.73rem; line-height: 1.4; }
+
+    .d-right-top { padding: 0.9rem 1rem 1rem; border-bottom: 1px solid var(--d-line); }
+    .d-run-meta { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 0.7rem; color: #89908a; font-size: 0.58rem; }
+    .d-run-meta span { font-variant-numeric: tabular-nums; }
+    .d-progress-list { display: grid; gap: 0.42rem; }
+    .d-progress-row {
+      display: grid;
+      grid-template-columns: 0.7rem 2rem minmax(0, 1fr) auto;
+      gap: 0.55rem;
+      align-items: center;
+      min-height: 2.15rem;
+      padding: 0.45rem 0.65rem;
+      border: 1px solid var(--d-line);
+      border-radius: 4px;
+      background: #f8faf8;
+      font-size: 0.61rem;
+    }
+    .d-progress-dot { width: 0.42rem; height: 0.42rem; border-radius: 50%; background: #c9ceca; }
+    .d-progress-row.done .d-progress-dot { background: var(--d-green); }
+    .d-progress-row.active { border-color: #a7b3aa; background: var(--d-panel); }
+    .d-progress-row.active .d-progress-dot { background: var(--d-ink); }
+    .d-progress-code { color: #9ba19c; font-variant-numeric: tabular-nums; }
+    .d-progress-row strong { font-family: var(--serif); font-weight: 600; }
+    .d-progress-state { color: var(--d-muted); font-size: 0.56rem; }
+    .d-primary-run {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      width: 100%;
+      min-height: 2.8rem;
+      margin-top: 0.75rem;
+      border: 1px solid #222824;
+      border-radius: 4px;
+      background-color: #222824;
+      background-image: radial-gradient(#4a544d 0.55px, transparent 0.55px);
+      background-size: 5px 5px;
+      color: #f4f6f3;
+      font-size: 0.66rem;
+      font-weight: 800;
+    }
+
+    .d-right-body { padding: 0.9rem 1rem 5rem; }
+    .d-tool-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0 0 0.75rem; }
+    .d-tool-head h2 { margin: 0; font-size: 0.75rem; }
+    .d-tool-head span { color: var(--d-muted); font-size: 0.58rem; }
+    .d-tool-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--d-line); border-left: 1px solid var(--d-line); }
+    .d-tool {
+      min-width: 0;
+      padding: 0.9rem;
+      border-right: 1px solid var(--d-line);
+      border-bottom: 1px solid var(--d-line);
+      background: var(--d-panel);
+    }
+    .d-tool strong { display: block; font-size: 0.69rem; }
+    .d-tool p { margin: 0.35rem 0 0; color: var(--d-muted); font-size: 0.61rem; line-height: 1.55; }
+    .d-activity { margin-top: 0.9rem; border-top: 1px solid var(--d-line-strong); }
+    .d-activity-head { display: flex; justify-content: space-between; gap: 1rem; padding: 0.7rem 0; color: var(--d-muted); font-size: 0.58rem; }
+    .d-activity-item { display: grid; grid-template-columns: 0.8rem minmax(0, 1fr) auto; gap: 0.6rem; padding: 0.75rem 0; border-top: 1px solid var(--d-line); }
+    .d-activity-icon { width: 0.5rem; height: 0.5rem; margin-top: 0.25rem; border-radius: 50%; background: #cbd0cc; }
+    .d-activity-icon.good { background: var(--d-green); }
+    .d-activity-icon.risk { background: #b5534d; }
+    .d-activity-copy strong { display: block; font-size: 0.67rem; }
+    .d-activity-copy span { display: block; margin-top: 0.22rem; color: var(--d-muted); font-size: 0.6rem; line-height: 1.5; }
+    .d-activity-time { color: #9ca29d; font-size: 0.56rem; font-variant-numeric: tabular-nums; }
+
+    .d-opportunity-list { border-top: 1px solid var(--d-line-strong); }
+    .d-opportunity-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(8rem, 0.75fr) 6.5rem;
+      gap: 0.8rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--d-line);
+      cursor: pointer;
+    }
+    .d-opportunity-row:hover { background: #f3f5f3; }
+    .d-opportunity-row strong { display: block; font-family: var(--serif); font-size: 0.92rem; font-weight: 600; }
+    .d-opportunity-row small { display: block; margin-top: 0.22rem; color: var(--d-muted); font-size: 0.59rem; line-height: 1.5; }
+    .d-row-note { color: #5f6761; font-size: 0.62rem; line-height: 1.5; }
+    .d-row-status { text-align: right; }
+    .d-dossier { border-top: 1px solid var(--d-line-strong); }
+    .d-dossier-row { display: grid; grid-template-columns: 6rem minmax(0, 1fr) 6rem; gap: 0.85rem; padding: 0.8rem 0; border-bottom: 1px solid var(--d-line); }
+    .d-dossier-row > span { color: var(--d-muted); font-size: 0.6rem; }
+    .d-dossier-row strong { font-size: 0.69rem; line-height: 1.55; }
+    .d-dossier-row em { color: var(--d-muted); font-size: 0.58rem; font-style: normal; text-align: right; }
+    .d-material-page { font-family: var(--serif); }
+    .d-material-block { padding: 1rem 0; border-bottom: 1px solid var(--d-line); }
+    .d-material-block h2 { margin: 0; font-size: 1.1rem; font-weight: 600; }
+    .d-material-block h3 { margin: 0.8rem 0 0; font-family: var(--sans); font-size: 0.7rem; }
+    .d-material-block p { margin: 0.5rem 0 0; color: #535a55; font-family: var(--sans); font-size: 0.7rem; line-height: 1.75; }
+    .d-change { background: #e7f3ed; box-shadow: inset 0 -1px #8fc3aa; }
+    .d-chat { margin-top: 1rem; border-top: 1px solid var(--d-line-strong); }
+    .d-chat-message { max-width: 88%; margin-top: 0.75rem; padding: 0.75rem 0.85rem; border: 1px solid var(--d-line); border-radius: 4px; background: var(--d-panel); color: #4f5751; font-size: 0.64rem; line-height: 1.6; }
+    .d-chat-message.user { margin-left: auto; border-color: #222824; background: #222824; color: #f2f4f1; }
+    .d-chat-input { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.5rem; margin-top: 0.8rem; }
+    .d-chat-input input { min-width: 0; min-height: 2.55rem; padding: 0 0.75rem; border: 1px solid var(--d-line); border-radius: 4px; background: var(--d-panel); color: var(--d-ink); font-size: 0.66rem; }
+    .d-trace {
+      grid-column: 1 / -1;
+      min-height: 6.2rem;
+      padding: 0.75rem 1rem 1rem;
+      background: #171a18;
+      color: #aeb8b0;
+      font-family: Consolas, "SFMono-Regular", monospace;
+      font-size: 0.57rem;
+      line-height: 1.65;
+    }
+    .d-trace-head { display: flex; justify-content: space-between; gap: 1rem; margin-bottom: 0.35rem; color: #6f7d73; text-transform: uppercase; }
+    .d-trace strong { color: #dce3dd; font-weight: 500; }
+
     @media (max-width: 1180px) {
       :root { --nav: 12.5rem; --aside: 16.5rem; }
       .opportunity-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -457,6 +673,8 @@
       .materials-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .c-workgrid { grid-template-columns: 1fr; }
       .c-inspector { position: static; }
+      .d-workspace { grid-template-columns: minmax(0, 1fr) minmax(24rem, 0.8fr); }
+      .d-report { padding-inline: 2.2rem; }
     }
 
     @media (max-width: 940px) {
@@ -471,6 +689,10 @@
       .c-command-actions { display: none; }
       .opportunity-row { grid-template-columns: minmax(12rem, 1.3fr) minmax(7rem, 0.7fr) 7rem; }
       .opportunity-row .optional-cell { display: none; }
+      .d-workspace { grid-template-columns: 1fr; }
+      .d-left { border-right: 0; border-bottom: 1px solid var(--d-line); }
+      .d-right-top { display: grid; grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.7fr); gap: 1rem; }
+      .d-primary-run { align-self: end; }
     }
 
     @media (max-width: 700px) {
@@ -541,6 +763,30 @@
       .c-ledger-row { grid-template-columns: 4.2rem minmax(0, 1fr); }
       .c-ledger-row > :nth-child(3),
       .c-ledger-row > :nth-child(4) { grid-column: 2; }
+      .d-topbar { grid-template-columns: auto minmax(0, 1fr) auto; gap: 0.65rem; padding: 0 0.65rem; }
+      .d-wordmark span, .d-stage > span:first-child { display: none; }
+      .d-mode-nav { justify-content: flex-start; overflow-x: auto; }
+      .d-mode-button { flex: 0 0 auto; padding-inline: 0.6rem; }
+      .d-stage { gap: 0.35rem; }
+      .d-workspace { display: block; }
+      .d-report { padding: 1.5rem 1rem 5.5rem; }
+      .d-report h1 { font-size: 2rem; }
+      .d-report-facts, .d-tool-grid { grid-template-columns: 1fr; }
+      .d-report-fact { border-right: 0; border-bottom: 1px solid var(--d-line); }
+      .d-report-fact:last-child { border-bottom: 0; }
+      .d-right-top { display: block; padding: 0.75rem; }
+      .d-right-body { padding: 0.75rem 0.75rem 5.5rem; }
+      .d-section-head { grid-template-columns: 2rem minmax(0, 1fr); }
+      .d-section-head .status { grid-column: 2; justify-self: start; }
+      .d-section p, .d-section h3, .d-quote, .d-inline-action { margin-left: 2.55rem; }
+      .d-opportunity-row { grid-template-columns: minmax(0, 1fr) auto; }
+      .d-opportunity-row .d-row-note { grid-column: 1; }
+      .d-row-status { grid-column: 2; grid-row: 1; }
+      .d-dossier-row { grid-template-columns: 4.5rem minmax(0, 1fr); }
+      .d-dossier-row em { grid-column: 2; text-align: left; }
+      .d-progress-row { grid-template-columns: 0.7rem 1.6rem minmax(0, 1fr); }
+      .d-progress-state { grid-column: 3; }
+      .d-trace { padding-bottom: 5.2rem; }
       .variant-label { min-width: 8.6rem; }
     }
 
@@ -552,7 +798,7 @@
 <body>
   <div class="prototype-note">
     <span>择途系统概念 Demo · 比较信息架构与产品骨架，不代表功能已经实现</span>
-    <span>虚构用户与机会数据 · 使用底部切换器或键盘 ← → 比较 A / B / C</span>
+    <span>虚构用户与机会数据 · 使用底部切换器或键盘 ← → 比较 A / B / C / D</span>
   </div>
   <div id="app"></div>
   <button id="mobile-scrim" class="mobile-scrim" type="button" aria-label="关闭导航" hidden></button>
@@ -581,7 +827,8 @@
       const variants = {
         A: "A · 决策工作台",
         B: "B · 职业简报",
-        C: "C · 决策台账"
+        C: "C · 决策台账",
+        D: "D · 职业决策研究台"
       };
 
       const navItems = [
@@ -811,6 +1058,101 @@
         return `<div class="c-shell">${cCommandbar()}<div class="c-body">${cNav()}<main class="c-main">${content}</main></div></div>`;
       }
 
+      const dPageMeta = {
+        today: { mode: "今日", step: "Step 1/4", stage: "校准决策重点", report: "DAILY DECISION BRIEF", id: "brief_20260812" },
+        opportunities: { mode: "机会", step: "Step 2/4", stage: "证据调查", report: "OPPORTUNITY DOSSIER", id: "set_active_04" },
+        opportunity: { mode: "机会", step: "Step 3/4", stage: "形成判断", report: "DECISION REPORT", id: "opp_chengyu_01" },
+        profile: { mode: "画像", step: "Step 1/3", stage: "事实校准", report: "CAREER FACT FILE", id: "profile_lz_27" },
+        materials: { mode: "材料", step: "Step 3/3", stage: "申请校订", report: "APPLICATION DOSSIER", id: "pack_shore_02" }
+      };
+
+      function dTopbar() {
+        const meta = dPageMeta[appState.page];
+        const modes = [["today", "今日"], ["opportunities", "机会"], ["profile", "画像"], ["materials", "材料"]];
+        return `<header class="d-topbar">
+          <div class="d-wordmark"><strong>择途 ZETU</strong><span>Career Decision System</span></div>
+          <nav class="d-mode-nav" aria-label="研究台模式">${modes.map(([id,label])=>`<button class="d-mode-button${appState.page===id||(id==="opportunities"&&appState.page==="opportunity")?" active":""}" type="button" data-page="${id}">${label}</button>`).join("")}</nav>
+          <div class="d-stage"><span>${meta.step}</span><strong>${meta.stage}</strong><span class="d-ready">Ready</span></div>
+        </header>`;
+      }
+
+      function dPaneHead(side) {
+        const meta = dPageMeta[appState.page];
+        if (side === "left") return `<div class="d-pane-head"><span>${meta.report} &nbsp; ID: ${meta.id}</span><div class="d-pane-tools"><button class="d-icon-button" type="button" title="查看引用">引用</button><button class="d-icon-button" type="button" title="导出当前报告">导出</button></div></div>`;
+        return `<div class="d-pane-head"><span><strong>${appState.page === "profile" ? "事实校准台" : appState.page === "materials" ? "申请材料校订" : "研究与交互"}</strong> · 与当前对象绑定</span><div class="d-pane-tools"><button class="d-icon-button dark" type="button">与顾问对话</button><button class="d-icon-button" type="button">研究记录</button></div></div>`;
+      }
+
+      function dReportIntro(label, title, deck, facts = []) {
+        return `<div class="d-report-label"><strong>${label}</strong><span>ID: ${dPageMeta[appState.page].id}</span></div><h1>${title}</h1><p class="d-deck">${deck}</p>${facts.length ? `<div class="d-report-facts">${facts.map(([name,value])=>`<div class="d-report-fact"><span>${name}</span><strong>${value}</strong></div>`).join("")}</div>` : ""}<hr class="d-report-rule">`;
+      }
+
+      function dSection(index, title, body, options = {}) {
+        return `<section class="d-section"><div class="d-section-head"><span class="d-section-index">${String(index).padStart(2,"0")}</span><h2>${title}</h2>${options.tone ? status(options.state, options.tone) : ""}</div><p>${body}</p>${options.subhead ? `<h3>${options.subhead}</h3>` : ""}${options.quote ? `<blockquote class="d-quote">${options.quote}</blockquote>` : ""}${options.action ? `<button class="d-inline-action" type="button" ${options.page?`data-page="${options.page}"`:""}>${options.action} ${icons.arrow}</button>` : ""}</section>`;
+      }
+
+      function dProgress(rows, action) {
+        return `<div class="d-run-meta"><span>SECTIONS ${rows.filter(r=>r[0]==="done").length}/${rows.length}</span><span>当前对象 · ${dPageMeta[appState.page].id}</span></div><div class="d-progress-list">${rows.map(([state,code,title,note])=>`<div class="d-progress-row ${state}"><span class="d-progress-dot"></span><span class="d-progress-code">${code}</span><strong>${title}</strong><span class="d-progress-state">${note}</span></div>`).join("")}</div><button class="d-primary-run" type="button">${action} ${icons.arrow}</button>`;
+      }
+
+      function dActivity(items) {
+        return `<div class="d-activity"><div class="d-activity-head"><strong>工作记录</strong><span>事实、推断和建议保持分离</span></div>${items.map(([tone,title,copy,time])=>`<div class="d-activity-item"><span class="d-activity-icon ${tone}"></span><span class="d-activity-copy"><strong>${title}</strong><span>${copy}</span></span><span class="d-activity-time">${time}</span></div>`).join("")}</div>`;
+      }
+
+      function dTools() {
+        return `<div class="d-tool-head"><div><h2>职业研究工具</h2><span>只处理当前页面中的对象和问题</span></div></div><div class="d-tool-grid">
+          <div class="d-tool"><strong>证据检索</strong><p>从用户提供的职位信息与公开来源中定位可核验事实。</p></div>
+          <div class="d-tool"><strong>冲突检测</strong><p>发现不同来源之间影响现实可行性的表述冲突。</p></div>
+          <div class="d-tool"><strong>画像校准</strong><p>检查岗位判断是否使用了未经用户确认的职业推断。</p></div>
+          <div class="d-tool"><strong>机会成本</strong><p>结合当前目标、限制和替代机会，解释投入代价。</p></div>
+        </div>`;
+      }
+
+      function todayContentD() {
+        const report = `${dReportIntro("DAILY DECISION BRIEF", "今天，不必继续寻找更多机会", "两个已有选择已经足够重要。先消除一个会改变判断的未知项，再完成一份已经值得申请的材料。", [["当前主方向","资深前端 / 前端架构"],["值得继续","2 个机会"],["今天可完成","2 个关键动作"]])}
+          ${dSection(1,"先确认澄屿科技的工作方式","官网人才页与招聘职位对工作方式的描述冲突。这不是一般信息缺口，而是直接影响通勤、生活安排与长期可持续性的硬条件。",{state:"优先处理",tone:"caution",quote:"不要让技术栈匹配掩盖现实限制。公开信息不足时，最有效的动作是向招聘方提出一个具体问题。",action:"打开完整机会判断",page:"opportunity"})}
+          ${dSection(2,"审核岸线云的职位定制简历","该机会信息确定性较高，平台工程经验与岗位要求直接相关。AI 只调整了两个项目的顺序，并删除一段关联较弱的经历，没有创造新的职业事实。",{state:"值得投入",tone:"good",action:"进入材料校订",page:"materials"})}
+          ${dSection(3,"纠正一条职业画像推断","系统曾把“跨团队技术方案负责人”推断为“人员管理者”。用户已经否定这一解释；仍需确认是否参与过招聘评估，以避免后续材料继续放大职责。",{state:"等待确认",tone:"wait",action:"查看职业事实档案",page:"profile"})}`;
+        const side = `${dProgress([["done","01","汇总机会变化","Completed"],["active","02","识别关键未知项","1 个冲突"],["done","03","检查申请材料","4 处修改"],["done","04","形成今日建议","Ready"]],"进入今日深度工作")}${dTools()}${dActivity([["risk","发现工作方式冲突","官网写弹性办公，招聘页写固定坐班；已提升为首要未知项。","09:51"],["good","岸线云定制材料完成草拟","事实一致性检查通过，等待用户审核表达重点。","10:02"],["","画像更正已传播","“人员管理者”推断已从机会匹配和简历中移除。","10:08"]])}`;
+        return [report, side, `<div class="d-trace-head"><span>decision trace</span><span>brief_20260812</span></div><div><strong>09:51</strong> 检测到会改变现实可行性的证据冲突</div><div><strong>10:02</strong> 岸线云申请包进入用户审核阶段</div><div><strong>10:08</strong> 用户更正已同步到 3 个下游判断</div>`];
+      }
+
+      function opportunitiesContentD() {
+        const report = `${dReportIntro("OPPORTUNITY DOSSIER", "四个机会，代表四种不同的取舍", "择途不生成黑盒排名。每个机会都要回答：它可能带来什么、会牺牲什么、哪些信息仍不足以支持投入。", [["当前机会","4"],["值得继续","2"],["关键未知项","10"]])}<div class="d-opportunity-list">${opportunities.map(o=>`<article class="d-opportunity-row" data-opportunity="${o.id}"><div><strong>${o.company} · ${o.role}</strong><small>${o.salary}<br>${o.place}</small></div><div class="d-row-note">${o.match}<br>下一步：${o.next}</div><div class="d-row-status">${status(o.recommendation,o.tone)}<small>${o.unknowns} 项未知</small></div></article>`).join("")}</div>`;
+        const side = `${dProgress([["done","01","归一化职位信息","4/4"],["done","02","匹配当前职业方向","4/4"],["active","03","核验公司与岗位证据","10 未知"],["","04","形成用户决策包","2 就绪"]],"继续核验当前机会")}${dTools()}${dActivity([["good","岸线云已具备申请条件","主体、职责和工作制度已有足够证据支持下一步。","10:11"],["risk","远岚网络触发硬约束","长期单休违反当前不可接受条件，无需继续美化匹配。","09:56"],["","折光智能等待融资信息","职责空间有吸引力，但业务稳定性尚无法判断。","09:44"]])}`;
+        return [report, side, `<div class="d-trace-head"><span>evidence queue</span><span>set_active_04</span></div><div><strong>04</strong> active opportunities · <strong>10</strong> unresolved items</div><div>建议不是排序结果，而是当前证据与个人约束下的行动状态。</div>`];
+      }
+
+      function opportunityContentD() {
+        const report = `${dReportIntro("DECISION REPORT", "澄屿科技：真正需要确认的不是技术栈，而是这份工作的现实形态", "技术领导经历和平台化职责匹配，但公开信息对工作方式存在冲突，岗位长期发布的原因也未知。", [["系统建议","谨慎投入"],["用户决定","尚未决定"],["证据状态","4 条 / 1 冲突"]])}
+          ${dSection(1,"为什么仍值得继续了解","公司产品与招聘主体可以核验，岗位强调复杂前端、工程化和跨团队技术落地，与林舟当前有效职业事实相符。薪资和职责上限也具备吸引力。",{state:"匹配较强",tone:"good",quote:"已确认事实支持“能够胜任”，但尚不足以支持“值得长期投入”。"})}
+          ${dSection(2,"为什么不能直接乐观申请","官网称弹性办公，招聘页却写固定坐班；同一岗位在六个月内重复发布。它们可能只是信息维护问题，也可能意味着工作制度或团队稳定性存在风险。",{state:"关键冲突",tone:"caution"})}
+          ${dSection(3,"建议与下一动作","继续了解，但先向招聘方确认实际工作方式、长期招聘原因和职责是否包含人员管理。得到回答后，再决定是否投入完整材料与面试准备成本。",{state:"谨慎投入",tone:"caution",action:"查看申请准备",page:"materials"})}`;
+        const side = `${dProgress([["done","01","解析职位与公司主体","Completed"],["done","02","检索公开证据","4 sources"],["done","03","比对职业事实与限制","27 facts"],["active","04","等待关键未知项确认","3 questions"]],"准备招聘方确认问题")}<div class="d-tool-head" style="margin-top:1rem"><div><h2>证据轨迹</h2><span>来源强度与冲突保持可见</span></div></div><div class="d-dossier">${evidence.map(e=>`<div class="d-dossier-row"><span>${e.kind}</span><strong>${e.title}<br><small style="color:#7b827d;font-weight:400">${e.note}</small></strong><em>${e.time}</em></div>`).join("")}</div><div class="d-chat"><div class="d-tool-head"><div><h2>与机会顾问对话</h2><span>上下文：澄屿科技 · 当前判断</span></div></div><div class="d-chat-message user">如果只能先问招聘方一个问题，应该问什么？</div><div class="d-chat-message">先确认实际工作方式。它是你的硬条件，而且公开来源互相冲突；答案会直接决定是否值得继续投入。</div><div class="d-chat-input"><input aria-label="向机会顾问提问" placeholder="围绕这个机会继续追问…"><button class="d-icon-button dark" type="button">发送</button></div></div>`;
+        return [report, side, `<div class="d-trace-head"><span>decision provenance</span><span>opp_chengyu_01</span></div><div><strong>FACT</strong> 产品与招聘主体可核验</div><div><strong>INFERENCE</strong> 长期招聘可能与扩招或留存有关，尚不可下结论</div><div><strong>VALUE</strong> 工作方式属于用户硬约束，优先于一般技术匹配</div>`];
+      }
+
+      function profileContentD() {
+        const rows = [["经历","8 年前端与全栈经历","已确认"],["能力","主导前端工程化升级","已确认"],["项目","设计微前端迁移路径并推动三个业务线落地","已确认"],["职责","技术负责人，不承担人员绩效","用户更正"],["AI 推断","可能参与过技术招聘评估","待确认"],["未知项","工程化改造的完整量化影响","待补充"]];
+        const report = `${dReportIntro("CAREER FACT FILE", "林舟的职业画像，是一份可以被质疑和更正的事实档案", "AI 可以主动提出理解，但只有用户确认的事实才能参与机会判断、简历表达与长期职业规划。", [["已确认事实","27"],["能力证据","18"],["待确认推断","2"]])}<div class="d-dossier">${rows.map(([type,value,state])=>`<div class="d-dossier-row"><span>${type}</span><strong>${value}</strong><em>${state}</em></div>`).join("")}</div>${dSection(1,"最近一次更正","用户否定了“人员管理者”推断，确认自己的领导方式是技术方案、架构决策与跨团队协作。该更正已经同步影响三个机会判断和两份材料。",{state:"已传播",tone:"good",quote:"更正历史用于解释系统为何改变判断，不用于重新施加用户已经否定的标签。"})}`;
+        const side = `${dProgress([["done","01","整理经历与项目证据","18 sources"],["done","02","提出职业事实与推断","29 items"],["active","03","等待用户解释权确认","2 inferences"]],"校准待确认职业推断")}<div class="d-tool-head" style="margin-top:1rem"><div><h2>待用户确认</h2><span>不会进入对外材料</span></div></div>${dActivity([["","是否参与技术招聘评估","来自“参与团队建设”的模糊表述，证据不足。","待确认"],["","是否具备平台团队协作经验","多个项目存在共享能力建设，但团队归属仍未知。","待确认"],["good","人员管理者推断已撤回","用户明确不承担绩效与人员管理。","08:55"]])}<div class="d-chat"><div class="d-chat-message user">我负责过面试题设计和技术面试，但不负责招聘决策。</div><div class="d-chat-message">这足以确认“参与技术招聘评估”，但不能扩展为“负责团队招聘”。我会保留这个边界。</div><div class="d-chat-input"><input aria-label="更正职业画像" placeholder="补充或纠正这条理解…"><button class="d-icon-button dark" type="button">确认</button></div></div>`;
+        return [report, side, `<div class="d-trace-head"><span>profile propagation</span><span>profile_lz_27</span></div><div><strong>08:55</strong> removed inference: people_manager</div><div><strong>08:56</strong> updated 3 opportunity matches</div><div><strong>08:57</strong> updated 2 material expressions</div>`];
+      }
+
+      function materialsContentD() {
+        const report = `${dReportIntro("APPLICATION DOSSIER", "岸线云 · 高级前端工程师申请材料", "职位定制不是重新发明一段职业经历，而是基于同一事实源，选择更适合当前岗位理解顺序的表达。", [["相对基础版","4 处修改"],["新增事实","0"],["当前状态","等待审核"]])}<div class="d-material-page">
+          <div class="d-material-block"><h2>职业摘要</h2><p>8 年前端与全栈经验，长期聚焦复杂业务系统、工程化与跨团队技术落地。曾<span class="d-change">主导前端工程化升级，并推动共享能力在三个业务线落地</span>。</p></div>
+          <div class="d-material-block"><h2>核心经历 · 星海互联</h2><h3>前端架构师 / 技术负责人</h3><p><span class="d-change">设计微前端迁移路径，协调三个业务线分阶段接入，降低存量系统一次性改造风险。</span>负责方案评审、公共能力建设和关键问题治理，不承担人员绩效管理。</p></div>
+          <div class="d-material-block"><h2>表达边界</h2><p>没有把“跨团队方案推动”写成“团队管理”；没有补写无法核验的性能收益；招聘参与仍只作为待确认画像推断，不进入本材料。</p></div>
+        </div>`;
+        const side = `${dProgress([["done","01","读取职位职责","Completed"],["done","02","选择相关职业事实","11 facts"],["done","03","生成有依据的改写","4 changes"],["active","04","等待用户审核","Review"]],"开始逐项审核")}${dActivity([["good","平台工程经验提前","岗位强调共享能力建设，因此调整到第一页。","修改 01"],["good","微前端项目表述具体化","保留三个业务线落地事实，没有补写不可核验收益。","修改 02"],["risk","人员管理表述被阻止","职业画像已明确不承担人员绩效，材料不得暗示管理职责。","边界"]])}<div class="d-chat"><div class="d-chat-message user">这份材料是不是太强调工程化，弱化了业务结果？</div><div class="d-chat-message">是。当前版本适合岸线云的平台岗位，但可以补充一个经过确认的业务结果。现有事实源里还缺少可靠量化数据，我不会替你编造。</div><div class="d-chat-input"><input aria-label="审核材料修改" placeholder="对当前修改提出意见…"><button class="d-icon-button dark" type="button">发送</button></div></div>`;
+        return [report, side, `<div class="d-trace-head"><span>material audit</span><span>pack_shore_02</span></div><div><strong>PASS</strong> all expressions trace to confirmed career facts</div><div><strong>BLOCK</strong> unverified quantitative outcome excluded</div><div><strong>WAIT</strong> user decision on emphasis and final wording</div>`];
+      }
+
+      function renderD() {
+        const [report, side, trace] = appState.page === "today" ? todayContentD() : appState.page === "opportunities" ? opportunitiesContentD() : appState.page === "opportunity" ? opportunityContentD() : appState.page === "profile" ? profileContentD() : materialsContentD();
+        return `<div class="d-shell">${dTopbar()}<div class="d-workspace"><section class="d-left">${dPaneHead("left")}<article class="d-report">${report}</article></section><section class="d-right">${dPaneHead("right")}<div class="d-right-top">${side.split('<div class="d-tool-head"')[0]}</div><div class="d-right-body">${side.includes('<div class="d-tool-head"') ? '<div class="d-tool-head"' + side.split('<div class="d-tool-head"').slice(1).join('<div class="d-tool-head"') : ""}</div></section><footer class="d-trace">${trace}</footer></div></div>`;
+      }
+
       function updateUrl() {
         const url = new URL(location.href);
         url.searchParams.set("variant", appState.variant);
@@ -847,7 +1189,7 @@
       }
 
       function render() {
-        $("app").innerHTML = appState.variant === "A" ? renderA() : appState.variant === "B" ? renderB() : renderC();
+        $("app").innerHTML = appState.variant === "A" ? renderA() : appState.variant === "B" ? renderB() : appState.variant === "C" ? renderC() : renderD();
         $("variant-label").textContent = variants[appState.variant];
         $("mobile-scrim").hidden = !appState.navOpen;
         bindEvents();

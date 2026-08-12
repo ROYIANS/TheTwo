@@ -105,3 +105,36 @@ Confirmed Zetu as an open-source, self-hosted personal career decision system; d
 ### Next Steps
 
 - None - task complete
+
+
+## Session 4: Define product capability map
+
+**Date**: 2026-08-12
+**Task**: Define product capability map
+**Branch**: `main`
+
+### Summary
+
+Defined Zetu's ten product capability domains, cross-cutting advisor/evidence/decision contracts, MVP versus later boundaries, isolated multi-user self-hosting rules, and manual text/screenshot job intake; synchronized the product brief and ADR history.
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `7c842c9` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete

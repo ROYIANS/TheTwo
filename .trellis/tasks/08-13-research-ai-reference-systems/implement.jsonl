@@ -1,0 +1,5 @@
+{"file":".trellis/spec/guides/documentation.md","reason":"遵循研究、决策和产品文档的唯一权威位置与 write-through 规则。"}
+{"file":".trellis/tasks/08-13-research-ai-reference-systems/research/java-ai-foundation-analysis.md","reason":"Java AI 底包的模块边界、Agent 调用链、生产缺口、迁移建议与学习路线。"}
+{"file":".trellis/tasks/08-13-research-ai-reference-systems/research/java-ai-rag-structured-output-evidence.md","reason":"Embedding/RAG 与结构化输出边界的专项源码证据。"}
+{"file":".trellis/tasks/08-13-research-ai-reference-systems/research/recruiting-platform-analysis.md","reason":"求职平台工具、工作流、外部副作用和恢复契约对照。"}
+{"file":".trellis/tasks/08-13-research-ai-reference-systems/research/social-simulation-platform-analysis.md","reason":"社会模拟系统的全栈、AI 编排、状态恢复和作品集经验对照。"}

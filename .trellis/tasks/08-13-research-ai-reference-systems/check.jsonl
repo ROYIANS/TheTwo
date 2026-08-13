@@ -1,0 +1,5 @@
+{"file":".trellis/spec/guides/documentation.md","reason":"检查研究产物的权威位置、引用和 write-through 一致性。"}
+{"file":".trellis/tasks/08-13-research-ai-reference-systems/research/java-ai-foundation-analysis.md","reason":"核验 Java AI 报告的能力边界、成熟度矩阵和迁移结论。"}
+{"file":".trellis/tasks/08-13-research-ai-reference-systems/research/java-ai-rag-structured-output-evidence.md","reason":"核验 RAG/Embedding/结构化输出的结论是否限定在所给构件。"}
+{"file":".trellis/tasks/08-13-research-ai-reference-systems/research/recruiting-platform-analysis.md","reason":"核验平台工具报告的产品与副作用边界。"}
+{"file":".trellis/tasks/08-13-research-ai-reference-systems/research/social-simulation-platform-analysis.md","reason":"核验社会模拟报告与 Java AI 报告的工程口径一致性。"}

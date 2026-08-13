@@ -3,7 +3,7 @@ title: 择途 MVP 体验主干
 type: product
 status: active
 created: 2026-08-12
-updated: 2026-08-12
+updated: 2026-08-13
 related:
   - product-brief.md
   - product-capability-map.md
@@ -17,6 +17,7 @@ related:
   - ../decisions/0020-explicit-advisory-job-recommendation.md
   - ../decisions/0022-isolated-multi-user-self-hosting.md
   - ../decisions/0023-manual-text-and-screenshot-job-intake.md
+  - ../decisions/0024-react-product-prototype-as-experience-baseline.md
 ---
 
 # 择途 MVP 体验主干
@@ -24,6 +25,10 @@ related:
 本文描述第一版择途中，用户如何从首次进入系统走到对一个具体机会形成完整申请决策包并作出决定。它关注用户目标、系统责任、确认点、持续状态和异常分支，不是页面清单、交互稿或技术架构。
 
 [产品能力地图](product-capability-map.md)回答“择途需要具备什么能力”，本文回答“这些能力如何组成一段连续且可完成的用户体验”。
+
+当前交互基线：本体验主干由 [React 产品原型](../../prototype/README.md) 提供可操作示例。原型用于后续产品讨论和交互校准，不代表正式前端、后端或部署技术选型。
+
+当前原型的界面方向是无壳、对象驱动的工作台：三个产品空间保留为产品语义域，不作为常驻菜单、固定 header 或侧栏展示；用户从“今天”的主任务、机会、职业事实和面试等真实对象进入局部上下文。对象关系负责说明依据和下一动作，交互时间线负责保留 AI 分析步骤、用户确认、建议快照、决定和结果复盘。重要变化必须可解释、可回看和可更正，AI 建议不能收缩用户的选择空间，也不能替用户执行外部行动。
 
 ## 体验目标
 

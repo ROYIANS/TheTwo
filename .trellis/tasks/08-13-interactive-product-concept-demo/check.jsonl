@@ -1,0 +1,7 @@
+{"file":"docs/product/product-brief.md","reason":"核验原型没有偏离产品定位、用户权力和外部行动边界。"}
+{"file":"docs/product/mvp-experience-backbone.md","reason":"核验完整示例、状态流和用户确认点。"}
+{"file":"docs/product/product-capability-map.md","reason":"核验 MVP 范围和明确不做。"}
+{"file":"docs/product/glossary.md","reason":"核验界面术语与当前领域语言一致。"}
+{"file":".trellis/spec/guides/documentation.md","reason":"核验原型产物和任务记录保持唯一权威位置。"}
+{"file":".trellis/spec/prototype/frontend/index.md","reason":"按原型前端质量门检查构建、响应式和交互验证。"}
+{"file":".trellis/spec/prototype/frontend/conventions.md","reason":"检查状态连续性、语义控件、焦点、移动端和概念边界。"}

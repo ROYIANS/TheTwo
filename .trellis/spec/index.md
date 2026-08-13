@@ -8,6 +8,10 @@
 * [`../../docs/specs/development-process.md`](../../docs/specs/development-process.md) - 公开的开发过程权威正文。
 * [`../../docs/README.md`](../../docs/README.md) - 文档分类、状态、命名和晋升规则。
 
+## Prototype Code Specs
+
+* [`prototype/frontend/index.md`](prototype/frontend/index.md) - React 产品概念原型的边界、交互和验证约束。
+
 ## Future Code Specs
 
 真实代码出现后，创建新的 Trellis 任务分析 package、源码和测试，再按实际 layer 创建规范。不得恢复通用占位模板或凭技术选型预写理想化规则。

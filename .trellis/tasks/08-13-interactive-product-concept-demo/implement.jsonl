@@ -1,0 +1,7 @@
+{"file":"docs/product/product-brief.md","reason":"产品定位、用户权力、AI 责任和隐私边界。"}
+{"file":"docs/product/mvp-experience-backbone.md","reason":"完整六阶段体验、确认点、异常和持续状态。"}
+{"file":"docs/product/product-capability-map.md","reason":"MVP 能力边界、横切契约和明确不做。"}
+{"file":"docs/product/glossary.md","reason":"固定职业事实源、研究资料库、机会研究台、系统建议和用户决定的领域语言。"}
+{"file":".trellis/spec/guides/documentation.md","reason":"原型任务产物、公开文档与长期结论的权威位置规则。"}
+{"file":".trellis/spec/prototype/frontend/index.md","reason":"React 概念原型的工程边界和质量检查。"}
+{"file":".trellis/spec/prototype/frontend/conventions.md","reason":"React 原型状态连续性、语义 HTML、样式和无障碍约定。"}

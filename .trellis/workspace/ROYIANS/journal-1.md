@@ -238,3 +238,36 @@ Defined Zetu as a personal career research system organized around the career fa
 ### Next Steps
 
 - None - task complete
+
+
+## Session 8: Repair links after research archive
+
+**Date**: 2026-08-13
+**Task**: Repair links after research archive
+**Branch**: `main`
+
+### Summary
+
+修复研究任务归档后 docs 阶段报告与归档任务 PRD 的相对链接，完成目标存在性、旧路径、脱敏和编码校验。
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `64d29ec` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete

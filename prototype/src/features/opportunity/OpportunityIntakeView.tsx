@@ -1,9 +1,11 @@
 import { ArrowRight, ClipboardPaste, FileText, Link2, Sparkles } from "lucide-react";
+import type { Dispatch } from "react";
+import type { AppAction } from "../../app/state";
 import type { DemoState } from "../../domain/model";
 import { demoOpportunity, opportunityTrace } from "../../data/demo-content";
 import { ObjectHeader, PrimaryButton, QuietButton, StatusPill, TraceList } from "../../components/ui";
 
-export function OpportunityIntakeView({ state, dispatch }: { state: DemoState; dispatch: (action: any) => void }) {
+export function OpportunityIntakeView({ state, dispatch }: { state: DemoState; dispatch: Dispatch<AppAction> }) {
   const parsed = state.opportunityParse.status === "done";
   return <div className="feature-view"><ObjectHeader eyebrow="带入一个机会" title={<>把你看到的机会<br /><em>带回你的语境。</em></>} description="机会从原始材料开始，不从平台列表开始。先保留你看到的正文、来源和时间，再决定是否创建研究对象。" /><div className="intake-layout"><section className="intake-form"><div className="input-block"><label><span><ClipboardPaste size={15} />职位文本</span><textarea readOnly value={`${demoOpportunity.company}\n${demoOpportunity.role}\n\n${demoOpportunity.description}`} /></label></div><div className="intake-meta"><label><span><Link2 size={14} />来源</span><input readOnly value="用户粘贴 · 招聘平台" /></label><label><span><FileText size={14} />采集时间</span><input readOnly value="刚刚" /></label></div><div className="intake-actions"><PrimaryButton onClick={() => dispatch({ type: "start-opportunity-parse" })} disabled={state.opportunityParse.status === "running"}>{state.opportunityParse.status === "running" ? "解析进行中" : parsed ? "重新解析" : "开始解析材料"}</PrimaryButton><QuietButton onClick={() => dispatch({ type: "set-view", view: "today" })}>先回到今天</QuietButton></div></section><aside className="intake-trace"><div className="trace-heading"><span><Sparkles size={16} />AI 正在整理</span><StatusPill tone={state.opportunityParse.status === "done" ? "positive" : state.opportunityParse.status === "running" ? "warning" : "neutral"}>{parsed ? "已完成" : state.opportunityParse.status === "running" ? "处理中" : "待开始"}</StatusPill></div><TraceList steps={opportunityTrace} current={state.opportunityParse.step} status={state.opportunityParse.status} />{parsed && <div className="draft-object"><span className="eyebrow">机会草稿</span><strong>{demoOpportunity.company} · {demoOpportunity.role}</strong><p>这还不是一个已确认机会。确认后它才会进入你的职业现场。</p><button type="button" className="button-primary" onClick={() => dispatch({ type: "confirm-opportunity" })}>确认创建机会对象 <ArrowRight size={15} /></button></div>}</aside></div></div>;
 }

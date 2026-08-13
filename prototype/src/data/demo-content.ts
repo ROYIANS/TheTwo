@@ -59,3 +59,38 @@ export const agentReplies = {
   research: "当前建议来自 2 条支持信息、1 条冲突信息和 1 个弱信号。它不是结论终点；如果团队实际远程规则不同，建议就应该重新计算。",
 };
 
+export const conversationStarter = `我正在考虑下一份工作，但还没有把方向说清楚。\n我更在意什么？哪些限制不能被忽略？`;
+
+export const conversationFacts: CareerFact[] = [
+  { id: "conversation-strength", label: "你希望继续做复杂前端与工程化工作", detail: "这是一次访谈中的暂定理解，来自你对下一份工作的描述。", source: "职业访谈 · 待确认", status: "inferred", consequence: "会影响之后带入机会时的方向匹配。" },
+  { id: "conversation-constraint", label: "你不想用长期加班换取名义上的成长", detail: "这条限制需要你确认它是不可突破的边界，还是当前更看重的偏好。", source: "职业访谈 · 待确认", status: "inferred", consequence: "会影响机会判断中的工作方式与机会成本。" },
+  { id: "conversation-location", label: "你愿意优先考虑上海或混合办公", detail: "具体到岗频率和城市边界还没有被确认。", source: "职业访谈 · 待确认", status: "inferred", consequence: "会影响职位地点、远程规则和沟通问题。" },
+];
+
+export const demoCommunication = {
+  summary: "你好，我正在了解这个岗位的实际工作方式。想先确认团队每周到岗安排、岗位是否承担正式人员管理，以及当前最重要的技术目标。",
+  questions: ["团队每周实际到岗几天？试用期前后是否不同？", "这个岗位是否承担正式绩效与晋升管理？", "入职后 3 个月最希望解决的技术问题是什么？"],
+};
+
+export const demoApplication = {
+  materials: ["资深前端 / 前端架构定位版", "构建耗时下降 42% 的项目证据", "首轮沟通草稿"],
+  followUp: "3 个工作日后回看是否收到真实回应",
+};
+
+export const demoInterview = {
+  title: "技术负责人初面",
+  scheduledAt: "周五 14:00",
+  purpose: "验证岗位是否真的有架构决策空间，以及团队实际工作方式。",
+  prompts: ["讲清一次基础设施重构中的取舍", "追问技术目标与授权边界", "确认远程规则和绩效责任"],
+};
+
+export const demoOffer = {
+  summary: "资深前端负责人 · 35-45K · 14 薪",
+  terms: ["上海 · 每周远程两天（待确认）", "负责设计系统与前端基础设施", "正式管理职责仍需确认"],
+};
+
+export const demoOutcome = {
+  title: "这次机会没有继续",
+  detail: "面试后对方确认岗位需要长期高强度到岗，与你当前硬约束冲突。",
+  learning: "工作方式是高价值的早期筛选问题，应该在下一份机会研究中提前确认。",
+};

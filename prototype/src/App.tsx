@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useReducer, useState, type Dispatch } from "react";
+import { useEffect, useMemo, useReducer, useState } from "react";
 import { BrainCircuit, Check, Sparkles, X } from "lucide-react";
 import { AgentDrawer } from "./features/agent/AgentDrawer";
 import { LoginScreen } from "./features/auth/LoginScreen";
@@ -6,8 +6,9 @@ import { InterviewView } from "./features/interview/InterviewView";
 import { OnboardingView } from "./features/onboarding/OnboardingView";
 import { OpportunityIntakeView } from "./features/opportunity/OpportunityIntakeView";
 import { OpportunityView } from "./features/opportunity/OpportunityView";
+import { ProfileView } from "./features/profile/ProfileView";
 import { TodayView } from "./features/today/TodayView";
-import { appReducer, confirmedFacts, initialState, pendingFacts, type AppAction } from "./app/state";
+import { appReducer, confirmedFacts, initialState, pendingFacts } from "./app/state";
 import { agentReplies } from "./data/demo-content";
 import "./styles.css";
 
@@ -77,11 +78,6 @@ function App() {
   if (state.view === "interview" && state.opportunity) view = <InterviewView state={state} dispatch={dispatch} />;
 
   return <div className="app-shell"><main className="main-content" id="main-content">{view}<footer className="session-exit"><span>{state.userName || "你的"}的私人职业空间 · {confirmed.length} 条已确认事实{pending.length ? ` · ${pending.length} 条待确认` : ""}</span><button type="button" onClick={() => dispatch({ type: "logout" })}>退出本次体验</button></footer></main><button className="agent-float" type="button" aria-label="打开职业 Agent" title="打开职业 Agent" onClick={() => setAgentOpen(true)}><BrainCircuit size={19} /><span>问 AI</span></button>{agentOpen && <AgentDrawer context={context} messages={state.agentMessages.length ? state.agentMessages : [{ from: "agent", text: state.view === "onboarding" ? agentReplies.onboarding : state.research.status === "done" ? agentReplies.research : agentReplies.default, time: "刚刚" }]} draft={agentDraft} onDraft={setAgentDraft} onSend={sendAgent} onClose={() => setAgentOpen(false)} />}{notice && <div className={`toast toast-${notice.tone}`} role="status"><span className="toast-icon">{notice.tone === "success" ? <Check size={15} /> : <Sparkles size={15} />}</span><span>{notice.text}</span><button type="button" aria-label="关闭提示" onClick={() => setNotice(null)}><X size={14} /></button></div>}</div>;
-}
-
-function ProfileView({ state, dispatch }: { state: ReturnType<typeof appReducer>; dispatch: Dispatch<AppAction> }) {
-  const facts = state.facts;
-  return <div className="feature-view"><div className="return-today"><button type="button" onClick={() => dispatch({ type: "set-view", view: "today" })}>← 回到今天</button></div><div className="profile-view-head"><div><p className="eyebrow">当前有效 · {facts.length} 条事实</p><h1>记住你<br /><em>真正做过什么。</em></h1><p className="object-description">这里不是一份静态简历。每条内容都有来源、状态和会影响什么，之后会随着机会和结果继续修正。</p></div><div className="profile-count"><strong>{facts.filter((fact) => fact.status === "confirmed").length}</strong><span>已确认</span><strong>{facts.filter((fact) => fact.status === "inferred").length}</strong><span>待你确认</span></div></div><div className="profile-facts">{facts.map((fact) => <article key={fact.id} className={`fact-review ${fact.status}`}><div className="fact-review-top"><span className={`status-pill status-${fact.status === "confirmed" ? "positive" : fact.status === "inferred" ? "warning" : "info"}`}><span />{fact.status === "confirmed" ? "已确认" : fact.status === "inferred" ? "待你确认" : "未知项"}</span><small>{fact.source}</small></div><h2>{fact.label}</h2><p>{fact.detail}</p><div className="fact-consequence"><span>会影响</span>{fact.consequence}</div>{fact.status === "inferred" && <div className="fact-actions"><button type="button" onClick={() => dispatch({ type: "reject-fact", id: fact.id })}>不是这样</button><button type="button" className="button-primary" onClick={() => dispatch({ type: "confirm-fact", id: fact.id })}>确认这条事实 <span>→</span></button></div>}</article>)}</div></div>;
 }
 
 export default App;

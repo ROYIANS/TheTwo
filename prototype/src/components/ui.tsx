@@ -26,12 +26,12 @@ export function TraceList({ steps, current, status }: { steps: Array<{ title: st
   return <div className="trace-list">{steps.map((step, index) => { const complete = status === "done" || index < current; const active = status === "running" && index === current; return <div key={step.title} className={`trace-step ${complete ? "complete" : ""} ${active ? "active" : ""}`}><span className="trace-marker">{complete ? <Check size={12} /> : active ? <span className="spinner" /> : <Circle size={8} />}</span><div><strong>{step.title}</strong><p>{step.detail}</p>{(active || complete) && <small>{complete ? `产出：${step.output ?? "已记录"}` : `正在读取：${step.input ?? "当前对象"}`}</small>}</div></div>; })}</div>;
 }
 
-export function LifeRail({ current, onStage }: { current: LifeStage; onStage: (stage: LifeStage) => void }) {
-  const stages: Array<{ id: LifeStage; label: string; note: string }> = [
-    { id: "discover", label: "带入", note: "一份真实机会" }, { id: "research", label: "研究", note: "证据与未知" }, { id: "communicate", label: "沟通", note: "问清关键问题" }, { id: "applied", label: "申请", note: "材料由你审核" }, { id: "interview", label: "面试", note: "准备与验证" }, { id: "offer", label: "Offer", note: "放回生活比较" }, { id: "outcome", label: "结果", note: "复盘并回写" },
+export function ObjectTrail({ current, available, onStage }: { current: LifeStage; available: LifeStage[]; onStage: (stage: LifeStage) => void }) {
+  const objects: Array<{ id: LifeStage; label: string; note: string }> = [
+    { id: "discover", label: "机会对象", note: "原始材料已确认" }, { id: "research", label: "研究任务", note: "证据与建议" }, { id: "communicate", label: "沟通草稿", note: "等待本人发送" }, { id: "applied", label: "申请记录", note: "材料与决定快照" }, { id: "interview", label: "面试事件", note: "准备与现场记录" }, { id: "offer", label: "Offer 对象", note: "真实条款" }, { id: "outcome", label: "结果复盘", note: "待确认的策略" },
   ];
-  const currentIndex = stages.findIndex((stage) => stage.id === current);
-  return <div className="life-rail">{stages.map((stage, index) => <button key={stage.id} type="button" className={`life-node ${stage.id === current ? "current" : ""} ${index < currentIndex ? "done" : ""}`} onClick={() => onStage(stage.id)}><span>{index < currentIndex ? <Check size={11} /> : <Circle size={8} />}</span><strong>{stage.label}</strong><small>{stage.note}</small></button>)}</div>;
+  const visible = objects.filter((item) => available.includes(item.id));
+  return <div className="object-trail" aria-label="这份机会已产生的关联对象">{visible.map((item, index) => <button key={item.id} type="button" aria-current={item.id === current ? "page" : undefined} className={`object-node ${item.id === current ? "current" : ""}`} onClick={() => onStage(item.id)}><span>{index < visible.length - 1 ? <Check size={11} /> : <Circle size={8} />}</span><strong>{item.label}</strong><small>{item.note}</small></button>)}</div>;
 }
 
 export function FactStatus({ status }: { status: FactStatus }) {
@@ -41,4 +41,3 @@ export function FactStatus({ status }: { status: FactStatus }) {
 export function EvidenceRow({ evidence, selected, onClick }: { evidence: EvidenceItem; selected: boolean; onClick: () => void }) {
   return <button type="button" className={`evidence-object ${selected ? "selected" : ""}`} onClick={onClick}><span className={`evidence-dot evidence-${evidence.tone}`} /><span><small>{evidence.source}</small><strong>{evidence.title}</strong><em>{evidence.summary}</em></span><ChevronRight size={14} /></button>;
 }
-

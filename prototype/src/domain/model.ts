@@ -1,5 +1,5 @@
 export type AppView = "onboarding" | "today" | "profile" | "opportunity-intake" | "opportunity" | "interview";
-export type SetupStep = "welcome" | "import" | "profile-analysis" | "facts" | "direction" | "ready";
+export type SetupStep = "welcome" | "import" | "interview" | "profile-analysis" | "facts" | "direction" | "ready";
 export type AsyncStatus = "idle" | "running" | "done";
 export type FactStatus = "inferred" | "confirmed" | "rejected" | "unknown";
 export type LifeStage = "discover" | "research" | "communicate" | "applied" | "interview" | "offer" | "outcome";
@@ -59,6 +59,58 @@ export interface ResearchState {
   evidence: EvidenceItem[];
 }
 
+export interface CommunicationEvent {
+  id: string;
+  channel: string;
+  status: "draft" | "recorded";
+  summary: string;
+  questions: string[];
+  createdAt: string;
+}
+
+export interface ApplicationEvent {
+  id: string;
+  status: "draft" | "recorded";
+  channel: string;
+  materials: string[];
+  createdAt: string;
+  followUp: string;
+}
+
+export interface InterviewEvent {
+  id: string;
+  status: "planned" | "prepared" | "recorded";
+  title: string;
+  scheduledAt: string;
+  purpose: string;
+  prompts: string[];
+  notes: string | null;
+}
+
+export interface OfferRecord {
+  id: string;
+  status: "draft" | "recorded";
+  summary: string;
+  terms: string[];
+  createdAt: string;
+}
+
+export interface OutcomeRecord {
+  id: string;
+  status: "draft" | "recorded";
+  title: string;
+  detail: string;
+  learning: string;
+  createdAt: string;
+}
+
+export interface UserDecisionRecord {
+  choice: Exclude<UserDecision, null>;
+  reason: string;
+  advisory: string;
+  createdAt: string;
+}
+
 export interface AgentMessage {
   from: "agent" | "user";
   text: string;
@@ -71,6 +123,8 @@ export interface DemoState {
   setupStep: SetupStep;
   userName: string;
   resumeVisible: boolean;
+  profileSource: "resume" | "conversation" | null;
+  intakeText: string;
   facts: CareerFact[];
   direction: CareerDirection | null;
   opportunity: Opportunity | null;
@@ -80,8 +134,14 @@ export interface DemoState {
   research: ResearchState;
   lifeStage: LifeStage;
   decision: UserDecision;
+  decisionRecord: UserDecisionRecord | null;
+  communication: CommunicationEvent | null;
+  application: ApplicationEvent | null;
+  interviewEvent: InterviewEvent | null;
+  offer: OfferRecord | null;
+  outcome: OutcomeRecord | null;
+  strategyUpdate: string | null;
   selectedEvidenceId: string | null;
   lifecycleNote: string | null;
   agentMessages: AgentMessage[];
 }
-

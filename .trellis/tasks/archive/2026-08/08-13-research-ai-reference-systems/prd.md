@@ -78,6 +78,6 @@
 
 ## Documentation Promotion
 
-* [x] 将本次研究的长期有效摘要晋升到 [`docs/work/milestones/2026-08-13-ai-reference-system-research.md`](../../../docs/work/milestones/2026-08-13-ai-reference-system-research.md)。
+* [x] 将本次研究的长期有效摘要晋升到 [`docs/work/milestones/2026-08-13-ai-reference-system-research.md`](../../../../../docs/work/milestones/2026-08-13-ai-reference-system-research.md)。
 * [x] 保留四份任务研究报告作为详细证据，不在 `docs/product/`、`docs/specs/` 或 `docs/decisions/` 复制尚未接受的产品或技术结论。
 * [x] 阶段工作已结束，归档前无需新增实现任务；下一步另建“可恢复 AI 研究作业最小纵切”任务。

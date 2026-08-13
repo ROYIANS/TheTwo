@@ -5,11 +5,11 @@ status: closed
 created: 2026-08-13
 updated: 2026-08-13
 related:
-  - ../../../.trellis/tasks/08-13-research-ai-reference-systems/prd.md
-  - ../../../.trellis/tasks/08-13-research-ai-reference-systems/research/recruiting-platform-analysis.md
-  - ../../../.trellis/tasks/08-13-research-ai-reference-systems/research/social-simulation-platform-analysis.md
-  - ../../../.trellis/tasks/08-13-research-ai-reference-systems/research/java-ai-foundation-analysis.md
-  - ../../../.trellis/tasks/08-13-research-ai-reference-systems/research/java-ai-rag-structured-output-evidence.md
+  - ../../../.trellis/tasks/archive/2026-08/08-13-research-ai-reference-systems/prd.md
+  - ../../../.trellis/tasks/archive/2026-08/08-13-research-ai-reference-systems/research/recruiting-platform-analysis.md
+  - ../../../.trellis/tasks/archive/2026-08/08-13-research-ai-reference-systems/research/social-simulation-platform-analysis.md
+  - ../../../.trellis/tasks/archive/2026-08/08-13-research-ai-reference-systems/research/java-ai-foundation-analysis.md
+  - ../../../.trellis/tasks/archive/2026-08/08-13-research-ai-reference-systems/research/java-ai-rag-structured-output-evidence.md
 ---
 
 # AI 参考系统研究阶段报告
@@ -95,9 +95,9 @@ related:
 
 详细报告：
 
-* [招聘平台工具审计](../../../.trellis/tasks/08-13-research-ai-reference-systems/research/recruiting-platform-analysis.md)
-* [社会模拟系统审计](../../../.trellis/tasks/08-13-research-ai-reference-systems/research/social-simulation-platform-analysis.md)
-* [Java AI 底包架构审计](../../../.trellis/tasks/08-13-research-ai-reference-systems/research/java-ai-foundation-analysis.md)
-* [RAG 与结构化输出专项核验](../../../.trellis/tasks/08-13-research-ai-reference-systems/research/java-ai-rag-structured-output-evidence.md)
+* [招聘平台工具审计](../../../.trellis/tasks/archive/2026-08/08-13-research-ai-reference-systems/research/recruiting-platform-analysis.md)
+* [社会模拟系统审计](../../../.trellis/tasks/archive/2026-08/08-13-research-ai-reference-systems/research/social-simulation-platform-analysis.md)
+* [Java AI 底包架构审计](../../../.trellis/tasks/archive/2026-08/08-13-research-ai-reference-systems/research/java-ai-foundation-analysis.md)
+* [RAG 与结构化输出专项核验](../../../.trellis/tasks/archive/2026-08/08-13-research-ai-reference-systems/research/java-ai-rag-structured-output-evidence.md)
 
 所有结论限定在提供的源码快照和已接受的择途文档范围内。未执行运行时验证，未评价未提供的远端知识库、模型服务或第三方框架内部实现。

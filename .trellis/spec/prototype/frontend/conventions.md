@@ -16,6 +16,20 @@
 * 系统建议与用户决定分开保存和呈现；用户覆盖建议不能改写历史建议。
 * 事实、AI 推断、未知、证据和风险使用明确标签与语义色，不依赖颜色单独传达含义。
 
+### 并行机会工作区
+
+* 多个机会使用 `opportunities + activeOpportunityId` 表达；研究、证据、建议、用户决定、沟通、申请、面试、Offer、结果和策略回写必须属于具体机会工作区，不能回退为顶层单例状态。
+* 所有机会生命周期动作先解析当前工作区，再只更新匹配 `activeOpportunityId` 的条目；切换机会不得复制或清空其他机会的局部状态。
+* 机会比较只并排呈现已有快照和未知项，不生成综合分、自动排名或虚构结论；尚未完成研究的维度明确显示“待研究”或“尚未形成判断”。
+
+```typescript
+interface DemoState {
+  opportunities: OpportunityWorkspace[];
+  activeOpportunityId: string | null;
+  compareOpportunityIds: string[];
+}
+```
+
 ## 组件和样式
 
 * 页面级结构使用语义 HTML；交互控件优先使用 `button`、`nav`、`main`、`aside`、`section`、`fieldset` 等原生元素。
@@ -28,6 +42,8 @@
 * AI 解释使用可验证的输入对象、证据、公开假设、中间产物和待确认项；不要在界面中展示或伪造模型私有思维链。
 * 会改变职业事实、建议、用户决定或外部行动的交互必须保留可回看/可更正路径；新信息生成新建议版本，不无痕改写旧决定。
 * 动画只表达进入、状态变化和反馈，并尊重 `prefers-reduced-motion`。
+* 生命周期历史不得使用嵌套横向或纵向滚动容器。采用“当前对象摘要 + 历史网格”：宽桌面单行网格、中宽视口自动换行、手机单列；完整七对象链必须保持 `scrollWidth === clientWidth` 且 `scrollHeight === clientHeight`。
+* 原型全局使用 `@phosphor-icons/react`，通过根级 `IconContext` 保持默认 `regular` 权重；按钮和正文图标以 `16px` 为主，重要对象图标可以使用 `20px`，只有当前或完成状态使用 `fill`/`bold`。不得混入 Lucide、Remix Icon 或其他图标依赖。
 
 ## 验证
 

@@ -26,6 +26,18 @@ export const demoOpportunity: Opportunity = {
   id: "opportunity-cy", company: "澄屿科技", role: "资深前端工程师 / 前端负责人", salary: "35-45K · 14 薪", location: "上海 · 资深前端 / 前端架构", direction: "资深前端 / 前端架构", source: "用户粘贴的职位材料", capturedAt: "刚刚带入", description: "负责业务工作台和前端基础设施建设，推动设计系统、性能和跨团队工程协作。",
 };
 
+export const demoOpportunityAlternative: Opportunity = {
+  id: "opportunity-lh-1",
+  company: "临海智造",
+  role: "前端架构师",
+  salary: "38-48K · 13 薪",
+  location: "上海 · 混合办公",
+  direction: "前端架构 / 工程平台",
+  source: "用户粘贴 · 朋友推荐",
+  capturedAt: "今天 11:20",
+  description: "负责内部研发平台、前端架构治理和设计系统演进，强调跨团队技术影响力。",
+};
+
 export const profileTrace: TraceStep[] = [
   { title: "读取你带入的材料", detail: "保留原文，不把推断写回事实。", input: "简历文本与项目经历", output: "6 段可引用内容" },
   { title: "提取可能的职业事实", detail: "识别职责、行动、结果和边界。", input: "项目经历与访谈回答", output: "5 条候选事实" },

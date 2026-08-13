@@ -1,4 +1,4 @@
-export type AppView = "onboarding" | "today" | "profile" | "opportunity-intake" | "opportunity" | "interview";
+export type AppView = "onboarding" | "today" | "profile" | "opportunity-intake" | "opportunities" | "opportunity-compare" | "opportunity" | "interview";
 export type SetupStep = "welcome" | "import" | "interview" | "profile-analysis" | "facts" | "direction" | "ready";
 export type AsyncStatus = "idle" | "running" | "done";
 export type FactStatus = "inferred" | "confirmed" | "rejected" | "unknown";
@@ -111,6 +111,22 @@ export interface UserDecisionRecord {
   createdAt: string;
 }
 
+export interface OpportunityWorkspace {
+  opportunity: Opportunity;
+  research: ResearchState;
+  lifeStage: LifeStage;
+  decision: UserDecision;
+  decisionRecord: UserDecisionRecord | null;
+  communication: CommunicationEvent | null;
+  application: ApplicationEvent | null;
+  interviewEvent: InterviewEvent | null;
+  offer: OfferRecord | null;
+  outcome: OutcomeRecord | null;
+  strategyUpdate: string | null;
+  selectedEvidenceId: string | null;
+  lifecycleNote: string | null;
+}
+
 export interface AgentMessage {
   from: "agent" | "user";
   text: string;
@@ -127,21 +143,11 @@ export interface DemoState {
   intakeText: string;
   facts: CareerFact[];
   direction: CareerDirection | null;
-  opportunity: Opportunity | null;
+  opportunities: OpportunityWorkspace[];
+  activeOpportunityId: string | null;
+  compareOpportunityIds: string[];
   opportunityDraftVisible: boolean;
   profileAnalysis: { status: AsyncStatus; step: number };
   opportunityParse: { status: AsyncStatus; step: number };
-  research: ResearchState;
-  lifeStage: LifeStage;
-  decision: UserDecision;
-  decisionRecord: UserDecisionRecord | null;
-  communication: CommunicationEvent | null;
-  application: ApplicationEvent | null;
-  interviewEvent: InterviewEvent | null;
-  offer: OfferRecord | null;
-  outcome: OutcomeRecord | null;
-  strategyUpdate: string | null;
-  selectedEvidenceId: string | null;
-  lifecycleNote: string | null;
   agentMessages: AgentMessage[];
 }

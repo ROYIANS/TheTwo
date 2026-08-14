@@ -4,7 +4,7 @@
 
 ## Pre-Development Checklist
 
-* 阅读当前任务 `.trellis/tasks/08-13-interactive-product-concept-demo/prd.md`；
+* 通过 Trellis 当前任务指针定位并阅读活动任务的 `prd.md`；
 * 阅读 `docs/product/mvp-experience-backbone.md` 和 `docs/product/product-capability-map.md`；
 * 阅读 [`conventions.md`](conventions.md)；
 * 确认本次改动仍是虚构数据、内存状态和前端交互，不接入真实服务。

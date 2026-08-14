@@ -1,0 +1,90 @@
+.form-feedback {
+  color: var(--green) !important;
+}
+
+.upload-actions > button:not(.button-primary) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.context-item > strong,
+.context-item > small {
+  display: block;
+}
+
+.context-item > strong {
+  color: var(--ink);
+  font-size: 9px;
+}
+
+.context-item > small {
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 8px;
+  line-height: 1.55;
+}
+
+.application-locked {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 28px;
+  padding: 14px 16px;
+  border: 1px solid var(--green);
+  background: var(--green-soft);
+  color: var(--green);
+  font-size: 9px;
+  line-height: 1.6;
+}
+
+.application-locked svg {
+  flex: none;
+  margin-top: 1px;
+}
+
+.application-locked strong {
+  display: block;
+  color: var(--ink);
+}
+
+.application-section :disabled,
+.application-decision :disabled {
+  cursor: not-allowed;
+  opacity: .62;
+}
+
+.application-checklist label.is-disabled {
+  cursor: default;
+}
+
+.application-checklist label {
+  position: relative;
+}
+
+.application-checklist input {
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+}
+
+.application-checklist label:has(input:focus-visible) {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
+
+.application-recorded {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin-top: 10px;
+  padding: 12px;
+  background: var(--green-soft);
+  color: var(--green);
+  font-size: 9px;
+  font-weight: 800;
+}

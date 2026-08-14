@@ -1,4 +1,4 @@
-export type AppView = "onboarding" | "today" | "profile" | "opportunity-intake" | "opportunities" | "opportunity-compare" | "opportunity" | "interview";
+export type AppView = "onboarding" | "today" | "profile" | "opportunity-intake" | "opportunities" | "opportunity-compare" | "opportunity" | "application" | "interview";
 export type SetupStep = "welcome" | "import" | "interview" | "profile-analysis" | "facts" | "direction" | "ready";
 export type AsyncStatus = "idle" | "running" | "done";
 export type FactStatus = "inferred" | "confirmed" | "rejected" | "unknown";
@@ -111,12 +111,51 @@ export interface UserDecisionRecord {
   createdAt: string;
 }
 
+export interface ProfileMaterial {
+  source: "file" | "sample" | "conversation" | null;
+  name: string;
+  text: string;
+}
+
+export interface OpportunityInput {
+  text: string;
+  source: string;
+  capturedAt: string;
+}
+
+export interface ResumeArtifact {
+  title: string;
+  headline: string;
+  summary: string;
+  experience: string;
+}
+
+export interface ApplicationReviewItem {
+  id: string;
+  label: string;
+  checked: boolean;
+}
+
+export interface ApplicationPackage {
+  status: AsyncStatus;
+  step: number;
+  resume: ResumeArtifact;
+  communicationDraft: string;
+  emphasis: string[];
+  boundaries: string[];
+  risks: string[];
+  questions: string[];
+  reviewItems: ApplicationReviewItem[];
+  exportedAt: string | null;
+}
+
 export interface OpportunityWorkspace {
   opportunity: Opportunity;
   research: ResearchState;
   lifeStage: LifeStage;
   decision: UserDecision;
   decisionRecord: UserDecisionRecord | null;
+  applicationPackage: ApplicationPackage | null;
   communication: CommunicationEvent | null;
   application: ApplicationEvent | null;
   interviewEvent: InterviewEvent | null;
@@ -125,6 +164,7 @@ export interface OpportunityWorkspace {
   strategyUpdate: string | null;
   selectedEvidenceId: string | null;
   lifecycleNote: string | null;
+  contextNotes: string[];
 }
 
 export interface AgentMessage {
@@ -138,16 +178,15 @@ export interface DemoState {
   view: AppView;
   setupStep: SetupStep;
   userName: string;
-  resumeVisible: boolean;
-  profileSource: "resume" | "conversation" | null;
-  intakeText: string;
+  profileMaterial: ProfileMaterial;
   facts: CareerFact[];
   direction: CareerDirection | null;
   opportunities: OpportunityWorkspace[];
   activeOpportunityId: string | null;
   compareOpportunityIds: string[];
-  opportunityDraftVisible: boolean;
+  opportunityInput: OpportunityInput;
+  opportunityDraft: Opportunity | null;
   profileAnalysis: { status: AsyncStatus; step: number };
   opportunityParse: { status: AsyncStatus; step: number };
-  agentMessages: AgentMessage[];
+  agentThreads: Record<string, AgentMessage[]>;
 }

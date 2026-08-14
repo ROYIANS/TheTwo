@@ -1,4 +1,4 @@
-import type { CareerDirection, CareerFact, EvidenceItem, Opportunity, TraceStep } from "../domain/model";
+import type { ApplicationPackage, CareerDirection, CareerFact, EvidenceItem, Opportunity, TraceStep } from "../domain/model";
 
 export const demoResumeText = `林舟
 前端工程师 / 前端架构方向
@@ -58,6 +58,13 @@ export const researchTrace: TraceStep[] = [
   { title: "形成可质疑的建议", detail: "建议只代表当前快照，不替你作决定。", input: "证据 + 事实 + 约束", output: "谨慎投入" },
 ];
 
+export const applicationTrace: TraceStep[] = [
+  { title: "读取方向定位与职位要求", detail: "只选择已经确认的事实和与岗位有关的经历。", input: "方向定位 + 职位语境", output: "材料取舍范围" },
+  { title: "生成职位定制表达", detail: "重排重点并说明表达边界，不补写不存在的经历。", input: "职业事实 + JD", output: "定制简历草稿" },
+  { title: "组织沟通与待确认问题", detail: "把风险和未知保留在申请材料旁边。", input: "研究证据 + 当前建议", output: "沟通草稿与问题" },
+  { title: "等待你的逐项审核", detail: "材料只有在你确认后才进入申请记录。", input: "全部申请产物", output: "可导出的申请决策包" },
+];
+
 export const demoEvidence: EvidenceItem[] = [
   { id: "evidence-registry", source: "企业登记 · 2024-06", strength: "primary", tone: "neutral", title: "公司主体与经营时间可核验", summary: "主体成立 6 年，登记状态正常，公开登记信息与官网主体一致。", excerpt: "登记主体为澄屿科技（上海）有限公司，成立时间 2018 年。", impact: "支持机会对象是真实主体，但不说明团队工作方式。" },
   { id: "evidence-remote", source: "公司官网 · 一手来源", strength: "primary", tone: "conflict", title: "官网写明每周可远程两天", summary: "官网招聘政策与职位描述中的“固定工作时间”存在语境差异。", excerpt: "正式员工在试用期后可申请每周不超过两天的远程办公，具体由团队负责人安排。", impact: "直接影响你的工作方式硬约束，需要向招聘方确认团队实际规则。" },
@@ -87,6 +94,29 @@ export const demoCommunication = {
 export const demoApplication = {
   materials: ["资深前端 / 前端架构定位版", "构建耗时下降 42% 的项目证据", "首轮沟通草稿"],
   followUp: "3 个工作日后回看是否收到真实回应",
+};
+
+export const demoApplicationPackage: ApplicationPackage = {
+  status: "idle",
+  step: 0,
+  resume: {
+    title: "林舟｜资深前端 / 前端架构｜澄屿科技定制版",
+    headline: "复杂前端系统、设计系统与工程基础设施",
+    summary: "8 年前端与偏全栈经历，长期负责复杂 B 端工作台、设计系统和前端工程化建设。能够从业务目标、团队协作和长期维护成本出发推进架构决策。",
+    experience: "前端基础设施重构\n- 带领 5 人协作小组拆解技术目标并推进交付\n- 通过缓存策略、构建链路拆分和依赖治理，将平均构建耗时从 7 分钟降至 4 分钟\n- 建立设计系统和跨团队工程协作机制",
+  },
+  communicationDraft: demoCommunication.summary,
+  emphasis: ["复杂 B 端工作台与设计系统", "构建耗时下降 42% 的可验证结果", "跨团队工程协作与架构决策"],
+  boundaries: ["不把技术带队描述为正式人员绩效管理", "不承诺尚未验证的业务增长结果", "混合办公政策需要招聘方再次确认"],
+  risks: ["长期高强度到岗与当前硬约束可能冲突", "人员管理边界仍不清楚", "匿名评价只能作为待核实信号"],
+  questions: [...demoCommunication.questions],
+  reviewItems: [
+    { id: "facts", label: "所有事实性表达都能回到已确认职业事实", checked: false },
+    { id: "positioning", label: "岗位定位和经历重点符合我的真实意图", checked: false },
+    { id: "boundaries", label: "风险、未知项和表达边界没有被申请文案隐藏", checked: false },
+    { id: "communication", label: "沟通草稿的语气、问题和发送时机由我确认", checked: false },
+  ],
+  exportedAt: null,
 };
 
 export const demoInterview = {

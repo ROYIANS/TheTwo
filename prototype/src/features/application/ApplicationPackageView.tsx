@@ -4,8 +4,9 @@ import type { AppAction } from "../../app/state";
 import { ObjectHeader, PrimaryButton, StatusPill, TraceList } from "../../components/ui";
 import { applicationTrace } from "../../data/demo-content";
 import type { OpportunityWorkspace, UserDecision } from "../../domain/model";
+import { AgentContextEntry } from "../agent/AgentWorkspace";
 
-export function ApplicationPackageView({ workspace, dispatch }: { workspace: OpportunityWorkspace; dispatch: Dispatch<AppAction> }) {
+export function ApplicationPackageView({ workspace, dispatch, onOpenAgent }: { workspace: OpportunityWorkspace; dispatch: Dispatch<AppAction>; onOpenAgent: () => void }) {
   const applicationPackage = workspace.applicationPackage;
   const [choice, setChoice] = useState<Exclude<UserDecision, null>>(workspace.decision ?? "apply");
   const [reason, setReason] = useState(workspace.decisionRecord?.reason ?? "");
@@ -40,6 +41,7 @@ export function ApplicationPackageView({ workspace, dispatch }: { workspace: Opp
     </ObjectHeader>
 
     {applicationRecorded && <div className="application-locked" role="status"><CheckCircleIcon size={16} weight="fill" /><span><strong>这份申请已经成为历史快照</strong>材料、审核结果和决定已锁定；你仍可以回看和导出，但不会无痕改写当时使用的版本。</span></div>}
+    <AgentContextEntry label="检查这份申请材料" detail="一起看表达是否越过事实、遗漏风险，或把未知说得太确定。" context={`${workspace.opportunity.company} · 申请决策包`} onOpen={onOpenAgent} />
     <div className="application-layout">
       <main className="application-editor">
         <section className="application-section resume-editor"><div className="application-section-head"><div><span><FileTextIcon size={15} />岗位定制简历</span><h2>只重排和解释已确认事实</h2></div><button type="button" onClick={exportResume}><DownloadSimpleIcon size={15} />导出简历</button></div><label><span>文件标题</span><input disabled={applicationRecorded} value={applicationPackage.resume.title} onChange={(event) => updateText("title", event.target.value)} /></label><label><span>定位标题</span><input disabled={applicationRecorded} value={applicationPackage.resume.headline} onChange={(event) => updateText("headline", event.target.value)} /></label><label><span>职业摘要</span><textarea disabled={applicationRecorded} value={applicationPackage.resume.summary} onChange={(event) => updateText("summary", event.target.value)} /></label><label><span>重点经历</span><textarea disabled={applicationRecorded} className="resume-experience" value={applicationPackage.resume.experience} onChange={(event) => updateText("experience", event.target.value)} /></label></section>

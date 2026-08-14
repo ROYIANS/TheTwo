@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useReducer, useState } from "react";
-import { BrainIcon, CheckIcon, IconContext, SparkleIcon, XIcon } from "@phosphor-icons/react";
-import { AgentDrawer } from "./features/agent/AgentDrawer";
+import { CheckIcon, IconContext, SparkleIcon, XIcon } from "@phosphor-icons/react";
+import { AgentWorkspace } from "./features/agent/AgentWorkspace";
 import { ApplicationPackageView } from "./features/application/ApplicationPackageView";
 import { LoginScreen } from "./features/auth/LoginScreen";
 import { InterviewView } from "./features/interview/InterviewView";
@@ -14,6 +14,7 @@ import { appReducer, confirmedFacts, currentOpportunityWorkspace, initialState, 
 import { agentReplies } from "./data/demo-content";
 import "./styles.css";
 import "./styles/product-interaction-overrides.css";
+import "./styles/visual-redesign.css";
 
 type Notice = { tone: "success" | "info" | "warning"; text: string } | null;
 
@@ -68,6 +69,17 @@ function App() {
     return () => window.removeEventListener("keydown", closeOnEscape);
   }, []);
 
+  useEffect(() => {
+    if (!agentOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = previousOverflow; };
+  }, [agentOpen]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [state.view, state.activeOpportunityId, active?.lifeStage]);
+
   const flash = (next: Exclude<Notice, null>) => {
     setNotice(next);
     window.setTimeout(() => setNotice(null), 3400);
@@ -86,17 +98,18 @@ function App() {
 
   let view = <OnboardingView state={state} dispatch={dispatch} />;
   if (state.setupStep === "ready" && state.view === "today") view = <TodayView state={state} active={active} dispatch={dispatch} />;
-  if (state.view === "profile") view = <ProfileView state={state} dispatch={dispatch} />;
+  if (state.view === "profile") view = <ProfileView state={state} dispatch={dispatch} onOpenAgent={() => setAgentOpen(true)} />;
   if (state.view === "opportunity-intake") view = <OpportunityIntakeView state={state} dispatch={dispatch} />;
   if (state.view === "opportunities") view = <OpportunitiesView state={state} dispatch={dispatch} />;
   if (state.view === "opportunity-compare") view = <OpportunityCompareView state={state} dispatch={dispatch} />;
-  if (state.view === "opportunity" && active) view = <OpportunityView workspace={active} dispatch={dispatch} />;
-  if (state.view === "application" && active) view = <ApplicationPackageView workspace={active} dispatch={dispatch} />;
-  if (state.view === "interview" && active) view = <InterviewView workspace={active} dispatch={dispatch} />;
+  if (state.view === "opportunity" && active) view = <OpportunityView workspace={active} dispatch={dispatch} onOpenAgent={() => setAgentOpen(true)} />;
+  if (state.view === "application" && active) view = <ApplicationPackageView workspace={active} dispatch={dispatch} onOpenAgent={() => setAgentOpen(true)} />;
+  if (state.view === "interview" && active) view = <InterviewView workspace={active} dispatch={dispatch} onOpenAgent={() => setAgentOpen(true)} />;
 
   const spaceOwner = state.userName ? `${state.userName}的` : "你的";
   const agentMessages = state.agentThreads[contextId];
-  return <IconContext.Provider value={{ weight: "regular" }}><div className="app-shell"><main className="main-content" id="main-content">{view}<footer className="session-exit"><span>{spaceOwner}私人职业空间 · {confirmed.length} 条已确认事实{pending.length ? ` · ${pending.length} 条待确认` : ""}</span><button type="button" onClick={() => dispatch({ type: "logout" })}>退出本次体验</button></footer></main><button className="agent-float" type="button" aria-label="打开职业 Agent" title="打开职业 Agent" onClick={() => setAgentOpen(true)}><BrainIcon size={19} /><span>问 AI</span></button>{agentOpen && <AgentDrawer context={context} messages={agentMessages?.length ? agentMessages : [{ from: "agent", text: state.view === "onboarding" ? agentReplies.onboarding : active?.research.status === "done" ? agentReplies.research : agentReplies.default, time: "刚刚" }]} draft={agentDraft} onDraft={setAgentDraft} onSend={sendAgent} onClose={() => setAgentOpen(false)} />}{notice && <div className={`toast toast-${notice.tone}`} role="status"><span className="toast-icon">{notice.tone === "success" ? <CheckIcon size={15} /> : <SparkleIcon size={15} />}</span><span>{notice.text}</span><button type="button" aria-label="关闭提示" onClick={() => setNotice(null)}><XIcon size={14} /></button></div>}</div></IconContext.Provider>;
+  const starterReply = state.view === "profile" ? agentReplies.profile : state.view === "application" ? agentReplies.application : state.view === "interview" ? agentReplies.interview : active?.research.status === "done" ? agentReplies.research : agentReplies.default;
+  return <IconContext.Provider value={{ weight: "regular" }}><div className="app-shell"><main className="main-content" id="main-content">{view}<footer className="session-exit"><span>{spaceOwner}私人职业空间 · {confirmed.length} 条已确认事实{pending.length ? ` · ${pending.length} 条待确认` : ""}</span><button type="button" onClick={() => dispatch({ type: "logout" })}>退出本次体验</button></footer></main>{agentOpen && <AgentWorkspace context={context} messages={agentMessages?.length ? agentMessages : [{ from: "agent", text: starterReply, time: "刚刚" }]} draft={agentDraft} onDraft={setAgentDraft} onSend={sendAgent} onClose={() => setAgentOpen(false)} />}{notice && <div className={`toast toast-${notice.tone}`} role="status"><span className="toast-icon">{notice.tone === "success" ? <CheckIcon size={15} /> : <SparkleIcon size={15} />}</span><span>{notice.text}</span><button type="button" aria-label="关闭提示" onClick={() => setNotice(null)}><XIcon size={14} /></button></div>}</div></IconContext.Provider>;
 }
 
 export default App;

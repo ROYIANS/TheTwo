@@ -8,7 +8,7 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 10
+- **Total Sessions**: 11
 - **Last Active**: 2026-08-14
 <!-- @@@/auto:current-status -->
 
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~340 | Active |
+| `journal-1.md` | ~374 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 11 | 2026-08-14 | Redesign prototype as a career archive workspace | `2f6e49d`, `ab4be12` | `main` |
 | 10 | 2026-08-14 | prototype 全量文案改写 | `4b31ad3` | `main` |
 | 9 | 2026-08-14 | Complete product-grade MVP concept demo | `5c7c99e`, `45039bc` | `main` |
 | 8 | 2026-08-13 | Repair links after research archive | `64d29ec` | `main` |

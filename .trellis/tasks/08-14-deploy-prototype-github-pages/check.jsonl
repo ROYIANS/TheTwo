@@ -1,0 +1,3 @@
+{"file":".trellis/spec/prototype/frontend/index.md","reason":"运行 prototype 适用的质量检查"}
+{"file":".trellis/spec/prototype/frontend/deployment.md","reason":"核对两种构建模式和 Pages 资源路径"}
+{"file":"docs/specs/operations/prototype-github-pages-deployment.md","reason":"按 accepted 部署契约完成验收"}

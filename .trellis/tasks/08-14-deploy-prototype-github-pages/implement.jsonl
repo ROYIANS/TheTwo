@@ -1,0 +1,3 @@
+{"file":".trellis/spec/prototype/frontend/index.md","reason":"Prototype 前端的预开发入口与质量门"}
+{"file":".trellis/spec/prototype/frontend/deployment.md","reason":"GitHub Pages 构建模式、路径和 CI 执行约束"}
+{"file":"docs/specs/operations/prototype-github-pages-deployment.md","reason":"部署契约的公开权威正文"}

@@ -14,6 +14,7 @@
 | Spec | 状态 | 说明 |
 |---|---|---|
 | [`development-process.md`](development-process.md) | accepted | Trellis 主导的开发过程、知识持久化和技能协作规则 |
+| [`operations/prototype-github-pages-deployment.md`](operations/prototype-github-pages-deployment.md) | accepted | Prototype 的 GitHub Pages 构建、路径与 CI 部署契约 |
 
 ## 未来领域
 

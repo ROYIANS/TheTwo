@@ -126,16 +126,25 @@ em {
   font-size: 11px;
 }
 
-.button-primary:hover {
+.button-primary:not(:disabled):hover {
+  border-color: var(--primary-dark);
   transform: translateY(-1px);
   background: var(--primary-dark);
+  color: #f5f7f3;
 }
 
 .button-primary:disabled {
   border-color: var(--line-strong);
   background: var(--line-strong);
   color: var(--muted);
+  opacity: 1;
   transform: none;
+}
+
+.fact-edit .button-primary {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: #f5f7f3;
 }
 
 .status-pill {

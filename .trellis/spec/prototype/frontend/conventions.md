@@ -52,6 +52,7 @@ reviewItems.map((item) =>
 * 视觉隐藏的表单控件必须显式收敛尺寸。复选框若同时命中通用 `input { width: 100% }` 和 `position: absolute`，会以视口为包含块制造页面级横向溢出；隐藏时设置 `width/height: 1px` 与 clip，并在外层标签补回 `:focus-visible` 焦点样式。
 * 移动端抽屉或浮层必须提供可见关闭操作，并支持 `Escape` 关闭。
 * 纯 CSS 负责布局与视觉，避免把内容全部包成圆角卡片；不要使用卡片嵌套、玻璃拟态、发光和紫蓝渐变。
+* 样式按 `styles.css`、`styles/product-interaction-overrides.css`、`styles/visual-redesign.css` 的顺序叠加。修改共享控件时必须同时检查基础选择器与最终覆盖层，并验证默认、悬停、焦点、禁用的 computed style；不能只看后加载文件。局部选择器可能比共享类更具体，主要操作需显式保持成对的前景色和背景色。
 * 运营型工作台使用固定字体层级和稳定网格；移动端重排信息优先级，而不是单纯缩小桌面两栏。
 * 不使用英文眉题、序号或产品内部代号作为装饰。保留的标签必须帮助用户理解当前状态、对象或下一动作。
 * AI 操作必须呈现当前上下文、执行步骤、完成状态和结果。Agent 不使用全局浮动入口；只在职业事实、机会研究、申请决策包和面试事件中提供与当前动作对应的就地入口。
@@ -66,6 +67,7 @@ reviewItems.map((item) =>
 
 * 原型采用“职业档案工作台”而非“AI 助手”视觉：冷苔绿色画布、冷白纸面、墨色正文和编辑式宋体标题构成基础，蓝色用于档案注脚与信息关系。
 * `--primary` / `--primary-dark` / `--primary-soft` 负责主要行动、当前对象和完成路径；coral / risk 色只用于风险、冲突、待确认后果和退出等语义，不再贯穿标题、CTA、焦点与 Agent。
+* 警告、风险等大面积状态表面从 `--canvas` / `--paper` 混入少量语义色，主要语义信号放在顶线、圆点、标签和文字，不直接铺高饱和色。正文和控件文字仍需达到适用的对比度要求。
 * 通过顶部分隔线、页边线、纸面密度和非对称留白区分主档案、侧注、证据和决定。阴影只保留给少数真实纸张或导入表面，不给每个 section 相同的卡片和阴影。
 * 标题字号使用稳定的断点值，不用 `vw` 随视口连续缩放；紧凑状态可以使用 pill，命令按钮保持方正、清晰，不把所有操作做成圆角胶囊。
 * 全局滚动条继承档案工作台配色：轨道使用 canvas/line，滑块使用 muted，悬停切换 primary；同时提供标准 `scrollbar-color` / `scrollbar-width` 和 WebKit 伪元素实现，不使用圆润胶囊滑块。
@@ -78,6 +80,22 @@ reviewItems.map((item) =>
   context={`${opportunity.company} · 机会研究`}
   onOpen={onOpenAgent}
 />
+```
+
+```css
+/* 状态表面保留语义，但服从冷灰纸面基底。 */
+--yellow-soft: color-mix(in oklch, var(--canvas) 97%, var(--yellow));
+--risk-soft: color-mix(in oklch, var(--paper) 98%, var(--risk));
+
+.fact-edit .button-primary {
+  background: var(--primary);
+  color: #f5f7f3;
+}
+
+.button-primary:not(:disabled):hover {
+  background: var(--primary-dark);
+  color: #f5f7f3;
+}
 ```
 
 ## 文案风格约定

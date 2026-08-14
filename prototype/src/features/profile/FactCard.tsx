@@ -17,11 +17,11 @@ export function FactCard({ fact, dispatch }: { fact: CareerFact; dispatch: Dispa
   return <article className={`fact-review ${fact.status}`}>
     <div className="fact-review-top"><FactStatus status={fact.status} /><small>{fact.source}</small></div>
     <h2>{fact.label}</h2>
-    {editing ? <div className="fact-edit"><textarea aria-label={`修改${fact.label}`} value={detail} onChange={(event) => setDetail(event.target.value)} /><div><button type="button" onClick={() => { setDetail(fact.detail); setEditing(false); }}><XIcon size={14} />取消</button><button type="button" className="button-primary" onClick={save}><CheckIcon size={14} />保存并确认</button></div></div> : <p>{fact.detail}</p>}
+    {editing ? <div className="fact-edit"><textarea aria-label={`修改${fact.label}`} value={detail} onChange={(event) => setDetail(event.target.value)} /><div><button type="button" onClick={() => { setDetail(fact.detail); setEditing(false); }}><XIcon size={14} />取消</button><button type="button" className="button-primary" onClick={save}><CheckIcon size={14} />改完确认</button></div></div> : <p>{fact.detail}</p>}
     <div className="fact-consequence"><span>会影响</span>{fact.consequence}</div>
     {!editing && <div className="fact-actions">
       <button type="button" onClick={() => setEditing(true)}><PencilSimpleIcon size={14} />修改</button>
-      {fact.status === "inferred" && <><button type="button" onClick={() => dispatch({ type: "reject-fact", id: fact.id })}>不是这样</button><button type="button" className="button-primary" onClick={() => dispatch({ type: "confirm-fact", id: fact.id })}>确认这条事实</button></>}
+      {fact.status === "inferred" && <><button type="button" onClick={() => dispatch({ type: "reject-fact", id: fact.id })}>不对</button><button type="button" className="button-primary" onClick={() => dispatch({ type: "confirm-fact", id: fact.id })}>确认</button></>}
     </div>}
   </article>;
 }

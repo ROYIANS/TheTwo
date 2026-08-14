@@ -28,7 +28,7 @@ export function TraceList({ steps, current, status }: { steps: Array<{ title: st
 
 export function ObjectTrail({ current, available, onStage }: { current: LifeStage; available: LifeStage[]; onStage: (stage: LifeStage) => void }) {
   const objects: Array<{ id: LifeStage; label: string; note: string }> = [
-    { id: "discover", label: "机会对象", note: "原始材料已确认" }, { id: "research", label: "研究任务", note: "证据与建议" }, { id: "communicate", label: "沟通草稿", note: "等待本人发送" }, { id: "applied", label: "申请记录", note: "材料与决定快照" }, { id: "interview", label: "面试事件", note: "准备与现场记录" }, { id: "offer", label: "Offer 对象", note: "真实条款" }, { id: "outcome", label: "结果复盘", note: "待确认的策略" },
+    { id: "discover", label: "机会对象", note: "原始材料已确认" }, { id: "research", label: "研究任务", note: "证据与建议" }, { id: "communicate", label: "沟通草稿", note: "草稿由你决定" }, { id: "applied", label: "申请记录", note: "材料与决定快照" }, { id: "interview", label: "面试事件", note: "准备与现场记录" }, { id: "offer", label: "Offer 对象", note: "真实条款" }, { id: "outcome", label: "结果复盘", note: "待确认的策略" },
   ];
   const visible = objects.filter((item) => available.includes(item.id));
   const currentObject = visible.find((item) => item.id === current) ?? visible[visible.length - 1];

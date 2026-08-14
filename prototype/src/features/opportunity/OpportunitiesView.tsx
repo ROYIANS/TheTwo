@@ -8,11 +8,11 @@ import { decisionLabel, stageLabel } from "./OpportunityView";
 export function OpportunitiesView({ state, dispatch }: { state: DemoState; dispatch: Dispatch<AppAction> }) {
   const compareCount = state.compareOpportunityIds.length;
   return <div className="feature-view opportunities-view">
-    <ObjectHeader eyebrow="工作机会" title={<>同时推进，<br /><em>但每次只判断一件事。</em></>} description="每个机会保留独立的证据、建议、决定和真实进展。这里负责切换与比较，不把求职变成一块看板。" status={<StatusPill tone={state.opportunities.length ? "positive" : "neutral"}>{state.opportunities.length} 个机会</StatusPill>}>
+    <ObjectHeader eyebrow="工作机会" title={<>同时推进，<br /><em>每次只判断一件事。</em></>} description="每个机会保留独立的证据、建议、决定和真实进展。在这里切换和比较，不把求职变成一块看板。" status={<StatusPill tone={state.opportunities.length ? "positive" : "neutral"}>{state.opportunities.length} 个机会</StatusPill>}>
       <div className="object-links"><button type="button" onClick={() => dispatch({ type: "set-view", view: "today" })}>回到今天 <ArrowRightIcon size={13} /></button></div>
     </ObjectHeader>
     <div className="opportunity-collection-actions"><PrimaryButton onClick={() => dispatch({ type: "load-opportunity" })}><PlusIcon size={16} />新建机会</PrimaryButton><button type="button" className="button-quiet" disabled={compareCount < 2} onClick={() => dispatch({ type: "set-view", view: "opportunity-compare" })}><ScalesIcon size={16} />比较已选机会 <span>{compareCount}/3</span></button></div>
-    {state.opportunities.length ? <div className="opportunity-list">{state.opportunities.map((workspace) => <OpportunityListItem key={workspace.opportunity.id} workspace={workspace} active={workspace.opportunity.id === state.activeOpportunityId} compared={state.compareOpportunityIds.includes(workspace.opportunity.id)} compareDisabled={!state.compareOpportunityIds.includes(workspace.opportunity.id) && compareCount >= 3} dispatch={dispatch} />)}</div> : <section className="opportunity-list-empty"><BriefcaseIcon size={24} /><h2>这里还没有工作机会</h2><p>从一段职位材料开始，创建后才会产生研究和后续对象。</p><PrimaryButton onClick={() => dispatch({ type: "load-opportunity" })}>带入第一个机会</PrimaryButton></section>}
+    {state.opportunities.length ? <div className="opportunity-list">{state.opportunities.map((workspace) => <OpportunityListItem key={workspace.opportunity.id} workspace={workspace} active={workspace.opportunity.id === state.activeOpportunityId} compared={state.compareOpportunityIds.includes(workspace.opportunity.id)} compareDisabled={!state.compareOpportunityIds.includes(workspace.opportunity.id) && compareCount >= 3} dispatch={dispatch} />)}</div> : <section className="opportunity-list-empty"><BriefcaseIcon size={24} /><h2>这里还没有机会</h2><p>从一段职位材料开始，创建后才有研究和后续对象。</p><PrimaryButton onClick={() => dispatch({ type: "load-opportunity" })}>带入第一个机会</PrimaryButton></section>}
   </div>;
 }
 
@@ -32,17 +32,17 @@ function OpportunityListItem({ workspace, active, compared, compareDisabled, dis
 export function OpportunityCompareView({ state, dispatch }: { state: DemoState; dispatch: Dispatch<AppAction> }) {
   const selected = state.compareOpportunityIds.map((id) => state.opportunities.find((workspace) => workspace.opportunity.id === id)).filter((workspace): workspace is OpportunityWorkspace => Boolean(workspace));
   return <div className="feature-view opportunity-compare-view">
-    <ObjectHeader eyebrow="机会比较" title={<>把差异放在一起，<br /><em>不要压成一个分数。</em></>} description="比较使用各机会已有的判断快照。未知仍然是未知，不会因为并排展示而被自动补全。" status={<StatusPill tone="info">{selected.length} 个机会</StatusPill>}><div className="object-links"><button type="button" onClick={() => dispatch({ type: "set-view", view: "opportunities" })}>调整比较对象 <ArrowRightIcon size={13} /></button></div></ObjectHeader>
+    <ObjectHeader eyebrow="机会比较" title={<>并排看，<br /><em>不压成一个分数。</em></>} description="比较使用各机会已有的判断快照。未知仍然是未知，不会因为并排展示就被自动填补。" status={<StatusPill tone="info">{selected.length} 个机会</StatusPill>}><div className="object-links"><button type="button" onClick={() => dispatch({ type: "set-view", view: "opportunities" })}>调整比较对象 <ArrowRightIcon size={13} /></button></div></ObjectHeader>
     {selected.length >= 2 ? <div className="comparison-table" style={{ "--compare-count": selected.length } as React.CSSProperties}>
       <div className="comparison-label comparison-head-label">比较维度</div>{selected.map((workspace) => <button type="button" className="comparison-opportunity-head" key={workspace.opportunity.id} onClick={() => dispatch({ type: "select-opportunity", id: workspace.opportunity.id })}><span>{workspace.opportunity.company}</span><strong>{workspace.opportunity.role}</strong><ArrowRightIcon size={15} /></button>)}
-      <ComparisonRow label="当前建议" workspaces={selected} render={(workspace) => workspace.decision ? `用户已决定${decisionLabel(workspace.decision)}` : workspace.research.status === "done" ? "谨慎投入" : "待研究"} />
+      <ComparisonRow label="当前建议" workspaces={selected} render={(workspace) => workspace.decision ? `你已决定${decisionLabel(workspace.decision)}` : workspace.research.status === "done" ? "谨慎投入" : "待研究"} />
       <ComparisonRow label="硬约束" workspaces={selected} render={(workspace) => workspace.research.status === "done" ? "长期高强度到岗需要优先确认" : "尚未形成判断"} tone="risk" />
       <ComparisonRow label="匹配与回报" workspaces={selected} render={(workspace) => workspace.research.status === "done" ? "复杂前端与工程化经验匹配；薪酬达到当前底线" : `${workspace.opportunity.direction} · ${workspace.opportunity.salary}`} />
       <ComparisonRow label="关键证据" workspaces={selected} render={(workspace) => workspace.research.evidence.find((item) => item.tone === "support")?.title ?? "尚无可用证据"} />
-      <ComparisonRow label="风险与未知" workspaces={selected} render={(workspace) => workspace.research.status === "done" ? "工作方式、管理边界和项目节奏仍需确认" : "研究尚未完成，不能提前判断"} tone="risk" />
+      <ComparisonRow label="风险与未知" workspaces={selected} render={(workspace) => workspace.research.status === "done" ? "工作方式、管理边界和项目节奏仍需确认" : "研究还没完成，不能提前判断"} tone="risk" />
       <ComparisonRow label="当前进展" workspaces={selected} render={(workspace) => `${stageLabel(workspace.lifeStage)} · 已产生 ${availableObjectCount(workspace)} 个对象`} />
       <ComparisonRow label="下一动作" workspaces={selected} render={nextActionLabel} tone="action" />
-    </div> : <section className="comparison-empty"><ScalesIcon size={25} /><h2>至少选择两个机会</h2><p>回到机会集合，选择两个或三个真实机会后再比较。</p><PrimaryButton onClick={() => dispatch({ type: "set-view", view: "opportunities" })}>选择比较对象</PrimaryButton></section>}
+    </div> : <section className="comparison-empty"><ScalesIcon size={25} /><h2>至少选择两个机会</h2><p>回到机会集合，选两个或三个再来比较。</p><PrimaryButton onClick={() => dispatch({ type: "set-view", view: "opportunities" })}>选择比较对象</PrimaryButton></section>}
   </div>;
 }
 

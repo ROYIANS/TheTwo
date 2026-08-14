@@ -374,9 +374,9 @@ export function appReducer(state: DemoState, action: AppAction): DemoState {
 function agentReplyFor(state: DemoState, text: string, contextId: string) {
   const opportunityId = contextId.startsWith("opportunity:") ? contextId.slice("opportunity:".length) : null;
   const active = opportunityId ? state.opportunities.find((workspace) => workspace.opportunity.id === opportunityId) ?? null : currentOpportunityWorkspace(state);
-  if (text.includes("面试")) return "我已把这条输入留在当前机会。它会和研究未知项一起进入面试准备，但不会自动成为已确认事实。";
-  if (text.includes("证据") || text.includes("建议")) return active?.research.status === "done" ? "当前建议由职业事实、支持信息、冲突信息和弱信号共同形成。你刚补充的内容已作为用户输入保留，下一次建议更新需要明确标出它造成的变化。" : "这份机会还没有完成研究。我只能说明当前输入和待研究范围，不会提前编造证据。";
-  return "这条内容已经绑定到当前上下文。我会把它当作新的用户输入，而不是无痕改写已经保存的事实或决定。";
+  if (text.includes("面试")) return "这个已经留下来了。面试前，把想验证的问题也整理出来——尤其是工作方式那条，当时没说清楚。";
+  if (text.includes("证据") || text.includes("建议")) return active?.research.status === "done" ? "建议是从那几条证据里来的。2 条支持、1 条冲突、1 个弱信号——不是一边倒的。你刚说的我记下了，如果改变判断，下次会标出来。" : "研究还没做完。现在说建议还太早，我不想先给你一个没有来源的答案。";
+  return "记下了。我不会帮你改掉已经确认的内容——你说的会作为新的补充留在这里。";
 }
 
 function factsFromProfileMaterial(state: DemoState): CareerFact[] {

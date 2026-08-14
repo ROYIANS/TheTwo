@@ -27,10 +27,10 @@ function App() {
   const active = currentOpportunityWorkspace(state);
   const contextId = state.view === "profile" ? "profile" : state.view === "onboarding" ? "onboarding" : state.view === "opportunity-intake" ? "opportunity-intake" : active ? `opportunity:${active.opportunity.id}` : "workspace";
   const context = useMemo(() => {
-    if (state.view === "onboarding") return "建立你的职业上下文";
-    if (state.view === "profile") return "林舟 · 当前有效职业事实";
-    if (state.view === "opportunity-intake") return "新机会 · 材料接入";
-    if (state.view === "opportunities") return "工作机会集合";
+    if (state.view === "onboarding") return "建立职业起点";
+    if (state.view === "profile") return "林舟 · 职业事实";
+    if (state.view === "opportunity-intake") return "带入机会";
+    if (state.view === "opportunities") return "全部机会";
     if (state.view === "opportunity-compare") return "机会比较";
     if (state.view === "application") return `${active?.opportunity.company ?? "当前机会"} · 申请决策包`;
     if (state.view === "interview") return `${active?.opportunity.company ?? "当前机会"} · 面试事件`;
@@ -73,13 +73,13 @@ function App() {
     window.setTimeout(() => setNotice(null), 3400);
   };
 
-  const login = () => { dispatch({ type: "login" }); flash({ tone: "success", text: "已进入一个全新的私人职业空间。" }); };
+  const login = () => { dispatch({ type: "login" }); flash({ tone: "success", text: "进来了。先带点什么进来。" }); };
   const sendAgent = () => {
     const text = agentDraft.trim();
     if (!text) return;
     dispatch({ type: "add-agent-user", contextId, text });
     setAgentDraft("");
-    window.setTimeout(() => flash({ tone: "info", text: "Agent 已把这个问题留在当前对象上。" }), 550);
+    window.setTimeout(() => flash({ tone: "info", text: "已经记下来了。" }), 550);
   };
 
   if (!state.authenticated) return <LoginScreen onLogin={login} />;

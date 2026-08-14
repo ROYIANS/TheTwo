@@ -305,3 +305,36 @@ Completed the end-to-end MVP experience with realistic import states, job-specif
 ### Next Steps
 
 - None - task complete
+
+
+## Session 10: prototype 全量文案改写
+
+**Date**: 2026-08-14
+**Task**: prototype 全量文案改写
+**Branch**: `main`
+
+### Summary
+
+改写 prototype 15 个文件的所有静态文本（标题、描述、按钮、Agent 回复、状态说明），从 GPT 生成的 AI 腔转变为 A 型冷静叙事风格：短句、克制、具体、有人情味。同步修复了全角引号引发的 TS 编译错误，pnpm check + pnpm build 通过。同步更新 frontend/conventions.md 记录文案风格约定。
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `4b31ad3` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete

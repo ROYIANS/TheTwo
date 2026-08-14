@@ -271,3 +271,37 @@ Defined Zetu as a personal career research system organized around the career fa
 ### Next Steps
 
 - None - task complete
+
+
+## Session 9: Complete product-grade MVP concept demo
+
+**Date**: 2026-08-14
+**Task**: Complete product-grade MVP concept demo
+**Branch**: `main`
+
+### Summary
+
+Completed the end-to-end MVP experience with realistic import states, job-specific outputs, review invalidation, resume and decision-package exports, responsive verification, and updated prototype contracts.
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `5c7c99e` | (see git log) |
+| `45039bc` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete

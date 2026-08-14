@@ -405,3 +405,36 @@ Balanced pending, warning, risk, hover, and disabled visual states across the pr
 ### Next Steps
 
 - None - task complete
+
+
+## Session 13: 部署 prototype 到 GitHub Pages
+
+**Date**: 2026-08-14
+**Task**: 部署 prototype 到 GitHub Pages
+**Branch**: `main`
+
+### Summary
+
+新增 GitHub Pages 自动部署 workflow 与专用 Vite pages mode，验证普通和 Pages 资源前缀，并记录部署契约。
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `6b013f1` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete

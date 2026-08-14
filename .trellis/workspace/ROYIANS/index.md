@@ -8,7 +8,7 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 12
+- **Total Sessions**: 13
 - **Last Active**: 2026-08-14
 <!-- @@@/auto:current-status -->
 
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~407 | Active |
+| `journal-1.md` | ~440 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 13 | 2026-08-14 | 部署 prototype 到 GitHub Pages | `6b013f1` | `main` |
 | 12 | 2026-08-14 | Harmonize prototype semantic colors | `5661218` | `main` |
 | 11 | 2026-08-14 | Redesign prototype as a career archive workspace | `2f6e49d`, `ab4be12` | `main` |
 | 10 | 2026-08-14 | prototype 全量文案改写 | `4b31ad3` | `main` |

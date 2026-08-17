@@ -1,15 +1,16 @@
 ---
 title: 首个自部署版本支持相互隔离的多个人用户
 type: decision
-status: accepted
+status: superseded
 id: ADR-0022
 created: 2026-08-12
-updated: 2026-08-12
+updated: 2026-08-17
 related:
   - ../product/product-brief.md
   - ../product/product-capability-map.md
   - 0009-self-hosted-open-source-product.md
   - 0011-minimum-necessary-external-disclosure.md
+  - 0025-single-user-self-hosted-instance.md
 ---
 
 # ADR-0022：首个自部署版本支持相互隔离的多个人用户
@@ -62,4 +63,4 @@ related:
 
 ## Supersession
 
-无。
+本决策已被 [ADR-0025：每个自部署实例只服务一个所有者](0025-single-user-self-hosted-instance.md) 取代。

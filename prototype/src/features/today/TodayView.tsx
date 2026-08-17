@@ -2,12 +2,13 @@ import { ArrowRightIcon, BrainIcon, BriefcaseIcon, CalendarDotsIcon, DatabaseIco
 import type { Dispatch } from "react";
 import type { DemoState, OpportunityWorkspace } from "../../domain/model";
 import { availableLifeStages, type AppAction } from "../../app/state";
+import { Button } from "../../components/Button";
 import { ObjectHeader, ObjectTrail, PrimaryButton, StatusPill, TraceList } from "../../components/ui";
 import { researchTrace } from "../../data/demo-content";
 
 export function TodayView({ state, active, dispatch }: { state: DemoState; active: OpportunityWorkspace | null; dispatch: Dispatch<AppAction> }) {
   const confirmedCount = state.facts.filter((fact) => fact.status === "confirmed").length;
-  return <div className="today-view"><ObjectHeader eyebrow={active ? "今天" : "刚刚开始"} title={active ? <>今天，先把一件<br /><em>事情推进一步。</em></> : <>有 {confirmedCount} 条事实<br /><em>在这里了。</em></>} description={active ? "几个机会可以同时在这里。今天只给你一件最值得推进的事。" : `下一步，把一个真实的机会带进来看看。`} status={<StatusPill tone="positive">{confirmedCount} 条已确认事实</StatusPill>}><div className="object-links"><button type="button" onClick={() => dispatch({ type: "set-view", view: "profile" })}><DatabaseIcon size={14} />查看职业事实 <ArrowRightIcon size={13} /></button>{state.opportunities.length > 0 && <button type="button" onClick={() => dispatch({ type: "set-view", view: "opportunities" })}><BriefcaseIcon size={14} />全部机会 · {state.opportunities.length} <ArrowRightIcon size={13} /></button>}<button type="button" onClick={() => dispatch({ type: "load-opportunity" })}><PlusIcon size={14} />新建机会 <ArrowRightIcon size={13} /></button></div></ObjectHeader>{active ? <OpportunityToday workspace={active} dispatch={dispatch} /> : <EmptyToday dispatch={dispatch} />}</div>;
+  return <div className="today-view"><ObjectHeader eyebrow={active ? "今天" : "刚刚开始"} title={active ? <>今天，先把一件<br /><em>事情推进一步。</em></> : <>有 {confirmedCount} 条事实<br /><em>在这里了。</em></>} description={active ? "几个机会可以同时在这里。今天只给你一件最值得推进的事。" : `下一步，把一个真实的机会带进来看看。`} status={<StatusPill tone="positive">{confirmedCount} 条已确认事实</StatusPill>}><div className="object-links"><Button tone="quiet" type="button" onClick={() => dispatch({ type: "set-view", view: "profile" })}><DatabaseIcon size={14} />查看职业事实 <ArrowRightIcon size={13} /></Button>{state.opportunities.length > 0 && <Button tone="quiet" type="button" onClick={() => dispatch({ type: "set-view", view: "opportunities" })}><BriefcaseIcon size={14} />全部机会 · {state.opportunities.length} <ArrowRightIcon size={13} /></Button>}<Button type="button" onClick={() => dispatch({ type: "load-opportunity" })}><PlusIcon size={14} />新建机会 <ArrowRightIcon size={13} /></Button></div></ObjectHeader>{active ? <OpportunityToday workspace={active} dispatch={dispatch} /> : <EmptyToday dispatch={dispatch} />}</div>;
 }
 
 function EmptyToday({ dispatch }: { dispatch: Dispatch<AppAction> }) {

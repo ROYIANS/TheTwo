@@ -1,0 +1,147 @@
+/* Ported from vidorra-life's HeroButton interaction model; colors stay product-native. */
+.app-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 4px;
+  font: inherit;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  outline: none;
+  transition:
+    box-shadow 150ms ease,
+    background-color 150ms ease,
+    border-color 150ms ease,
+    color 150ms ease,
+    transform 80ms ease;
+}
+
+.app-button-small {
+  min-height: 44px;
+  padding: 0 12px;
+  font-size: 11px;
+}
+
+.app-button-medium {
+  min-height: 44px;
+  padding: 0 16px;
+  font-size: 12px;
+}
+
+.app-button-large {
+  min-height: 48px;
+  padding: 0 20px;
+  font-size: 13px;
+}
+
+.app-button-icon {
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  min-height: 44px;
+  padding: 0;
+}
+
+.app-button-full {
+  width: 100%;
+}
+
+button.app-button:not(.app-button-plain) {
+  min-height: 44px;
+}
+
+button.app-button.app-button-large:not(.app-button-plain) {
+  min-height: 48px;
+}
+
+.app-button:active,
+.app-button[data-pressed="true"] {
+  transform: translateY(1px) scale(.99);
+}
+
+.app-button-primary {
+  border: 1px solid transparent;
+  background-color: var(--primary-dark);
+  color: var(--paper);
+  box-shadow:
+    inset 0 -2px 0 0 color-mix(in oklab, var(--paper) 12%, transparent),
+    0 1px 3px color-mix(in oklab, var(--primary-dark) 40%, transparent);
+}
+
+.app-button-primary:hover {
+  background-color: color-mix(in oklab, var(--primary-dark) 88%, var(--paper));
+  color: var(--paper);
+  box-shadow: none;
+}
+
+.app-button-ghost {
+  border: 1px solid color-mix(in oklab, var(--ink) 18%, transparent);
+  background-color: color-mix(in oklab, var(--paper) 55%, transparent);
+  color: var(--ink);
+  box-shadow: inset 0 -2px 0 0 color-mix(in oklab, var(--ink) 9%, transparent);
+}
+
+.app-button-ghost:hover {
+  background-color: var(--paper);
+  color: var(--ink);
+  box-shadow: none;
+}
+
+.app-button-danger {
+  border: 1px solid transparent;
+  background-color: var(--risk);
+  color: var(--ink);
+  box-shadow:
+    inset 0 -2px 0 0 color-mix(in oklab, var(--ink) 12%, transparent),
+    0 1px 3px color-mix(in oklab, var(--risk) 35%, transparent);
+}
+
+.app-button-danger:hover {
+  background-color: color-mix(in oklab, var(--risk) 88%, var(--paper));
+  color: var(--ink);
+  box-shadow: none;
+}
+
+.app-button-quiet,
+.app-button-icon {
+  border: 1px solid transparent;
+  background-color: transparent;
+  color: var(--ink-soft);
+  box-shadow: none;
+}
+
+.app-button-quiet:hover,
+.app-button-icon:hover {
+  background-color: color-mix(in oklab, var(--ink) 6%, transparent);
+  color: var(--ink);
+}
+
+.app-button-plain {
+  font: inherit;
+  letter-spacing: inherit;
+}
+
+.app-button:focus-visible,
+.app-button-plain:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+}
+
+.app-button:disabled,
+.app-button[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: .55;
+  transform: none;
+  box-shadow: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-button {
+    transition: none;
+  }
+}

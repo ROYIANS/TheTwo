@@ -1,5 +1,6 @@
 :root {
   font-family: "Microsoft YaHei UI", "PingFang SC", sans-serif;
+  --font-serif: "STZhongsong", "FZSongKeBenXiuKaiS-R-GB", "Songti SC", "Noto Serif SC", serif;
   color: #202624;
   background: #f2f3ee;
   font-synthesis: none;

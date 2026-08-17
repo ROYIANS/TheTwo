@@ -1,17 +1,18 @@
 import type { ReactNode } from "react";
 import { ArrowRightIcon, CaretRightIcon, CheckIcon, CircleIcon } from "@phosphor-icons/react";
 import type { EvidenceItem, FactStatus, LifeStage } from "../domain/model";
+import { Button } from "./Button";
 
 export function StatusPill({ children, tone = "neutral" }: { children: ReactNode; tone?: "neutral" | "positive" | "warning" | "info" }) {
   return <span className={`status-pill status-${tone}`}><span />{children}</span>;
 }
 
 export function PrimaryButton({ children, onClick, disabled = false }: { children: ReactNode; onClick: () => void; disabled?: boolean }) {
-  return <button type="button" className="button-primary" onClick={onClick} disabled={disabled}>{children}<ArrowRightIcon size={15} /></button>;
+  return <Button tone="primary" type="button" className="button-primary" onClick={onClick} disabled={disabled}>{children}<ArrowRightIcon size={15} /></Button>;
 }
 
 export function QuietButton({ children, onClick }: { children: ReactNode; onClick: () => void }) {
-  return <button type="button" className="button-quiet" onClick={onClick}>{children}<CaretRightIcon size={14} /></button>;
+  return <Button tone="quiet" type="button" className="button-quiet" onClick={onClick}>{children}<CaretRightIcon size={14} /></Button>;
 }
 
 export function ObjectHeader({ eyebrow, title, description, status, children }: { eyebrow: string; title: ReactNode; description: string; status?: ReactNode; children?: ReactNode }) {
@@ -19,7 +20,7 @@ export function ObjectHeader({ eyebrow, title, description, status, children }: 
 }
 
 export function ReturnToday({ onClick }: { onClick: () => void }) {
-  return <div className="return-today"><button type="button" onClick={onClick}>← 回到今天</button></div>;
+  return <div className="return-today"><Button tone="quiet" type="button" onClick={onClick}>← 回到今天</Button></div>;
 }
 
 export function TraceList({ steps, current, status }: { steps: Array<{ title: string; detail: string; input?: string; output?: string }>; current: number; status: "idle" | "running" | "done" }) {
@@ -34,7 +35,7 @@ export function ObjectTrail({ current, available, onStage }: { current: LifeStag
   const currentObject = visible.find((item) => item.id === current) ?? visible[visible.length - 1];
   return <nav className="object-history" aria-label="这份机会已产生的关联对象">
     <div className="object-history-summary"><span>当前对象</span><strong>{currentObject.label}</strong><small>{currentObject.note} · 已产生 {visible.length} 个关联对象</small></div>
-    <div className="object-history-grid">{visible.map((item, index) => <button key={item.id} type="button" aria-current={item.id === current ? "page" : undefined} className={`object-node ${item.id === current ? "current" : ""}`} onClick={() => onStage(item.id)}><span>{item.id === current ? <CircleIcon size={8} weight="fill" /> : <CheckIcon size={11} />}</span><span><strong>{item.label}</strong><small>{item.note}</small></span><em>{String(index + 1).padStart(2, "0")}</em></button>)}</div>
+    <div className="object-history-grid">{visible.map((item, index) => <Button tone="plain" key={item.id} type="button" aria-current={item.id === current ? "page" : undefined} className={`object-node ${item.id === current ? "current" : ""}`} onClick={() => onStage(item.id)}><span>{item.id === current ? <CircleIcon size={8} weight="fill" /> : <CheckIcon size={11} />}</span><span><strong>{item.label}</strong><small>{item.note}</small></span><em>{String(index + 1).padStart(2, "0")}</em></Button>)}</div>
   </nav>;
 }
 
@@ -43,5 +44,5 @@ export function FactStatus({ status }: { status: FactStatus }) {
 }
 
 export function EvidenceRow({ evidence, selected, onClick }: { evidence: EvidenceItem; selected: boolean; onClick: () => void }) {
-  return <button type="button" className={`evidence-object ${selected ? "selected" : ""}`} onClick={onClick}><span className={`evidence-dot evidence-${evidence.tone}`} /><span><small>{evidence.source}</small><strong>{evidence.title}</strong><em>{evidence.summary}</em></span><CaretRightIcon size={14} /></button>;
+  return <Button tone="plain" type="button" className={`evidence-object ${selected ? "selected" : ""}`} onClick={onClick}><span className={`evidence-dot evidence-${evidence.tone}`} /><span><small>{evidence.source}</small><strong>{evidence.title}</strong><em>{evidence.summary}</em></span><CaretRightIcon size={14} /></Button>;
 }

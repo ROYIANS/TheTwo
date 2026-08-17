@@ -12,9 +12,11 @@ import { ProfileView } from "./features/profile/ProfileView";
 import { TodayView } from "./features/today/TodayView";
 import { appReducer, confirmedFacts, currentOpportunityWorkspace, initialState, pendingFacts } from "./app/state";
 import { agentReplies } from "./data/demo-content";
+import { Button } from "./components/Button";
 import "./styles.css";
 import "./styles/product-interaction-overrides.css";
 import "./styles/visual-redesign.css";
+import "./styles/button.css";
 
 type Notice = { tone: "success" | "info" | "warning"; text: string } | null;
 
@@ -109,7 +111,7 @@ function App() {
   const spaceOwner = state.userName ? `${state.userName}的` : "你的";
   const agentMessages = state.agentThreads[contextId];
   const starterReply = state.view === "profile" ? agentReplies.profile : state.view === "application" ? agentReplies.application : state.view === "interview" ? agentReplies.interview : active?.research.status === "done" ? agentReplies.research : agentReplies.default;
-  return <IconContext.Provider value={{ weight: "regular" }}><div className="app-shell"><main className="main-content" id="main-content">{view}<footer className="session-exit"><span>{spaceOwner}私人职业空间 · {confirmed.length} 条已确认事实{pending.length ? ` · ${pending.length} 条待确认` : ""}</span><button type="button" onClick={() => dispatch({ type: "logout" })}>退出本次体验</button></footer></main>{agentOpen && <AgentWorkspace context={context} messages={agentMessages?.length ? agentMessages : [{ from: "agent", text: starterReply, time: "刚刚" }]} draft={agentDraft} onDraft={setAgentDraft} onSend={sendAgent} onClose={() => setAgentOpen(false)} />}{notice && <div className={`toast toast-${notice.tone}`} role="status"><span className="toast-icon">{notice.tone === "success" ? <CheckIcon size={15} /> : <SparkleIcon size={15} />}</span><span>{notice.text}</span><button type="button" aria-label="关闭提示" onClick={() => setNotice(null)}><XIcon size={14} /></button></div>}</div></IconContext.Provider>;
+  return <IconContext.Provider value={{ weight: "regular" }}><div className="app-shell"><main className="main-content" id="main-content">{view}<footer className="session-exit"><span>{spaceOwner}私人职业空间 · {confirmed.length} 条已确认事实{pending.length ? ` · ${pending.length} 条待确认` : ""}</span><Button tone="danger" type="button" onClick={() => dispatch({ type: "logout" })}>退出本次体验</Button></footer></main>{agentOpen && <AgentWorkspace context={context} messages={agentMessages?.length ? agentMessages : [{ from: "agent", text: starterReply, time: "刚刚" }]} draft={agentDraft} onDraft={setAgentDraft} onSend={sendAgent} onClose={() => setAgentOpen(false)} />}{notice && <div className={`toast toast-${notice.tone}`} role="status"><span className="toast-icon">{notice.tone === "success" ? <CheckIcon size={15} /> : <SparkleIcon size={15} />}</span><span>{notice.text}</span><Button tone="icon" type="button" aria-label="关闭提示" onClick={() => setNotice(null)}><XIcon size={14} /></Button></div>}</div></IconContext.Provider>;
 }
 
 export default App;

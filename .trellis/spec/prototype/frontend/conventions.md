@@ -53,6 +53,7 @@ reviewItems.map((item) =>
 * 移动端抽屉或浮层必须提供可见关闭操作，并支持 `Escape` 关闭。
 * 纯 CSS 负责布局与视觉，避免把内容全部包成圆角卡片；不要使用卡片嵌套、玻璃拟态、发光和紫蓝渐变。
 * 样式按 `styles.css`、`styles/product-interaction-overrides.css`、`styles/visual-redesign.css` 的顺序叠加。修改共享控件时必须同时检查基础选择器与最终覆盖层，并验证默认、悬停、焦点、禁用的 computed style；不能只看后加载文件。局部选择器可能比共享类更具体，主要操作需显式保持成对的前景色和背景色。
+* 重排现有响应式网格时，除了覆盖 `grid-template-columns`，还要检查旧断点是否给子项留下显式 `grid-column` / `grid-row`。若结构语义已改变，在最终断点同时重置为 `auto`，否则正文可能继续落入旧图标列并逐字换行。
 * 运营型工作台使用固定字体层级和稳定网格；移动端重排信息优先级，而不是单纯缩小桌面两栏。
 * 不使用英文眉题、序号或产品内部代号作为装饰。保留的标签必须帮助用户理解当前状态、对象或下一动作。
 * AI 操作必须呈现当前上下文、执行步骤、完成状态和结果。Agent 不使用全局浮动入口；只在职业事实、机会研究、申请决策包和面试事件中提供与当前动作对应的就地入口。
@@ -62,6 +63,58 @@ reviewItems.map((item) =>
 * 动画只表达进入、状态变化和反馈，并尊重 `prefers-reduced-motion`。
 * 生命周期历史不得使用嵌套横向或纵向滚动容器。采用“当前对象摘要 + 历史网格”：宽桌面单行网格、中宽视口自动换行、手机单列；完整七对象链必须保持 `scrollWidth === clientWidth` 且 `scrollHeight === clientHeight`。
 * 原型全局使用 `@phosphor-icons/react`，通过根级 `IconContext` 保持默认 `regular` 权重；按钮和正文图标以 `16px` 为主，重要对象图标可以使用 `20px`，只有当前或完成状态使用 `fill`/`bold`。不得混入 Lucide、Remix Icon 或其他图标依赖。
+
+### 共享按钮
+
+`prototype/src/components/Button.tsx` 是原型内原生按钮的唯一出口。业务组件不得直接声明 `<button>`；必须按动作语义选择 `primary`、`ghost`、`danger`、`quiet`、`icon` 或 `plain`。`plain` 只用于对象节点、分段控件、遮罩等由局部结构完整负责外观的交互表面，不能用来绕过统一按钮状态。
+
+```tsx
+type ButtonTone = "primary" | "ghost" | "danger" | "quiet" | "icon" | "plain";
+type ButtonSize = "small" | "medium" | "large" | "icon";
+
+<Button tone="primary" size="large">进入本地演示</Button>
+<Button tone="danger">退出本次体验</Button>
+<Button tone="icon" aria-label="关闭提示"><XIcon size={14} /></Button>
+```
+
+非 `plain` 按钮的触摸高度不得低于 `44px`，`large` 保持至少 `48px`。共享按钮样式最后加载，并用足够明确的选择器守住尺寸、焦点、禁用和按压状态，因为旧页面中的 `.object-links button`、`.fact-actions .button-primary` 等局部规则可能具有更高 specificity。验证时必须遍历可见按钮，检查 `data-button-tone`、computed height、横向溢出和控制台错误；只搜索组件调用或只看共享 CSS 不算完成。
+
+```css
+button.app-button:not(.app-button-plain) { min-height: 44px; }
+button.app-button.app-button-large:not(.app-button-plain) { min-height: 48px; }
+```
+
+### 未认证融合首页
+
+未认证状态同时承担产品方向说明和唯一所有者入口，不再维护与产品视觉割裂的通用登录卡片或独立营销页。
+
+* `App.tsx` 的 `state.authenticated` 仍是原型登录态唯一真相；融合首页只接收 `onLogin`，不能另建局部认证状态、假密码表单或注册流程。
+* 页面明确表达“独立部署、一个实例、一个所有者”，不得出现公开注册、邀请成员、账号切换、团队空间或多人隔离暗示。
+* 原型没有真实认证、持久化和外部服务时，入口附近必须直接说明本地演示边界；产品方向可以描述正式目标，但不能把目标写成已实现能力。
+* 首屏同时放置品牌、产品定义、主要入口和实际工作流预览；移动端在首屏底部露出后续预览内容，不把所有信息压缩成一张卡片。
+* 落地叙事与登录后的职业档案工作台共用色彩 token、衬线标题、线性分隔和物理按钮语汇，不复制参考项目的品牌资产或组件体系。
+* 落地页使用 `var(--font-serif)` 时，必须在根 token 层提供完整中文衬线字体栈。未定义的自定义属性会让命中的 `font-family` 在 computed-value 阶段失效，并直接继承全局 sans-serif，而不会回退到同一元素更早的 serif 声明；验收必须读取 computed `font-family`，不能只检查 CSS 源码。
+* 工程纸影响只保留为结构方法：Hero 可以使用低对比线性边轨，研究预览可以使用一层局部网格。同一区域最多一种主导纹样，不得满屏铺纹理或添加伪坐标、伪读数、内部代号。
+* 未认证首页不使用菱形节点、条码刻线、斜线舱壁或独立点阵，以免复制参考项目的品牌符号并造成装饰堆叠。
+* SVG pattern id 必须由 `useId()` 派生；所有纯装饰图案使用 `aria-hidden`、`pointer-events: none` 和现有颜色 token。复杂 rails 只在宽桌面显示，中小屏收敛为普通边线和局部网格。
+* 未认证首页的 Header 继承冷苔绿画布、纸面和墨色 token，不单独引入偏粉或暖红底色。
+* 首页叙事保持有限：首屏之后只保留工作方式、合并后的产品边界和简短收尾。相同承诺和主要入口不得在多个同权重区块中重复。
+
+```tsx
+// Good: 状态仍由根 reducer 管理，首页只负责表达与触发进入。
+if (!state.authenticated) return <LoginScreen onLogin={login} />;
+
+// Bad: 首页虚构第二套账号能力或多人入口。
+<LoginScreen onRegister={register} onInviteMember={inviteMember} />
+```
+
+```tsx
+// 图案 id 在同页多实例下仍保持唯一，装饰不进入可访问性树。
+const id = useId().replace(/:/g, "");
+return <svg aria-hidden className="landing-pattern"><pattern id={id} /></svg>;
+```
+
+验证至少覆盖 `1440px` 桌面、约 `820px` 平板和 `390px` 移动视口：`scrollWidth === clientWidth`、主入口触摸高度不小于 `44px`、控制台无错误，并完成“首页 -> onboarding -> 退出回首页”闭环。桌面截图必须确认 Header 与主色一致、Hero 层级清楚且没有菱形装饰；平板与移动截图必须确认复杂 rails 已隐藏且局部网格没有遮挡正文。
 
 ## 视觉语言
 
@@ -95,6 +148,15 @@ reviewItems.map((item) =>
 .button-primary:not(:disabled):hover {
   background: var(--primary-dark);
   color: #f5f7f3;
+}
+```
+
+```css
+/* 改写旧响应式网格时，同时清除上一版的显式放置坐标。 */
+.workflow-detail,
+.workflow-icon {
+  grid-column: auto;
+  grid-row: auto;
 }
 ```
 
